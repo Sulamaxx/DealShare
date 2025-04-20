@@ -21,3 +21,7 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
+Route::get('/approval-pending', function () {
+    return view('auth.approval-pending');
+});
