@@ -142,61 +142,106 @@
             <div class="section-header">Popular Deals <a href="#" class="float-end fs-6 text-success">View All
                     &raquo;</a></div>
             <div class="row">
-                <!-- Repeat deal card -->
-                <div class="col-md-6">
-                    <div class="deal-card p-3">
-                        <img src="https://via.placeholder.com/300x150" class="deal-image mb-2">
-                        <div class="deal-title">Save 800 LKR</div>
-                        <div class="deal-description">20% Off On Total Bill Value Cremalato offers a truly indulgent
-                            experience that satisfies even the most discerning sweet tooth.</div>
-                        <div class="deal-meta mt-2">
-                            <span class="text-success">+10</span> | 10min | 5 Hotel Deals | Top Deals
-                            <div class="verified mt-1">Verified Member</div>
+
+                @for ($i = 0; $i < 6; $i++)
+                    <!-- Repeat deal card -->
+                    <div class="col-md-6">
+                        <div class="deal-card p-3">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="row">
+                                        <img src="https://via.placeholder.com/300x150" class="deal-image mb-2">
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="row">
+                                        <div class="deal-title">Save 800 LKR</div>
+                                        <div class="deal-description">20% Off On Total Bill Value Cremalato offers a truly
+                                            indulgent
+                                            experience that satisfies even the most discerning sweet tooth.</div>
+                                        <div class="deal-meta mt-2">
+                                            <span class="text-success">+10</span> | 10min | 5 Hotel Deals | Top Deals
+                                            <div class="verified mt-1">Verified Member</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- Repeat as needed -->
+                    <!-- Repeat as needed -->
+                @endfor
+
             </div>
 
             <!-- Section: New Deals -->
             <div class="section-header">New Deals <a href="#" class="float-end fs-6 text-success">View All &raquo;</a>
             </div>
             <div class="row">
-                <!-- Repeat deal card -->
-                <div class="col-md-6">
-                    <div class="deal-card p-3">
-                        <img src="https://via.placeholder.com/300x150" class="deal-image mb-2">
-                        <div class="deal-title">Save 800 LKR</div>
-                        <div class="deal-description">20% Off On Total Bill Value Cremalato offers a truly indulgent
-                            experience that satisfies even the most discerning sweet tooth.</div>
-                        <div class="deal-meta mt-2">
-                            <span class="text-success">+10</span> | 10min | 5 Hotel Deals | Top Deals
-                            <div class="verified mt-1">Verified Member</div>
+
+                @for ($i = 0; $i < 6; $i++)
+                    <!-- Repeat deal card -->
+                    <div class="col-md-6">
+                        <div class="deal-card p-3">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="row">
+                                        <img src="https://via.placeholder.com/300x150" class="deal-image mb-2">
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="row">
+                                        <div class="deal-title">Save 800 LKR</div>
+                                        <div class="deal-description">20% Off On Total Bill Value Cremalato offers a truly
+                                            indulgent
+                                            experience that satisfies even the most discerning sweet tooth.</div>
+                                        <div class="deal-meta mt-2">
+                                            <span class="text-success">+10</span> | 10min | 5 Hotel Deals | Top Deals
+                                            <div class="verified mt-1">Verified Member</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endfor
+
             </div>
 
             <!-- Section: Highly Voted Deals -->
             <div class="section-header">Highly Voted Deals <a href="#" class="float-end fs-6 text-success">View All
                     &raquo;</a></div>
             <div class="row">
-                <!-- Repeat deal card -->
-                <div class="col-md-6">
-                    <div class="deal-card p-3">
-                        <img src="https://via.placeholder.com/300x150" class="deal-image mb-2">
-                        <div class="deal-title">Save 800 LKR</div>
-                        <div class="deal-description">20% Off On Total Bill Value Cremalato offers a truly indulgent
-                            experience that satisfies even the most discerning sweet tooth.</div>
-                        <div class="deal-meta mt-2">
-                            <span class="text-success">+10</span> | 10min | 5 Hotel Deals | Top Deals
-                            <div class="verified mt-1">Verified Member</div>
+
+                @for ($i = 0; $i < 6; $i++)
+                    <!-- Repeat deal card -->
+                    <div class="col-md-6">
+                        <div class="deal-card p-3">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="row">
+                                        <img src="https://via.placeholder.com/300x150" class="deal-image mb-2">
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="row">
+                                        <div class="deal-title">Save 800 LKR</div>
+                                        <div class="deal-description">20% Off On Total Bill Value Cremalato offers a truly
+                                            indulgent
+                                            experience that satisfies even the most discerning sweet tooth.</div>
+                                        <div class="deal-meta mt-2">
+                                            <span class="text-success">+10</span> | 10min | 5 Hotel Deals | Top Deals
+                                            <div class="verified mt-1">Verified Member</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endfor
+
             </div>
 
-            <div class="tt-topic-list">
+            {{-- <div class="tt-topic-list">
                 <div class="tt-list-header">
                     <div class="tt-col-topic">Topic</div>
                     <div class="tt-col-category">Category</div>
@@ -749,7 +794,7 @@
                         </svg>
                     </button>
                 </div>
-            </div>
+            </div> --}}
 
         </div>
     </main>
@@ -789,8 +834,7 @@
             </div>
             <div class="form-group">
                 <label for="settingsUserName">Username</label>
-                <input type="text" name="name" class="form-control" id="settingsUserName"
-                    placeholder="azyrusmax">
+                <input type="text" name="name" class="form-control" id="settingsUserName" placeholder="azyrusmax">
             </div>
             <div class="form-group">
                 <label for="settingsUserEmail">Email</label>

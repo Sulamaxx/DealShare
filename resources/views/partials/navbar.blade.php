@@ -1,5 +1,5 @@
     <!-- tt-mobile menu -->
-    <nav class="panel-menu" id="mobile-menu">
+    <nav class="panel-menu" id="mobile-menu" style="background-color: #fe9001">
         <ul>
 
         </ul>
@@ -17,8 +17,8 @@
     </nav>
 
     <header id="tt-header">
-        <div class="container" style="background-color:#222222 ">
-            <div class="row tt-row no-gutters">
+        <div class="container" style="background-color:#222222; height: 120px; display: flex; align-items: center; ">
+            <div class="row tt-row no-gutters col-12 p-0 justify-content-between">
                 <div class="col-auto">
                     <!-- toggle mobile menu -->
                     <a class="toggle-mobile-menu" href="#">
@@ -28,7 +28,7 @@
                     </a>
                     <!-- /toggle mobile menu -->
                     <!-- logo -->
-                    <div class="tt-logo">
+                    <div class="">
                         <a href="/"><img src="images/logo.png" alt=""></a>
                     </div>
                     <!-- /logo -->
