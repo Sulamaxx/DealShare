@@ -92,7 +92,7 @@
         }
     </style>
 
-    <section class="banner position-relative">
+    <div class="banner position-relative col-12">
         <div class="container">
             <div class="row align-items-center">
                 <!-- Left Column -->
@@ -131,7 +131,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
 
     <main id="tt-pageContent" class="p-0">

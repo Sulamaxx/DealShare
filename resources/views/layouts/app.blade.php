@@ -39,7 +39,7 @@
     @include('partials.navbar')
 
     <!-- Main Content -->
-    <div class="container p-0">
+    <div class="col-12 p-0">
         @yield('content')
     </div>
 

@@ -16,7 +16,7 @@
         </div>
     </nav>
 
-    <header id="tt-header">
+    <header id="tt-header" style="background-color:#222222;">
         <div class="container" style="background-color:#222222; height: 120px; display: flex; align-items: center; ">
             <div class="row tt-row no-gutters col-12 p-0 justify-content-between">
                 <div class="col-auto">
