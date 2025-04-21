@@ -1,4 +1,4 @@
-<!-- Remove the container if you want to extend the Footer to full width. -->
+{{-- <!-- Remove the container if you want to extend the Footer to full width. -->
 <div class="container-fluid p-0">
     <!-- Footer -->
     <footer class="text-center text-lg-start text-dark" style="background-color: #ECEFF1">
@@ -123,4 +123,119 @@
     </footer>
     <!-- Footer -->
 </div>
-<!-- End of .container -->
+<!-- End of .container --> --}}
+
+<style>
+    .footer {
+        background-color: #e5e5e5;
+        padding: 20px 0;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .footer-container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .footer-left h2 {
+        margin: 0;
+        font-size: 24px;
+    }
+
+    .logo-bold {
+        font-weight: 800;
+        color: #009444;
+    }
+
+    .logo-orange {
+        color: #f58220;
+        font-weight: 600;
+    }
+
+    .footer-copy {
+        margin-top: 5px;
+        font-size: 14px;
+        color: #555;
+    }
+
+    .footer-right {
+        text-align: right;
+    }
+
+    .footer-links {
+        margin-bottom: 10px;
+        font-size: 14px;
+    }
+
+    .footer-links a {
+        color: #333;
+        text-decoration: none;
+        margin: 0 5px;
+    }
+
+    .footer-social a {
+        margin: 0 5px;
+        font-size: 18px;
+        color: #333;
+        text-decoration: none;
+    }
+
+    .call-btn {
+        background-color: #f58220;
+        color: #fff;
+        padding: 6px 12px;
+        border-radius: 4px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .call-btn i {
+        margin-right: 5px;
+    }
+
+    @media (max-width: 768px) {
+        .footer-container {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .footer-right {
+            text-align: center;
+            margin-top: 10px;
+        }
+    }
+</style>
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-left">
+            <h2><span class="logo-bold">Buy</span><span class="logo-orange">Me</span></h2>
+            <p class="footer-copy">© 2025 Buyme.lk. All Rights Reserved.</p>
+        </div>
+        <div class="footer-right">
+            <div class="footer-links">
+                <a href="#">Stay Safe</a> |
+                <a href="#">FAQ</a> |
+                <a href="#">Anti-Scam</a> |
+                <a href="#">Terms</a> |
+                <a href="#">Privacy</a> |
+                <a href="#">Blog</a> |
+                <a href="#">Contact Us</a>
+            </div>
+            <div class="footer-social">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="tel:0112356356" class="call-btn">
+                    <i class="fab fa-whatsapp"></i> 0112 356 356
+                </a>
+            </div>
+        </div>
+    </div>
+</footer>
