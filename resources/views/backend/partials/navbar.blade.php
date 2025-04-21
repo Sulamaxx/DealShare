@@ -9,10 +9,10 @@
                 <button type="button" class="sidebar-mobile-toggle d-flex !leading-[0]">
                     <iconify-icon icon="heroicons:bars-3-solid" class="icon !text-[30px]"></iconify-icon>
                 </button>
-                <form class="navbar-search">
+                {{-- <form class="navbar-search">
                     <input type="text" name="search" placeholder="Search">
                     <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
-                </form>
+                </form> --}}
 
             </div>
         </div>
@@ -28,7 +28,7 @@
                 </button>
 
                 <!-- Language Dropdown Start  -->
-                <div class="hidden sm:inline-block">
+                {{-- <div class="hidden sm:inline-block">
                     <button data-dropdown-toggle="dropdownInformation" class="has-indicator w-10 h-10 bg-neutral-200 dark:bg-neutral-700 dark:text-white rounded-full flex justify-center items-center" type="button">
                         <img src="{{ asset('assets/images/lang-flag.png') }}" alt="image" class="w-6 h-6 object-cover rounded-full">
                     </button>
@@ -125,10 +125,10 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <!-- Language Dropdown End  -->
                 <!-- Message Dropdown Start  -->
-                <button data-dropdown-toggle="dropdownMessage" class="has-indicator w-10 h-10 bg-neutral-200 dark:bg-neutral-700 rounded-full flex justify-center items-center" type="button">
+                {{-- <button data-dropdown-toggle="dropdownMessage" class="has-indicator w-10 h-10 bg-neutral-200 dark:bg-neutral-700 rounded-full flex justify-center items-center" type="button">
                     <iconify-icon icon="mage:email" class="text-neutral-900 dark:text-white text-xl"></iconify-icon>
                 </button>
                 <div id="dropdownMessage" class="z-10 hidden bg-white dark:bg-neutral-700 rounded-2xl overflow-hidden shadow-lg max-w-[394px] w-full">
@@ -224,10 +224,10 @@
                             <a href="javascript:void(0)" class="text-primary-600 dark:text-primary-600 font-semibold hover:underline text-center">See All Message </a>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <!-- Message Dropdown End  -->
                 <!-- Notification Start  -->
-                <button data-dropdown-toggle="dropdownNotification" class="has-indicator w-10 h-10 bg-neutral-200 dark:bg-neutral-700 rounded-full flex justify-center items-center" type="button">
+                {{-- <button data-dropdown-toggle="dropdownNotification" class="has-indicator w-10 h-10 bg-neutral-200 dark:bg-neutral-700 rounded-full flex justify-center items-center" type="button">
                     <iconify-icon icon="iconoir:bell" class="text-neutral-900 dark:text-white text-xl"></iconify-icon>
                 </button>
                 <div id="dropdownNotification" class="z-10 hidden bg-white dark:bg-neutral-700 rounded-2xl overflow-hidden shadow-lg max-w-[394px] w-full">
@@ -313,7 +313,7 @@
                             <a href="javascript:void(0)" class="text-primary-600 dark:text-primary-600 font-semibold hover:underline text-center">See All Notification </a>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <!-- Notification End  -->
 
 
@@ -338,7 +338,7 @@
                                     <iconify-icon icon="solar:user-linear" class="icon text-xl"></iconify-icon>  My Profile
                                 </a>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a class="text-black px-0 py-2 hover:text-primary-600 flex items-center gap-4" href="{{ route('email') }}">
                                     <iconify-icon icon="tabler:message-check" class="icon text-xl"></iconify-icon>  Inbox
                                 </a>
@@ -347,7 +347,7 @@
                                 <a class="text-black px-0 py-2 hover:text-primary-600 flex items-center gap-4" href="{{ route('company') }}">
                                     <iconify-icon icon="icon-park-outline:setting-two" class="icon text-xl"></iconify-icon>  Setting
                                 </a>
-                            </li>
+                            </li> --}}
                             <li>
                                 <a class="text-black px-0 py-2 hover:text-danger-600 flex items-center gap-4" href="javascript:void(0)">
                                     <iconify-icon icon="lucide:power" class="icon text-xl"></iconify-icon>  Log Out

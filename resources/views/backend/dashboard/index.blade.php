@@ -6,7 +6,7 @@
     $script = '<script src="' . asset('assets/js/homeOneChart.js') . '"></script>';
 @endphp
 
-@section('content')
+{{-- @section('content')
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-6">
         <div
             class="card shadow-none border border-gray-200 dark:border-neutral-600 dark:bg-neutral-700 rounded-lg h-full bg-gradient-to-r from-cyan-600/10 to-bg-white">
@@ -729,4 +729,4 @@
             </div>
         </div>
     </div>
-@endsection
+@endsection --}}

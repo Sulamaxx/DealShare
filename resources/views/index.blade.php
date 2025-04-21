@@ -3,11 +3,199 @@
 @section('title', 'Forum')
 
 @section('content')
+    <style>
+        .navbar-custom {
+            background-color: #111;
+        }
 
+        .navbar-brand span {
+            color: #28a745;
+            font-weight: bold;
+        }
 
+        .banner {
+            background-color: #f03c02;
+            color: white;
+            padding: 50px 20px;
+        }
 
-    <main id="tt-pageContent" class="tt-offset-small">
+        .banner .tag {
+            background: yellow;
+            color: red;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            position: absolute;
+            top: 30px;
+            right: 30px;
+        }
+
+        .filters select,
+        .filters button {
+            margin: 10px 5px 0 0;
+        }
+
+        .deal-banner {
+            max-width: 100%;
+            border-radius: 15px;
+        }
+
+        /* Deals */
+        .deal-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            background: #fff;
+            transition: box-shadow 0.2s;
+        }
+
+        .deal-card:hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .deal-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .deal-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .deal-description {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .deal-meta {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .section-header {
+            font-size: 24px;
+            font-weight: 600;
+            border-left: 4px solid #28a745;
+            padding-left: 10px;
+            margin: 30px 0 15px;
+        }
+
+        .verified {
+            font-size: 12px;
+            color: #28a745;
+            font-weight: bold;
+        }
+    </style>
+
+    <section class="banner position-relative">
         <div class="container">
+            <div class="row align-items-center">
+                <!-- Left Column -->
+                <div class="col-md-6">
+                    <h3 class="fw-bold">Welcome to</h3>
+                    <h1 class="fw-bold display-5">Bargains Forum</h1>
+                    <p class="lead">Share deals, discover hidden gems, and connect with savvy shoppers!</p>
+
+                    <!-- Filter Section -->
+                    <form class="filters d-flex flex-wrap">
+                        <select class="form-select w-auto">
+                            <option>Categories</option>
+                            <option>Electronics</option>
+                            <option>Clothing</option>
+                            <option>Food</option>
+                        </select>
+                        <select class="form-select w-auto">
+                            <option>Store</option>
+                            <option>Amazon</option>
+                            <option>eBay</option>
+                        </select>
+                        <select class="form-select w-auto">
+                            <option>Price Range</option>
+                            <option>Under $50</option>
+                            <option>$50 - $100</option>
+                            <option>Above $100</option>
+                        </select>
+                        <button class="btn btn-dark">Search</button>
+                    </form>
+                </div>
+
+                <!-- Right Column -->
+                <div class="col-md-6 text-center position-relative">
+                    <img src="https://i.ibb.co/DMWPR9v/deal-phone.png" alt="Deal Promo" class="deal-banner mt-4">
+                    <div class="tag">UP TO <br> 60% OFF</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <main id="tt-pageContent" class="p-0">
+        <div class="container">
+
+
+            <!-- Section: Popular Deals -->
+            <div class="section-header">Popular Deals <a href="#" class="float-end fs-6 text-success">View All
+                    &raquo;</a></div>
+            <div class="row">
+                <!-- Repeat deal card -->
+                <div class="col-md-6">
+                    <div class="deal-card p-3">
+                        <img src="https://via.placeholder.com/300x150" class="deal-image mb-2">
+                        <div class="deal-title">Save 800 LKR</div>
+                        <div class="deal-description">20% Off On Total Bill Value Cremalato offers a truly indulgent
+                            experience that satisfies even the most discerning sweet tooth.</div>
+                        <div class="deal-meta mt-2">
+                            <span class="text-success">+10</span> | 10min | 5 Hotel Deals | Top Deals
+                            <div class="verified mt-1">Verified Member</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Repeat as needed -->
+            </div>
+
+            <!-- Section: New Deals -->
+            <div class="section-header">New Deals <a href="#" class="float-end fs-6 text-success">View All &raquo;</a>
+            </div>
+            <div class="row">
+                <!-- Repeat deal card -->
+                <div class="col-md-6">
+                    <div class="deal-card p-3">
+                        <img src="https://via.placeholder.com/300x150" class="deal-image mb-2">
+                        <div class="deal-title">Save 800 LKR</div>
+                        <div class="deal-description">20% Off On Total Bill Value Cremalato offers a truly indulgent
+                            experience that satisfies even the most discerning sweet tooth.</div>
+                        <div class="deal-meta mt-2">
+                            <span class="text-success">+10</span> | 10min | 5 Hotel Deals | Top Deals
+                            <div class="verified mt-1">Verified Member</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section: Highly Voted Deals -->
+            <div class="section-header">Highly Voted Deals <a href="#" class="float-end fs-6 text-success">View All
+                    &raquo;</a></div>
+            <div class="row">
+                <!-- Repeat deal card -->
+                <div class="col-md-6">
+                    <div class="deal-card p-3">
+                        <img src="https://via.placeholder.com/300x150" class="deal-image mb-2">
+                        <div class="deal-title">Save 800 LKR</div>
+                        <div class="deal-description">20% Off On Total Bill Value Cremalato offers a truly indulgent
+                            experience that satisfies even the most discerning sweet tooth.</div>
+                        <div class="deal-meta mt-2">
+                            <span class="text-success">+10</span> | 10min | 5 Hotel Deals | Top Deals
+                            <div class="verified mt-1">Verified Member</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="tt-topic-list">
                 <div class="tt-list-header">
                     <div class="tt-col-topic">Topic</div>
@@ -562,6 +750,7 @@
                     </button>
                 </div>
             </div>
+
         </div>
     </main>
 
@@ -660,15 +849,15 @@
         </form>
     </div>
 
-    <a href="page-create-topic.html" class="tt-btn-create-topic">
+    {{-- <a href="page-create-topic.html" class="tt-btn-create-topic">
         <span class="tt-icon">
             <svg>
                 <use xlink:href="#icon-create_new"></use>
             </svg>
         </span>
-    </a>
+    </a> --}}
 
-    <div class="modal fade" id="modalAdvancedSearch" tabindex="-1" role="dialog" aria-label="myModalLabel"
+    {{-- <div class="modal fade" id="modalAdvancedSearch" tabindex="-1" role="dialog" aria-label="myModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
@@ -797,7 +986,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
 
 
