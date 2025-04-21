@@ -6,6 +6,7 @@ use App\Http\Controllers\ChartController;
 use App\Http\Controllers\ComponentspageController;
 use App\Http\Controllers\CryptocurrencyController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DealsController;
 use App\Http\Controllers\FormsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
@@ -73,11 +74,11 @@ Route::prefix('aiapplication')->group(function () {
 });
 
 // Authentication
-Route::prefix('authentication')->group(function () {
+Route::prefix('admin')->group(function () {
     Route::controller(AuthenticationController::class)->group(function () {
-        Route::get('/forgot-password', 'forgotPassword')->name('forgotPassword');
+        // Route::get('/forgot-password', 'forgotPassword')->name('forgotPassword');
         Route::get('/sign-in', 'signin')->name('signin');
-        Route::get('/sign-up', 'signup')->name('signup');
+        // Route::get('/sign-up', 'signup')->name('signup');
     });
 });
 
@@ -181,11 +182,20 @@ Route::prefix('table')->group(function () {
 });
 
 // Users
-Route::prefix('users')->group(function () {
+Route::prefix('admin/users')->group(function () {
     Route::controller(UsersController::class)->group(function () {
         Route::get('/add-user', 'addUser')->name('addUser');
         Route::get('/users-grid', 'usersGrid')->name('usersGrid');
         Route::get('/users-list', 'usersList')->name('usersList');
         Route::get('/view-profile', 'viewProfile')->name('viewProfile');
+    });
+});
+
+// Deals
+Route::prefix('admin/users')->group(function () {
+    Route::controller(DealsController::class)->group(function () {
+        Route::get('/add-deals', 'addDeal')->name('addDeal');
+        Route::get('/deals-list', 'dealsList')->name('dealsList');
+        Route::get('/view-deals', 'viewDeal')->name('viewDeal');
     });
 });
