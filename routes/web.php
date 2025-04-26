@@ -13,6 +13,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TableController;
+use App\Http\Controllers\UserFrontController;
 use App\Http\Controllers\UserPostController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Artisan;
@@ -30,9 +31,7 @@ Route::get('/run-seeders', function () {
     return 'Seeders have been successfully run!';
 });
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::get('/', [UserFrontController::class, 'index'])->name('home');
 
 Route::middleware([
     'auth:sanctum',
