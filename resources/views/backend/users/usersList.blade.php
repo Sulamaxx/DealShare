@@ -53,11 +53,11 @@
                                 <tr>
                                     <th scope="col">
                                         <div class="flex items-center gap-10">
-                                            <div class="form-check style-check flex items-center">
+                                            {{-- <div class="form-check style-check flex items-center">
                                                 <input class="form-check-input rounded border input-form-dark"
                                                     type="checkbox" name="checkbox" id="selectAll">
-                                            </div>
-                                            S.L
+                                            </div> --}}
+                                           NO
                                         </div>
                                     </th>
                                     <th scope="col">Join Date</th>
@@ -72,10 +72,10 @@
                                     <tr>
                                         <td>
                                             <div class="flex items-center gap-10">
-                                                <div class="form-check style-check flex items-center">
+                                                {{-- <div class="form-check style-check flex items-center">
                                                     <input class="form-check-input rounded border border-neutral-400"
                                                         type="checkbox" name="checkbox" id="SL-1">
-                                                </div>
+                                                </div> --}}
                                                 {{ $index + 1 }}
                                             </div>
                                         </td>
