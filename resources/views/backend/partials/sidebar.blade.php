@@ -323,13 +323,14 @@
                                 class="ri-circle-fill circle-icon text-warning-600 w-auto"></i> Users Grid</a>
                     </li> --}}
                     <li>
-                        <a href="{{ route('addUser') }}"><i class="ri-circle-fill circle-icon text-info-600 w-auto"></i>
+                        <a href="{{ route('addUser') }}"><i
+                                class="ri-circle-fill circle-icon text-danger-600 w-auto"></i>
                             Add User</a>
                     </li>
-                    <li>
+                    {{-- <li>
                         <a href="{{ route('viewProfile') }}"><i
                                 class="ri-circle-fill circle-icon text-danger-600 w-auto"></i> View Profile</a>
-                    </li>
+                    </li> --}}
                 </ul>
             </li>
 

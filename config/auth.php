@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
     ],
 
     /*
@@ -69,6 +73,19 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+
+        // 'admins' => [
+        //     'driver' => 'eloquent',
+        //     'model' => App\Models\User::class, // Same model but with custom query
+        //     'query' => function ($query) {
+        //         return $query->where('user_type', 'admin');
+        //     },
+        // ],
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class, // Use the same User model if the admin is also a user
+        ],
+
     ],
 
     /*

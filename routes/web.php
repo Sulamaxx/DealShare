@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\AuthenticationController;
+use App\Http\Controllers\admin\UsersController;
 use App\Http\Controllers\AiapplicationController;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\ComponentspageController;
@@ -12,8 +13,21 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TableController;
-use App\Http\Controllers\UsersController;
+use App\Http\Middleware\AdminMiddleware;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/run-migrations', function () {
+    // Run the migrations
+    Artisan::call('migrate');
+    return 'Migrations have been successfully run!';
+});
+
+Route::get('/run-seeders', function () {
+    // Run the seeders
+    Artisan::call('db:seed');
+    return 'Seeders have been successfully run!';
+});
 
 Route::get('/', function () {
     return view('index');
@@ -35,11 +49,61 @@ Route::get('/approval-pending', function () {
 
 
 
-// Admin Routes
 
-Route::controller(DashboardController::class)->group(function () {
-    Route::get('/admin', 'index')->name('index');
+
+
+// Admin Routes
+// Authentication
+Route::prefix('admin')->group(function () {
+    Route::controller(AuthenticationController::class)->group(function () {
+        // Route::get('/forgot-password', 'forgotPassword')->name('forgotPassword');
+        Route::get('/login', 'signin')->name('admin.login');
+        Route::post('/login', 'login')->name('admin.login');
+        // Route::get('/sign-up', 'signup')->name('signup');
+    });
 });
+Route::prefix('admin')->group(function () {
+    Route::controller(AuthenticationController::class)
+        ->middleware([AdminMiddleware::class])
+        ->group(function () {
+            // Route::get('/forgot-password', 'forgotPassword')->name('forgotPassword');
+            Route::get('/logout', 'logout')->name('admin.logout');
+        });
+});
+Route::controller(DashboardController::class)
+    ->middleware([AdminMiddleware::class])
+    ->group(function () {
+        Route::get('/admin', 'index')->name('index');
+    });
+
+// Users
+Route::prefix('admin/users')
+    ->middleware([AdminMiddleware::class])
+    ->group(function () {
+        Route::controller(UsersController::class)->group(function () {
+            Route::get('/add-user', 'addUser')->name('addUser');
+            Route::get('/users-grid', 'usersGrid')->name('usersGrid');
+            Route::get('/users-list', 'usersList')->name('usersList');
+            Route::get('/view-profile/{id}', 'viewProfile')->name('user.profile');
+            Route::patch('/user/{id}/status', 'changeStatus')->name('user.status');
+            Route::delete('/user/{id}', 'destroy')->name('user.delete');
+            Route::post('/admin/users/store', 'store')->name('admin.users.store');
+        });
+    });
+
+// Deals
+Route::prefix('admin/deals')
+    ->middleware([AdminMiddleware::class])
+    ->group(function () {
+        Route::controller(DealsController::class)->group(function () {
+            Route::get('/add-deals', 'addDeal')->name('addDeal');
+            Route::get('/deals-list', 'dealsList')->name('dealsList');
+            Route::get('/view-deals', 'viewDeal')->name('viewDeal');
+        });
+    });
+
+
+
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('calendar-Main', 'calendarMain')->name('calendarMain');
@@ -73,15 +137,6 @@ Route::prefix('aiapplication')->group(function () {
     });
 });
 
-// Authentication
-Route::prefix('admin')->group(function () {
-    Route::controller(AuthenticationController::class)->group(function () {
-        // Route::get('/forgot-password', 'forgotPassword')->name('forgotPassword');
-        Route::get('/login', 'signin')->name('signin');
-        Route::post('/login', 'login')->name('admin.login');
-        // Route::get('/sign-up', 'signup')->name('signup');
-    });
-});
 
 // chart
 Route::prefix('chart')->group(function () {
@@ -182,21 +237,3 @@ Route::prefix('table')->group(function () {
     });
 });
 
-// Users
-Route::prefix('admin/users')->group(function () {
-    Route::controller(UsersController::class)->group(function () {
-        Route::get('/add-user', 'addUser')->name('addUser');
-        Route::get('/users-grid', 'usersGrid')->name('usersGrid');
-        Route::get('/users-list', 'usersList')->name('usersList');
-        Route::get('/view-profile', 'viewProfile')->name('viewProfile');
-    });
-});
-
-// Deals
-Route::prefix('admin/users')->group(function () {
-    Route::controller(DealsController::class)->group(function () {
-        Route::get('/add-deals', 'addDeal')->name('addDeal');
-        Route::get('/deals-list', 'dealsList')->name('dealsList');
-        Route::get('/view-deals', 'viewDeal')->name('viewDeal');
-    });
-});
