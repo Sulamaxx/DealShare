@@ -2,12 +2,12 @@
 
 use App\Http\Controllers\admin\AuthenticationController;
 use App\Http\Controllers\admin\DashboardController;
+use App\Http\Controllers\admin\DealsController;
 use App\Http\Controllers\admin\UsersController;
 use App\Http\Controllers\AiapplicationController;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\ComponentspageController;
 use App\Http\Controllers\CryptocurrencyController;
-use App\Http\Controllers\DealsController;
 use App\Http\Controllers\FormsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
@@ -106,6 +106,12 @@ Route::prefix('admin/deals')
             Route::get('/add-deals', 'addDeal')->name('addDeal');
             Route::get('/deals-list', 'dealsList')->name('dealsList');
             Route::get('/view-deals', 'viewDeal')->name('viewDeal');
+            // Route::get('/deals',  'index')->name('deals.index');
+            Route::patch('/deals/status/{id}',  'updateStatus')->name('deal.status');
+            Route::get('/deals/{id}/view',  'show')->name('deal.profile');
+            Route::get('/deals/{id}/edit',  'edit')->name('deal.edit');
+            Route::delete('/deals/{id}',  'destroy')->name('deal.delete');
+
         });
     });
 

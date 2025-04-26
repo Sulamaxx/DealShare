@@ -16,24 +16,28 @@
                 <div
                     class="card-header border-b border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-700 py-4 px-6 flex items-center flex-wrap gap-3 justify-between">
                     <div class="flex items-center flex-wrap gap-3">
-                        <span class="text-base font-medium text-secondary-light mb-0">Show</span>
-                        <select
-                            class="form-select form-select-sm w-auto dark:bg-neutral-600 dark:text-white border-neutral-200 dark:border-neutral-500 rounded-lg">
-                            @for ($i = 1; $i <= 10; $i++)
-                                <option>{{ $i }}</option>
-                            @endfor
-                        </select>
-                        <form class="navbar-search">
-                            <input type="text" class="bg-white dark:bg-neutral-700 h-10 w-auto" name="search"
-                                placeholder="Search deals...">
-                            <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
+                        <form method="GET" action="{{ route('dealsList') }}" class="flex items-center flex-wrap gap-4 mb-6">
+                            <div class="row flex flex-row gap-3">
+                                <input type="text" name="search" value="{{ request('search') }}"
+                                    class="form-control w-48 bg-white dark:bg-neutral-700" placeholder="Search deals...">
+
+                                <select name="status" class="form-select w-32 dark:bg-neutral-700 dark:text-white">
+                                    <option value="">All Status</option>
+                                    <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Active
+                                    </option>
+                                    <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Inactive
+                                    </option>
+                                </select>
+
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    <iconify-icon icon="ion:search-outline"></iconify-icon> Filter
+                                </button>
+
+                                <a href="{{ route('dealsList') }}" class="btn btn-secondary btn-sm">
+                                    <iconify-icon icon="ph:arrow-counter-clockwise"></iconify-icon> Reset
+                                </a>
+                            </div>
                         </form>
-                        <select
-                            class="form-select form-select-sm w-auto dark:bg-neutral-600 dark:text-white border-neutral-200 dark:border-neutral-500 rounded-lg">
-                            <option>Status</option>
-                            <option>Active</option>
-                            <option>Expired</option>
-                        </select>
                     </div>
                     <a href="{{ route('addDeal') }}"
                         class="btn btn-primary text-sm btn-sm px-3 py-3 rounded-lg flex items-center gap-2">
@@ -46,102 +50,91 @@
                         <table class="table bordered-table sm-table mb-0">
                             <thead>
                                 <tr>
-                                    <th scope="col">
-                                        <div class="flex items-center gap-10">
-                                            <div class="form-check style-check flex items-center">
-                                                <input class="form-check-input rounded border input-form-dark"
-                                                    type="checkbox" id="selectAll">
-                                            </div>
-                                            S.L
-                                        </div>
-                                    </th>
-                                    <th scope="col">Posted On</th>
-                                    <th scope="col">Title</th>
-                                    <th scope="col">Category</th>
-                                    <th scope="col">Price</th>
-                                    <th scope="col">Expiry Date</th>
-                                    <th scope="col" class="text-center">Status</th>
-                                    <th scope="col" class="text-center">Action</th>
+                                    <th>#</th>
+                                    <th>Posted On</th>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Link</th>
+                                    <th>Post By</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @for ($i = 0; $i < 10; $i++)
+                                @forelse ($deals as $index => $deal)
                                     <tr>
-                                        <td>
-                                            <div class="flex items-center gap-10">
-                                                <div class="form-check style-check flex items-center">
-                                                    <input class="form-check-input rounded border border-neutral-400"
-                                                        type="checkbox">
-                                                </div>
-                                                {{ $i + 1 }}
-                                            </div>
-                                        </td>
-                                        <td>{{ now()->subDays($i)->format('d M Y') }}</td>
-                                        <td>
-                                            <div class="flex items-center">
-                                                <img src="{{ asset('assets/images/deals/deal' . (($i % 3) + 1) . '.jpg') }}"
-                                                    alt=""
-                                                    class="w-10 h-10 rounded-full shrink-0 me-2 overflow-hidden">
-                                                <div class="grow">
-                                                    <span class="text-base mb-0 font-normal text-secondary-light">Hot Deal
-                                                        #{{ $i + 1 }}</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Electronics</td>
-                                        <td>$99.99</td>
-                                        <td>{{ now()->addDays(7 - $i)->format('d M Y') }}</td>
+                                        <td>{{ $deals->firstItem() + $index }}</td>
+                                        <td>{{ $deal->created_at->format('d M Y') }}</td>
+                                        <td>{{ $deal->title }}</td>
+                                        <td>{{ $deal->category ?? '-' }}</td>
+                                        <td><a href="{{ $deal->link }}" target="_blank">{{ $deal->link }}</a></td>
+                                        <td>{{ $deal->user->name ?? '-' }}</td>
                                         <td class="text-center">
-                                            <span
-                                                class="bg-success-100 dark:bg-success-600/25 text-success-600 dark:text-success-400 border border-success-600 px-6 py-1.5 rounded font-medium text-sm">
-                                                {{ $i % 2 === 0 ? 'Active' : 'Expired' }}
-                                            </span>
+                                            @if ($deal->status == 1)
+                                                <span
+                                                    class="bg-success-100 dark:bg-success-600/25 text-success-600 dark:text-success-400 border border-success-600 px-6 py-1.5 rounded font-medium text-sm">Active</span>
+                                            @else
+                                                <span
+                                                    class="bg-neutral-200 dark:bg-neutral-600 text-neutral-600 border border-neutral-400 px-6 py-1.5 rounded font-medium text-sm">Inactive</span>
+                                            @endif
                                         </td>
                                         <td class="text-center">
                                             <div class="flex items-center gap-3 justify-center">
-                                                <button type="button"
-                                                    class="bg-info-100 dark:bg-info-600/25 hover:bg-info-200 text-info-600 dark:text-info-400 font-medium w-10 h-10 flex justify-center items-center rounded-full">
-                                                    <iconify-icon icon="majesticons:eye-line"
-                                                        class="icon text-xl"></iconify-icon>
-                                                </button>
+                                                <form action="{{ route('deal.status', $deal->id) }}" method="POST"
+                                                    class="inline-block">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button type="submit"
+                                                        class="{{ $deal->status == 0 ? 'bg-success-100 dark:bg-success-600/25 text-success-600 dark:text-success-400 hover:bg-success-200' : 'bg-dark-100 dark:bg-dark-600/25 text-dark-600 dark:text-dark-400 hover:bg-dark-200' }} font-medium w-10 h-10 flex justify-center items-center rounded-full">
+                                                        <iconify-icon icon="mdi:toggle-switch"
+                                                            class="menu-icon"></iconify-icon>
+                                                    </button>
+                                                </form>
+                                                <form method="GET" action="{{ route('deal.profile', $deal->id) }}">
+                                                    @csrf
+                                                    <button type="submit"
+                                                        class="bg-info-100 dark:bg-info-600/25 hover:bg-info-200 text-info-600 dark:text-info-400 font-medium w-10 h-10 flex justify-center items-center rounded-full">
+                                                        <iconify-icon icon="majesticons:eye-line"
+                                                            class="icon text-xl"></iconify-icon>
+                                                    </button>
+                                                </form>
                                                 <button type="button"
                                                     class="bg-success-100 dark:bg-success-600/25 text-success-600 dark:text-success-400 bg-hover-success-200 font-medium w-10 h-10 flex justify-center items-center rounded-full">
                                                     <iconify-icon icon="lucide:edit" class="menu-icon"></iconify-icon>
                                                 </button>
-                                                <button type="button"
+                                                {{-- <button type="button"
                                                     class="remove-item-btn bg-danger-100 dark:bg-danger-600/25 hover:bg-danger-200 text-danger-600 dark:text-danger-500 font-medium w-10 h-10 flex justify-center items-center rounded-full">
                                                     <iconify-icon icon="fluent:delete-24-regular"
                                                         class="menu-icon"></iconify-icon>
-                                                </button>
+                                                </button> --}}
+                                                <form action="{{ route('deal.delete', $deal->id) }}" method="POST"
+                                                    class="inline-block"
+                                                    onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                        class="remove-item-btn bg-danger-100 dark:bg-danger-600/25 hover:bg-danger-200 text-danger-600 dark:text-danger-500 font-medium w-10 h-10 flex justify-center items-center rounded-full">
+                                                        <iconify-icon icon="fluent:delete-24-regular"
+                                                            class="menu-icon"></iconify-icon>
+                                                    </button>
+                                                </form>
+
                                             </div>
                                         </td>
                                     </tr>
-                                @endfor
+                                @empty
+                                    <tr>
+                                        <td colspan="8" class="text-center">No deals found.</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
 
                     <div class="flex items-center justify-between flex-wrap gap-2 mt-6">
-                        <span>Showing 1 to 10 of 50 deals</span>
-                        <ul class="pagination flex flex-wrap items-center gap-2 justify-center">
-                            <li class="page-item">
-                                <a class="page-link bg-neutral-300 dark:bg-neutral-600 text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8 text-base"
-                                    href="#"><iconify-icon icon="ep:d-arrow-left"></iconify-icon></a>
-                            </li>
-                            <li class="page-item"><a
-                                    class="page-link bg-primary-600 text-white rounded-lg h-8 w-8 flex items-center justify-center text-base"
-                                    href="#">1</a></li>
-                            <li class="page-item"><a
-                                    class="page-link bg-neutral-300 dark:bg-neutral-600 text-secondary-light rounded-lg h-8 w-8 flex items-center justify-center"
-                                    href="#">2</a></li>
-                            <li class="page-item"><a
-                                    class="page-link bg-neutral-300 dark:bg-neutral-600 text-secondary-light rounded-lg h-8 w-8 flex items-center justify-center"
-                                    href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link bg-neutral-300 dark:bg-neutral-600 text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8 text-base"
-                                    href="#"> <iconify-icon icon="ep:d-arrow-right"></iconify-icon> </a>
-                            </li>
-                        </ul>
+                        {{-- <span class="text-sm">Showing {{ $deals->firstItem() }} to {{ $deals->lastItem() }} of
+                            {{ $deals->total() }} deals</span> --}}
+                        {{ $deals->appends(request()->query())->links() }}
                     </div>
                 </div>
             </div>
