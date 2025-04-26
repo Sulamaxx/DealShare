@@ -47,9 +47,28 @@
                 </div>
                 <div class="col-auto ">
                     <div class="tt-account-btn">
-                        <a href="{{ route('login') }}" class="btn btn-primary">Log in</a>
-                        <a href="{{ route('register') }}" class="btn btn-secondary">Sign up</a>
-                        <a href="{{ route('register') }}" class="btn" style="background-color: #fe9001;">Post Your
+                        @if (Auth::user())
+                            <div class="d-flex align-items-center gap-3">
+                                <span class="text-white fw-bold">
+                                    {{ Auth::user()->name }}
+                                </span>
+                                <a href="{{ route('logout') }}" class="btn btn-sm btn-danger"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    Logout
+                                </a>
+
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                    style="display: none;">
+                                    @csrf
+                                </form>
+                            </div>
+                        @else
+                            <a href="{{ route('login') }}" class="btn btn-primary">Log in</a>
+                            <a href="{{ route('register') }}" class="btn btn-secondary">Sign up</a>
+                        @endif
+
+                        <a href="{{ route('create-deals') }}" class="btn" style="background-color: #fe9001;">Post
+                            Your
                             Deal</a>
                     </div>
                 </div>
