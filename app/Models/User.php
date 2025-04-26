@@ -32,6 +32,7 @@ class User extends Authenticatable
         'email',
         'password',
         'ip',
+        'profile_photo_path',
     ];
 
     /**
@@ -67,4 +68,15 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // Assuming you have an `admin` type and a `user` type
+    const ADMIN = 'admin';
+    const USER = 'user';
+
+    // You can also add a helper method to check if the user is an admin
+    public function isAdmin()
+    {
+        return $this->user_type === self::ADMIN;
+    }
+
 }
