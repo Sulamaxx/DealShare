@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\admin\AuthenticationController;
 use App\Http\Controllers\AiapplicationController;
-use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\ComponentspageController;
 use App\Http\Controllers\CryptocurrencyController;
@@ -77,7 +77,8 @@ Route::prefix('aiapplication')->group(function () {
 Route::prefix('admin')->group(function () {
     Route::controller(AuthenticationController::class)->group(function () {
         // Route::get('/forgot-password', 'forgotPassword')->name('forgotPassword');
-        Route::get('/sign-in', 'signin')->name('signin');
+        Route::get('/login', 'signin')->name('signin');
+        Route::post('/login', 'login')->name('admin.login');
         // Route::get('/sign-up', 'signup')->name('signup');
     });
 });
