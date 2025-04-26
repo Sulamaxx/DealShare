@@ -178,7 +178,7 @@
             </div>
             <div class="row">
 
-                @for ($i = 0; $i < 6; $i++)
+                {{-- @for ($i = 0; $i < 6; $i++)
                     <!-- Repeat deal card -->
                     <div class="col-md-6">
                         <div class="deal-card p-3">
@@ -203,7 +203,12 @@
                             </div>
                         </div>
                     </div>
-                @endfor
+                @endfor --}}
+                @foreach ($new_deals as $deal)
+                    <!-- Repeat deal card -->
+                    @include('deal.deal_card',[$deal])
+                @endforeach
+
 
             </div>
 
