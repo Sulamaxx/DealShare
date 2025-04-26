@@ -79,4 +79,10 @@ class User extends Authenticatable
         return $this->user_type === self::ADMIN;
     }
 
+    public function posts()
+    {
+        return $this->hasMany(Post::class, 'post_by');
+    }
+
+
 }

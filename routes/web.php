@@ -1,18 +1,19 @@
 <?php
 
 use App\Http\Controllers\admin\AuthenticationController;
+use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\UsersController;
 use App\Http\Controllers\AiapplicationController;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\ComponentspageController;
 use App\Http\Controllers\CryptocurrencyController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DealsController;
 use App\Http\Controllers\FormsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TableController;
+use App\Http\Controllers\UserPostController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -38,15 +39,21 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
+
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::get('/create-deals', [UserPostController::class, 'index'])->name('create-deals');
+
+    Route::post('/posts', [UserPostController::class, 'store'])->name('posts.store');
+
 });
+
 
 Route::get('/approval-pending', function () {
     return view('auth.approval-pending');
 });
-
 
 
 
