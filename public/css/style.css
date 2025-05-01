@@ -6603,7 +6603,7 @@ hr {
   position: relative;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
   .tt-desktop-menu {
     display: none;
   }
