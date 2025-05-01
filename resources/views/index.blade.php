@@ -216,12 +216,14 @@
                                         style="flex-basis: 70%; display: flex; flex-direction: column;">
 
 
-                                        <h5 style="font-size: 1.125em; margin-bottom: 3px;font-weight:bolder">Save 800 LKR
+                                        <h5 style="font-size: 1.125em; margin-bottom: 3px;font-weight:bolder">Save 800
+                                            LKR
                                         </h5>
 
 
                                         <p style="font-size: 0.875em; color: #555; margin-bottom: 3px; flex-grow: 1;">
-                                            20% Off On Total Bill Value Cremalato offers a truly indulgent experience that
+                                            20% Off On Total Bill Value Cremalato offers a truly indulgent experience
+                                            that
                                             satisfies even the most discerning sweet tooth. most discerning sweet tooth.
                                             most discerning sweet tooth.
                                         </p>
@@ -284,15 +286,46 @@
                             </div>
                         @endfor
 
+
                     </div>
                 </div>
             </section>
 
-            <div class="section-header">New Deals <a href="#" class="float-end fs-6 text-success">View All &raquo;</a>
-            </div>
-            <div class="row">
+            <section class="popular-deals-section" style="margin-top: 20px;line-height: 17.5px;">
+                <div class="container" style="padding-inline: 0px">
 
-                {{-- @for ($i = 0; $i < 6; $i++)
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+
+
+                            <h2 style="margin-bottom: 0; font-weight: bold; font-size: 1.5rem; display: inline-block;">
+                                New Deals
+                            </h2>
+
+                            <div style="width: 62.5px; height: 3px; background-color: #DC3545; display: inline-block;">
+                            </div>
+
+
+                        </div>
+
+                        <a href="#" class="fs-6 animated-link" {{-- Added a class for easier targeting in CSS --}}
+                            style="text-decoration: none; color: #555; font-weight: bold; display: inline-flex; align-items: center;">
+                            View All
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"
+                                viewBox="0 0 16 16" style="vertical-align: middle; margin-left: 0.125em;">
+                                <path fill-rule="evenodd"
+                                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"
+                                viewBox="0 0 16 16" style="vertical-align: middle;margin-left: -0.5em;">
+                                <path fill-rule="evenodd"
+                                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="row">
+
+                        {{-- @for ($i = 0; $i < 6; $i++)
                     <!-- Repeat deal card -->
                     <div class="col-md-6">
                         <div class="deal-card p-3">
@@ -318,13 +351,216 @@
                         </div>
                     </div>
                 @endfor --}}
-                @foreach ($new_deals as $deal)
-                    <!-- Repeat deal card -->
-                    @include('deal.deal_card', [$deal])
-                @endforeach
+                        @foreach ($new_deals as $deal)
+                            <!-- Repeat deal card -->
+                            @include('deal.deal_card', [$deal])
+                        @endforeach
 
 
-            </div>
+                    </div>
+                </div>
+            </section>
+
+            {{-- <section class="popular-deals-section" style="margin-top: 20px;line-height: 17.5px;">
+                <div class="container" style="padding-inline: 0px">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+
+
+                            <h2 style="margin-bottom: 0; font-weight: bold; font-size: 1.5rem; display: inline-block;">
+                                Popular Deals
+                            </h2>
+
+                            <div style="width: 62.5px; height: 3px; background-color: #DC3545; display: inline-block;">
+                            </div>
+
+
+                        </div>
+
+                        <a href="#" class="fs-6 animated-link" {{-- Added a class for easier targeting in CSS
+                            style="text-decoration: none; color: #555; font-weight: bold; display: inline-flex; align-items: center;">
+                            View All
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"
+                                viewBox="0 0 16 16" style="vertical-align: middle; margin-left: 0.125em;">
+                                <path fill-rule="evenodd"
+                                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"
+                                viewBox="0 0 16 16" style="vertical-align: middle;margin-left: -0.5em;">
+                                <path fill-rule="evenodd"
+                                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                            </svg>
+                        </a>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            @for ($i = 0; $i < 3; $i++)
+                                <div class="col-sm-12 col-md-12 col-lg-12">
+
+                                    <div class="single-deal-card card mb-4"
+                                        style="display: flex; flex-direction: row; border:none;border-radius:0%; overflow: hidden;">
+
+
+                                        <div class="deal-image-area position-relative"
+                                            style="flex-basis: 30%; background-image: url('placeholder-deal-image.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+
+                                        </div>
+
+
+                                        <div class="deal-details-area p-1"
+                                            style="flex-basis: 70%; display: flex; flex-direction: column;">
+
+
+                                            <h5 style="font-size: 1.125em; margin-bottom: 3px;font-weight:bolder">Save 800
+                                                LKR
+                                            </h5>
+
+
+                                            <p style="font-size: 0.875em; color: #555; margin-bottom: 3px; flex-grow: 1;">
+                                                20% Off On Total Bill Value Cremalato offers a truly indulgent experience
+                                                that
+                                                satisfies even the most discerning sweet tooth. most discerning sweet tooth.
+                                                most discerning sweet tooth.
+                                            </p>
+
+
+                                            <small class="text-muted mb-2">
+                                                <i class="fas fa-info-circle me-1"></i>
+                                                <a href="#" style="text-decoration: none; color: #555;">powertools
+                                                    specialists.com.au</a>
+                                            </small>
+
+
+                                            <div class="deal-meta mt-auto">
+                                                <div class="d-flex align-items-center justify-content-between mb-1">
+
+                                                    <div class="d-flex align-items-center"
+                                                        style="background-color: #ddd;padding-inline: 5px;border-radius:3.75px">
+
+                                                        <span class=" fw-bold"
+                                                            style="margin-right: 5px;font-weight: bold;font-color:#ddd">
+                                                            +10
+                                                        </span>
+                                                        <span style="margin-right: 5px;font-color:#ddd">|</span>
+                                                        <span class="fw-bold"
+                                                            style="margin-right: 5px;font-weight: bold;font-color:#ddd">
+                                                            -1
+                                                        </span>
+                                                    </div>
+
+                                                    <span class="text-muted">
+                                                        10min
+                                                        <i class="far fa-comment ms-2 me-1" style="font-weight: 600;"></i> 5
+                                                    </span>
+                                                    <div class="d-flex flex-wrap gap-1">
+
+                                                        <span class=" fw-bold" style="margin-right: 1.25px;font-color:#ddd">
+                                                            5 Hotel Deals
+                                                        </span>
+                                                        <span style="margin-right: 1.25px;font-color:#ddd">|</span>
+                                                        <span class="fw-bold" style="margin-right: 1em;font-color:#ddd">
+                                                            Top Deals
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                {{-- Tags and Verified Member
+                                                <div class="d-flex flex-wrap align-items-center gap-2"
+                                                    style="margin-top: 0.307rem">
+                                                    <div class="verified-member d-flex align-items-center text-success">
+                                                        <i class="fas fa-star me-1"
+                                                            style="padding: 2px;background-color: #DC3545;color: white;"></i>
+                                                        {{-- Star icon placeholder
+                                                        Verified Member
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            @endfor
+                        </div>
+                        <div class="col-12 col-md-6">
+                            @for ($i = 0; $i < 6; $i++)
+                                <div class="col-sm-12 col-md-12 col-lg-12">
+
+                                    <div class="single-deal-card card mb-4"
+                                        style="display: flex; flex-direction: row; border:none;border-radius:0%; overflow: hidden;">
+
+
+                                        <div class="deal-image-area position-relative"
+                                            style="flex-basis: 30%; background-image: url('placeholder-deal-image.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+
+                                        </div>
+
+
+                                        <div class="deal-details-area p-1"
+                                            style="flex-basis: 70%; display: flex; flex-direction: column;">
+
+
+                                            <h5 style="font-size: 1.125em; margin-bottom: 3px;font-weight:bolder">Save 800
+                                                LKR
+                                            </h5>
+
+
+                                            <div class="deal-meta mt-auto">
+                                                <div class="d-flex align-items-center justify-content-between mb-1">
+
+                                                    <div class="d-flex align-items-center"
+                                                        style="background-color: #ddd;padding-inline: 5px;border-radius:3.75px">
+
+                                                        <span class=" fw-bold"
+                                                            style="margin-right: 5px;font-weight: bold;font-color:#ddd">
+                                                            +10
+                                                        </span>
+                                                        <span style="margin-right: 5px;font-color:#ddd">|</span>
+                                                        <span class="fw-bold"
+                                                            style="margin-right: 5px;font-weight: bold;font-color:#ddd">
+                                                            -1
+                                                        </span>
+                                                    </div>
+
+                                                    <span class="text-muted">
+                                                        10min
+                                                        <i class="far fa-comment ms-2 me-1" style="font-weight: 600;"></i> 5
+                                                    </span>
+                                                    <div class="d-flex flex-wrap gap-1">
+
+                                                        <span class=" fw-bold" style="margin-right: 1.25px;font-color:#ddd">
+                                                            5 Hotel Deals
+                                                        </span>
+                                                        <span style="margin-right: 1.25px;font-color:#ddd">|</span>
+                                                        <span class="fw-bold" style="margin-right: 1em;font-color:#ddd">
+                                                            Top Deals
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                {{-- Tags and Verified Member
+                                                <div class="d-flex flex-wrap align-items-center gap-2"
+                                                    style="margin-top: 0.307rem">
+                                                    <div class="verified-member d-flex align-items-center text-success">
+                                                        <i class="fas fa-star me-1"
+                                                            style="padding: 2px;background-color: #DC3545;color: white;"></i>
+                                                        {{-- Star icon placeholder
+                                                        Verified Member
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            @endfor
+                        </div>
+                    </div>
+                </div>
+            </section> --}}
+
 
             <section class="popular-deals-section" style="margin-top: 20px;line-height: 17.5px;">
                 <div class="container" style="padding-inline: 0px">
@@ -343,7 +579,7 @@
 
                         </div>
 
-                        <a href="#" class="fs-6 animated-link" 
+                        <a href="#" class="fs-6 animated-link"
                             style="text-decoration: none; color: #555; font-weight: bold; display: inline-flex; align-items: center;">
                             View All
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"
