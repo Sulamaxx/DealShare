@@ -90,44 +90,68 @@
             color: #28a745;
             font-weight: bold;
         }
+
+        .animated-link svg {
+            transition: transform 0.3s ease-in-out;
+            /* Add transition for smooth animation */
+        }
+
+        .animated-link:hover svg {
+            transform: translateX(3px);
+            /* Move the icon 3 pixels to the right on hover */
+        }
+
+        /* Optional: Add a slightly larger movement for the second arrow for a staggered effect */
+        .animated-link svg:last-child {
+            transition: transform 0.3s ease-in-out;
+            /* Ensure transition is also on the second svg */
+        }
+
+        .animated-link:hover svg:last-child {
+            transform: translateX(3px);
+            /* Move the second icon further to the right */
+        }
+
+        /* Optional: Change color on hover */
+        .animated-link:hover {
+            color: #888 !important;
+            /* Example: Change text color on hover */
+        }
     </style>
 
-    <div class="banner position-relative col-12">
+    <div class="banner position-relative col-12"
+        style="background-color: #fe4c01; color: white; padding: 40px 0;background-image: url('https://i.ibb.co/DMWPR9v/deal-phone.png'); background-size: cover; background-position: center right; background-repeat: no-repeat; min-height: 300px;">
+
         <div class="container">
             <div class="row align-items-center">
-                <!-- Left Column -->
                 <div class="col-md-6">
-                    <h3 class="fw-bold">Welcome to</h3>
-                    <h1 class="fw-bold display-5">Bargains Forum</h1>
-                    <p class="lead">Share deals, discover hidden gems, and connect with savvy shoppers!</p>
 
-                    <!-- Filter Section -->
-                    <form class="filters d-flex flex-wrap">
-                        <select class="form-select w-auto">
+                    <h3 class="fw-bold" style="color: white; font-size: 1.5em; margin-bottom: 5px;">Welcome to</h3>
+                    <h1 class="fw-bold display-5" style="color: white; font-size: 2.5em; margin-bottom: 10px;">Bargains Forum
+                    </h1>
+                    <p class="lead" style="color: white; font-size: 1.2em; margin-bottom: 20px;">Share deals, discover
+                        hidden gems, and connect with savvy shoppers!</p>
+
+                    <form class="filters d-flex flex-wrap gap-2">
+                        <select class="form-select w-auto" style="border-radius: 20px;">
                             <option>Categories</option>
                             <option>Electronics</option>
                             <option>Clothing</option>
                             <option>Food</option>
                         </select>
-                        <select class="form-select w-auto">
+                        <select class="form-select w-auto" style="border-radius: 20px;">
                             <option>Store</option>
                             <option>Amazon</option>
                             <option>eBay</option>
                         </select>
-                        <select class="form-select w-auto">
+                        <select class="form-select w-auto" style="border-radius: 20px;">
                             <option>Price Range</option>
                             <option>Under $50</option>
                             <option>$50 - $100</option>
                             <option>Above $100</option>
                         </select>
-                        <button class="btn btn-dark">Search</button>
+                        <button class="btn btn-dark" style="border-radius: 20px;margin-top: auto;">Search</button>
                     </form>
-                </div>
-
-                <!-- Right Column -->
-                <div class="col-md-6 text-center position-relative">
-                    <img src="https://i.ibb.co/DMWPR9v/deal-phone.png" alt="Deal Promo" class="deal-banner mt-4">
-                    <div class="tag">UP TO <br> 60% OFF</div>
                 </div>
             </div>
         </div>
@@ -138,42 +162,132 @@
         <div class="container">
 
 
-            <!-- Section: Popular Deals -->
-            <div class="section-header">Popular Deals <a href="#" class="float-end fs-6 text-success">View All
-                    &raquo;</a></div>
-            <div class="row">
 
-                @for ($i = 0; $i < 6; $i++)
-                    <!-- Repeat deal card -->
-                    <div class="col-md-6">
-                        <div class="deal-card p-3">
-                            <div class="row">
-                                <div class="col-4">
-                                    <div class="row">
-                                        <img src="https://via.placeholder.com/300x150" class="deal-image mb-2">
+            <section class="popular-deals-section" style="margin-top: 20px;line-height: 17.5px;">
+                <div class="container" style="padding-inline: 0px">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+
+
+                            <h2 style="margin-bottom: 0; font-weight: bold; font-size: 1.5rem; display: inline-block;">
+                                Popular Deals
+                            </h2>
+
+                            <div style="width: 62.5px; height: 3px; background-color: #DC3545; display: inline-block;">
+                            </div>
+
+
+                        </div>
+
+                        <a href="#" class="fs-6 animated-link" {{-- Added a class for easier targeting in CSS --}}
+                            style="text-decoration: none; color: #555; font-weight: bold; display: inline-flex; align-items: center;">
+                            View All
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"
+                                viewBox="0 0 16 16" style="vertical-align: middle; margin-left: 0.125em;">
+                                <path fill-rule="evenodd"
+                                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"
+                                viewBox="0 0 16 16" style="vertical-align: middle;margin-left: -0.5em;">
+                                <path fill-rule="evenodd"
+                                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                            </svg>
+                        </a>
+                    </div>
+
+
+                    <div class="row">
+
+                        @for ($i = 0; $i < 6; $i++)
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+
+                                <div class="single-deal-card card mb-4"
+                                    style="display: flex; flex-direction: row; border:none;border-radius:0%; overflow: hidden;">
+
+
+                                    <div class="deal-image-area position-relative"
+                                        style="flex-basis: 30%; background-image: url('placeholder-deal-image.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+
                                     </div>
-                                </div>
-                                <div class="col-8">
-                                    <div class="row">
-                                        <div class="deal-title">Save 800 LKR</div>
-                                        <div class="deal-description">20% Off On Total Bill Value Cremalato offers a truly
-                                            indulgent
-                                            experience that satisfies even the most discerning sweet tooth.</div>
-                                        <div class="deal-meta mt-2">
-                                            <span class="text-success">+10</span> | 10min | 5 Hotel Deals | Top Deals
-                                            <div class="verified mt-1">Verified Member</div>
+
+
+                                    <div class="deal-details-area p-1"
+                                        style="flex-basis: 70%; display: flex; flex-direction: column;">
+
+
+                                        <h5 style="font-size: 1.125em; margin-bottom: 3px;font-weight:bolder">Save 800 LKR
+                                        </h5>
+
+
+                                        <p style="font-size: 0.875em; color: #555; margin-bottom: 3px; flex-grow: 1;">
+                                            20% Off On Total Bill Value Cremalato offers a truly indulgent experience that
+                                            satisfies even the most discerning sweet tooth. most discerning sweet tooth.
+                                            most discerning sweet tooth.
+                                        </p>
+
+
+                                        <small class="text-muted mb-2">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            <a href="#" style="text-decoration: none; color: #555;">powertools
+                                                specialists.com.au</a>
+                                        </small>
+
+
+                                        <div class="deal-meta mt-auto">
+                                            <div class="d-flex align-items-center justify-content-between mb-1">
+
+                                                <div class="d-flex align-items-center"
+                                                    style="background-color: #ddd;padding-inline: 5px;border-radius:3.75px">
+
+                                                    <span class=" fw-bold"
+                                                        style="margin-right: 5px;font-weight: bold;font-color:#ddd">
+                                                        +10
+                                                    </span>
+                                                    <span style="margin-right: 5px;font-color:#ddd">|</span>
+                                                    <span class="fw-bold"
+                                                        style="margin-right: 5px;font-weight: bold;font-color:#ddd">
+                                                        -1
+                                                    </span>
+                                                </div>
+
+                                                <span class="text-muted">
+                                                    10min
+                                                    <i class="far fa-comment ms-2 me-1" style="font-weight: 600;"></i> 5
+                                                </span>
+                                                <div class="d-flex flex-wrap gap-1">
+
+                                                    <span class=" fw-bold" style="margin-right: 1.25px;font-color:#ddd">
+                                                        5 Hotel Deals
+                                                    </span>
+                                                    <span style="margin-right: 1.25px;font-color:#ddd">|</span>
+                                                    <span class="fw-bold" style="margin-right: 1em;font-color:#ddd">
+                                                        Top Deals
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            {{-- Tags and Verified Member --}}
+                                            <div class="d-flex flex-wrap align-items-center gap-2"
+                                                style="margin-top: 0.307rem">
+                                                <div class="verified-member d-flex align-items-center text-success">
+                                                    <i class="fas fa-star me-1"
+                                                        style="padding: 2px;background-color: #DC3545;color: white;"></i>
+                                                    {{-- Star icon placeholder --}}
+                                                    Verified Member
+                                                </div>
+                                            </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endfor
+
                     </div>
-                    <!-- Repeat as needed -->
-                @endfor
+                </div>
+            </section>
 
-            </div>
-
-            <!-- Section: New Deals -->
             <div class="section-header">New Deals <a href="#" class="float-end fs-6 text-success">View All &raquo;</a>
             </div>
             <div class="row">
@@ -206,47 +320,381 @@
                 @endfor --}}
                 @foreach ($new_deals as $deal)
                     <!-- Repeat deal card -->
-                    @include('deal.deal_card',[$deal])
+                    @include('deal.deal_card', [$deal])
                 @endforeach
 
 
             </div>
 
-            <!-- Section: Highly Voted Deals -->
-            <div class="section-header">Highly Voted Deals <a href="#" class="float-end fs-6 text-success">View All
-                    &raquo;</a></div>
-            <div class="row">
+            <section class="popular-deals-section" style="margin-top: 20px;line-height: 17.5px;">
+                <div class="container" style="padding-inline: 0px">
 
-                @for ($i = 0; $i < 6; $i++)
-                    <!-- Repeat deal card -->
-                    <div class="col-md-6">
-                        <div class="deal-card p-3">
-                            <div class="row">
-                                <div class="col-4">
-                                    <div class="row">
-                                        <img src="https://via.placeholder.com/300x150" class="deal-image mb-2">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+
+
+                            <h2 style="margin-bottom: 0; font-weight: bold; font-size: 1.5rem; display: inline-block;">
+                                Highly Voted Deals
+                            </h2>
+
+                            <div style="width: 62.5px; height: 3px; background-color: #DC3545; display: inline-block;">
+                            </div>
+
+
+                        </div>
+
+                        <a href="#" class="fs-6 animated-link" 
+                            style="text-decoration: none; color: #555; font-weight: bold; display: inline-flex; align-items: center;">
+                            View All
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"
+                                viewBox="0 0 16 16" style="vertical-align: middle; margin-left: 0.125em;">
+                                <path fill-rule="evenodd"
+                                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"
+                                viewBox="0 0 16 16" style="vertical-align: middle;margin-left: -0.5em;">
+                                <path fill-rule="evenodd"
+                                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                            </svg>
+                        </a>
+                    </div>
+
+
+                    <div class="row">
+
+                        @for ($i = 0; $i < 6; $i++)
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+
+                                <div class="single-deal-card card mb-4"
+                                    style="display: flex; flex-direction: row; border:none;border-radius:0%; overflow: hidden;">
+
+
+                                    <div class="deal-image-area position-relative"
+                                        style="flex-basis: 30%; background-image: url('placeholder-deal-image.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+
                                     </div>
-                                </div>
-                                <div class="col-8">
-                                    <div class="row">
-                                        <div class="deal-title">Save 800 LKR</div>
-                                        <div class="deal-description">20% Off On Total Bill Value Cremalato offers a truly
-                                            indulgent
-                                            experience that satisfies even the most discerning sweet tooth.</div>
-                                        <div class="deal-meta mt-2">
-                                            <span class="text-success">+10</span> | 10min | 5 Hotel Deals | Top Deals
-                                            <div class="verified mt-1">Verified Member</div>
+
+
+                                    <div class="deal-details-area p-1"
+                                        style="flex-basis: 70%; display: flex; flex-direction: column;">
+
+
+                                        <h5 style="font-size: 1.125em; margin-bottom: 3px;font-weight:bolder">Save 800 LKR
+                                        </h5>
+
+
+                                        <p style="font-size: 0.875em; color: #555; margin-bottom: 3px; flex-grow: 1;">
+                                            20% Off On Total Bill Value Cremalato offers a truly indulgent experience that
+                                            satisfies even the most discerning sweet tooth. most discerning sweet tooth.
+                                            most discerning sweet tooth.
+                                        </p>
+
+
+                                        <small class="text-muted mb-2">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            <a href="#" style="text-decoration: none; color: #555;">powertools
+                                                specialists.com.au</a>
+                                        </small>
+
+
+                                        <div class="deal-meta mt-auto">
+                                            <div class="d-flex align-items-center justify-content-between mb-1">
+
+                                                <div class="d-flex align-items-center"
+                                                    style="background-color: #ddd;padding-inline: 5px;border-radius:3.75px">
+
+                                                    <span class=" fw-bold"
+                                                        style="margin-right: 5px;font-weight: bold;font-color:#ddd">
+                                                        +10
+                                                    </span>
+                                                    <span style="margin-right: 5px;font-color:#ddd">|</span>
+                                                    <span class="fw-bold"
+                                                        style="margin-right: 5px;font-weight: bold;font-color:#ddd">
+                                                        -1
+                                                    </span>
+                                                </div>
+
+                                                <span class="text-muted">
+                                                    10min
+                                                    <i class="far fa-comment ms-2 me-1" style="font-weight: 600;"></i> 5
+                                                </span>
+                                                <div class="d-flex flex-wrap gap-1">
+
+                                                    <span class=" fw-bold" style="margin-right: 1.25px;font-color:#ddd">
+                                                        5 Hotel Deals
+                                                    </span>
+                                                    <span style="margin-right: 1.25px;font-color:#ddd">|</span>
+                                                    <span class="fw-bold" style="margin-right: 1em;font-color:#ddd">
+                                                        Top Deals
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            {{-- Tags and Verified Member --}}
+                                            <div class="d-flex flex-wrap align-items-center gap-2"
+                                                style="margin-top: 0.307rem">
+                                                <div class="verified-member d-flex align-items-center text-success">
+                                                    <i class="fas fa-star me-1"
+                                                        style="padding: 2px;background-color: #DC3545;color: white;"></i>
+                                                    {{-- Star icon placeholder --}}
+                                                    Verified Member
+                                                </div>
+                                            </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
+                        @endfor
+
+                    </div>
+                </div>
+            </section>
+
+
+
+        </div>
+    </main>
+
+    <div id="js-popup-settings" class="tt-popup-settings">
+        <div class="tt-btn-col-close">
+            <a href="#">
+                <span class="tt-icon-title">
+                    <svg>
+                        <use xlink:href="#icon-settings_fill"></use>
+                    </svg>
+                </span>
+                <span class="tt-icon-text">
+                    Settings
+                </span>
+                <span class="tt-icon-close">
+                    <svg>
+                        <use xlink:href="#icon-cancel"></use>
+                    </svg>
+                </span>
+            </a>
+        </div>
+        <form class="form-default">
+            <div class="tt-form-upload">
+                <div class="row no-gutter">
+                    <div class="col-auto">
+                        <div class="tt-avatar">
+                            <svg>
+                                <use xlink:href="#icon-ava-d"></use>
+                            </svg>
                         </div>
                     </div>
-                @endfor
-
+                    <div class="col-auto ml-auto">
+                        <a href="#" class="btn btn-primary">Upload Picture</a>
+                    </div>
+                </div>
             </div>
+            <div class="form-group">
+                <label for="settingsUserName">Username</label>
+                <input type="text" name="name" class="form-control" id="settingsUserName"
+                    placeholder="azyrusmax">
+            </div>
+            <div class="form-group">
+                <label for="settingsUserEmail">Email</label>
+                <input type="text" name="name" class="form-control" id="settingsUserEmail"
+                    placeholder="Sample@sample.com">
+            </div>
+            <div class="form-group">
+                <label for="settingsUserPassword">Password</label>
+                <input type="password" name="name" class="form-control" id="settingsUserPassword"
+                    placeholder="************">
+            </div>
+            <div class="form-group">
+                <label for="settingsUserLocation">Location</label>
+                <input type="text" name="name" class="form-control" id="settingsUserLocation"
+                    placeholder="Slovakia">
+            </div>
+            <div class="form-group">
+                <label for="settingsUserWebsite">Website</label>
+                <input type="text" name="name" class="form-control" id="settingsUserWebsite"
+                    placeholder="Sample.com">
+            </div>
+            <div class="form-group">
+                <label for="settingsUserAbout">About</label>
+                <textarea name="" placeholder="Few words about you" class="form-control" id="settingsUserAbout"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="settingsUserAbout">Notify me via Email</label>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="settingsCheckBox01" name="checkbox">
+                    <label for="settingsCheckBox01">
+                        <span class="check"></span>
+                        <span class="box"></span>
+                        <span class="tt-text">When someone replies to my thread</span>
+                    </label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="settingsCheckBox02" name="checkbox">
+                    <label for="settingsCheckBox02">
+                        <span class="check"></span>
+                        <span class="box"></span>
+                        <span class="tt-text">When someone likes my thread or reply</span>
+                    </label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="settingsCheckBox03" name="checkbox">
+                    <label for="settingsCheckBox03">
+                        <span class="check"></span>
+                        <span class="box"></span>
+                        <span class="tt-text">When someone mentions me</span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <a href="#" class="btn btn-secondary">Save</a>
+            </div>
+        </form>
+    </div>
 
-            {{-- <div class="tt-topic-list">
+    {{-- <a href="page-create-topic.html" class="tt-btn-create-topic">
+        <span class="tt-icon">
+            <svg>
+                <use xlink:href="#icon-create_new"></use>
+            </svg>
+        </span>
+    </a> --}}
+
+    {{-- <div class="modal fade" id="modalAdvancedSearch" tabindex="-1" role="dialog" aria-label="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="tt-modal-advancedSearch">
+                    <div class="tt-modal-title">
+                        <i class="pt-icon">
+                            <svg>
+                                <use xlink:href="#icon-advanced_search"></use>
+                            </svg>
+                        </i>
+                        Advanced Search
+                        <a class="pt-close-modal" href="#" data-dismiss="modal">
+                            <svg class="icon">
+                                <use xlink:href="#icon-cancel"></use>
+                            </svg>
+                        </a>
+                    </div>
+                    <form class="form-default">
+                        <div class="form-group">
+                            <i class="pt-customInputIcon">
+                                <svg class="tt-icon">
+                                    <use xlink:href="#icon-search"></use>
+                                </svg>
+                            </i>
+                            <input type="text" name="name" class="form-control pt-customInputSearch"
+                                id="searchForum" placeholder="Search all forums">
+                        </div>
+                        <div class="form-group">
+                            <label for="searchName">Posted by</label>
+                            <input type="text" name="name" class="form-control" id="searchName"
+                                placeholder="Username">
+                        </div>
+                        <div class="form-group">
+                            <label for="searchCategory">In Category</label>
+                            <input type="text" name="name" class="form-control" id="searchCategory"
+                                placeholder="Add Category">
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="searcCheckBox01" name="checkbox">
+                            <label for="searcCheckBox01">
+                                <span class="check"></span>
+                                <span class="box"></span>
+                                <span class="tt-text">Include all tags</span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>Only return topics/posts that...</label>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="searcCheckBox02" name="checkbox">
+                                <label for="searcCheckBox02">
+                                    <span class="check"></span>
+                                    <span class="box"></span>
+                                    <span class="tt-text">I liked</span>
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="searcCheckBox03" name="checkbox">
+                                <label for="searcCheckBox03">
+                                    <span class="check"></span>
+                                    <span class="box"></span>
+                                    <span class="tt-text">are in my messages</span>
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="searcCheckBox04" name="checkbox">
+                                <label for="searcCheckBox04">
+                                    <span class="check"></span>
+                                    <span class="box"></span>
+                                    <span class="tt-text">I’ve read</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control" id="searchTop">
+                                <option>any</option>
+                                <option>value 01</option>
+                                <option>value 02</option>
+                                <option>value 03</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="searchaTopics">Where topics</label>
+                            <select class="form-control" id="searchaTopics">
+                                <option>any</option>
+                                <option>value 01</option>
+                                <option>value 02</option>
+                                <option>value 03</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="searchAdvTime">Posted</label>
+                            <div class="row">
+                                <div class="col-6">
+                                    <select class="form-control">
+                                        <option>any</option>
+                                        <option>value 01</option>
+                                        <option>value 02</option>
+                                        <option>value 03</option>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <input type="text" name="name" class="form-control" id="searchAdvTime"
+                                        placeholder="dd-mm-yyyy">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="minPostCount">Minimum Post Count</label>
+                            <select class="form-control" id="minPostCount">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option selected>10</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <a href="#" class="btn btn-secondary btn-block">Search</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div> --}}
+
+
+
+@endsection
+
+{{-- <div class="tt-topic-list">
                 <div class="tt-list-header">
                     <div class="tt-col-topic">Topic</div>
                     <div class="tt-col-category">Category</div>
@@ -800,243 +1248,3 @@
                     </button>
                 </div>
             </div> --}}
-
-        </div>
-    </main>
-
-    <div id="js-popup-settings" class="tt-popup-settings">
-        <div class="tt-btn-col-close">
-            <a href="#">
-                <span class="tt-icon-title">
-                    <svg>
-                        <use xlink:href="#icon-settings_fill"></use>
-                    </svg>
-                </span>
-                <span class="tt-icon-text">
-                    Settings
-                </span>
-                <span class="tt-icon-close">
-                    <svg>
-                        <use xlink:href="#icon-cancel"></use>
-                    </svg>
-                </span>
-            </a>
-        </div>
-        <form class="form-default">
-            <div class="tt-form-upload">
-                <div class="row no-gutter">
-                    <div class="col-auto">
-                        <div class="tt-avatar">
-                            <svg>
-                                <use xlink:href="#icon-ava-d"></use>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="col-auto ml-auto">
-                        <a href="#" class="btn btn-primary">Upload Picture</a>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="settingsUserName">Username</label>
-                <input type="text" name="name" class="form-control" id="settingsUserName" placeholder="azyrusmax">
-            </div>
-            <div class="form-group">
-                <label for="settingsUserEmail">Email</label>
-                <input type="text" name="name" class="form-control" id="settingsUserEmail"
-                    placeholder="Sample@sample.com">
-            </div>
-            <div class="form-group">
-                <label for="settingsUserPassword">Password</label>
-                <input type="password" name="name" class="form-control" id="settingsUserPassword"
-                    placeholder="************">
-            </div>
-            <div class="form-group">
-                <label for="settingsUserLocation">Location</label>
-                <input type="text" name="name" class="form-control" id="settingsUserLocation"
-                    placeholder="Slovakia">
-            </div>
-            <div class="form-group">
-                <label for="settingsUserWebsite">Website</label>
-                <input type="text" name="name" class="form-control" id="settingsUserWebsite"
-                    placeholder="Sample.com">
-            </div>
-            <div class="form-group">
-                <label for="settingsUserAbout">About</label>
-                <textarea name="" placeholder="Few words about you" class="form-control" id="settingsUserAbout"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="settingsUserAbout">Notify me via Email</label>
-                <div class="checkbox-group">
-                    <input type="checkbox" id="settingsCheckBox01" name="checkbox">
-                    <label for="settingsCheckBox01">
-                        <span class="check"></span>
-                        <span class="box"></span>
-                        <span class="tt-text">When someone replies to my thread</span>
-                    </label>
-                </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" id="settingsCheckBox02" name="checkbox">
-                    <label for="settingsCheckBox02">
-                        <span class="check"></span>
-                        <span class="box"></span>
-                        <span class="tt-text">When someone likes my thread or reply</span>
-                    </label>
-                </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" id="settingsCheckBox03" name="checkbox">
-                    <label for="settingsCheckBox03">
-                        <span class="check"></span>
-                        <span class="box"></span>
-                        <span class="tt-text">When someone mentions me</span>
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <a href="#" class="btn btn-secondary">Save</a>
-            </div>
-        </form>
-    </div>
-
-    {{-- <a href="page-create-topic.html" class="tt-btn-create-topic">
-        <span class="tt-icon">
-            <svg>
-                <use xlink:href="#icon-create_new"></use>
-            </svg>
-        </span>
-    </a> --}}
-
-    {{-- <div class="modal fade" id="modalAdvancedSearch" tabindex="-1" role="dialog" aria-label="myModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="tt-modal-advancedSearch">
-                    <div class="tt-modal-title">
-                        <i class="pt-icon">
-                            <svg>
-                                <use xlink:href="#icon-advanced_search"></use>
-                            </svg>
-                        </i>
-                        Advanced Search
-                        <a class="pt-close-modal" href="#" data-dismiss="modal">
-                            <svg class="icon">
-                                <use xlink:href="#icon-cancel"></use>
-                            </svg>
-                        </a>
-                    </div>
-                    <form class="form-default">
-                        <div class="form-group">
-                            <i class="pt-customInputIcon">
-                                <svg class="tt-icon">
-                                    <use xlink:href="#icon-search"></use>
-                                </svg>
-                            </i>
-                            <input type="text" name="name" class="form-control pt-customInputSearch"
-                                id="searchForum" placeholder="Search all forums">
-                        </div>
-                        <div class="form-group">
-                            <label for="searchName">Posted by</label>
-                            <input type="text" name="name" class="form-control" id="searchName"
-                                placeholder="Username">
-                        </div>
-                        <div class="form-group">
-                            <label for="searchCategory">In Category</label>
-                            <input type="text" name="name" class="form-control" id="searchCategory"
-                                placeholder="Add Category">
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="searcCheckBox01" name="checkbox">
-                            <label for="searcCheckBox01">
-                                <span class="check"></span>
-                                <span class="box"></span>
-                                <span class="tt-text">Include all tags</span>
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <label>Only return topics/posts that...</label>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="searcCheckBox02" name="checkbox">
-                                <label for="searcCheckBox02">
-                                    <span class="check"></span>
-                                    <span class="box"></span>
-                                    <span class="tt-text">I liked</span>
-                                </label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="searcCheckBox03" name="checkbox">
-                                <label for="searcCheckBox03">
-                                    <span class="check"></span>
-                                    <span class="box"></span>
-                                    <span class="tt-text">are in my messages</span>
-                                </label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="searcCheckBox04" name="checkbox">
-                                <label for="searcCheckBox04">
-                                    <span class="check"></span>
-                                    <span class="box"></span>
-                                    <span class="tt-text">I’ve read</span>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <select class="form-control" id="searchTop">
-                                <option>any</option>
-                                <option>value 01</option>
-                                <option>value 02</option>
-                                <option>value 03</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="searchaTopics">Where topics</label>
-                            <select class="form-control" id="searchaTopics">
-                                <option>any</option>
-                                <option>value 01</option>
-                                <option>value 02</option>
-                                <option>value 03</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="searchAdvTime">Posted</label>
-                            <div class="row">
-                                <div class="col-6">
-                                    <select class="form-control">
-                                        <option>any</option>
-                                        <option>value 01</option>
-                                        <option>value 02</option>
-                                        <option>value 03</option>
-                                    </select>
-                                </div>
-                                <div class="col-6">
-                                    <input type="text" name="name" class="form-control" id="searchAdvTime"
-                                        placeholder="dd-mm-yyyy">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="minPostCount">Minimum Post Count</label>
-                            <select class="form-control" id="minPostCount">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                                <option>6</option>
-                                <option>7</option>
-                                <option>8</option>
-                                <option>9</option>
-                                <option selected>10</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <a href="#" class="btn btn-secondary btn-block">Search</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
-
-
-@endsection
