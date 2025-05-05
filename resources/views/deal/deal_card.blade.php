@@ -4,17 +4,17 @@
         style="display: flex; flex-direction: row; border:none;border-radius:0%; overflow: hidden;">
 
         @if ($deal->image)
-            <div class="deal-image-area position-relative"
-                style="flex-basis: 30%; background-image: url('{{ asset('storage/deals/' . $deal->image) }}'); background-size: cover; background-position: center; background-repeat: no-repeat;"
+            <a href="{{ route('view-deal', $deal->id) }}" class="deal-image-area position-relative"
+                style="flex-basis: 30%; background-image: url('{{ asset($deal->image) }}'); background-size: cover; background-position: center; background-repeat: no-repeat;"
                 alt="{{ $deal->title }}">
 
-            </div>
+            </a>
         @else
-            <div class="deal-image-area position-relative"
+            <a class="deal-image-area position-relative"
                 style="flex-basis: 30%; background-image: url('https://via.placeholder.com/300x150'); background-size: cover; background-position: center; background-repeat: no-repeat;"
                 alt="Placeholder Image">
 
-            </div>
+            </a>
         @endif
 
         <div class="deal-details-area p-1" style="flex-basis: 70%; display: flex; flex-direction: column;">
@@ -23,7 +23,7 @@
             <h5 style="font-size: 1.125em; margin-bottom: 3px;font-weight:bolder">{{ $deal->title }}</h5>
 
 
-            <p style="font-size: 0.875em; color: #555; margin-bottom: 3px; flex-grow: 1;">
+            <p style="font-size: 0.875em; color: #555; margin-bottom: 3px; flex-grow: 1; overflow-wrap: anywhere;">
                 {{ $deal->description }}
             </p>
 
