@@ -248,3 +248,4 @@ Route::prefix('table')->group(function () {
     });
 });
 
+Route::post('/posts/{post}/vote', [UserPostController::class, 'vote'])->name('post.vote');

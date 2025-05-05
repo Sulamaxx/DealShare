@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+
+use function Laravel\Prompts\error;
 
 class UserPostController extends Controller
 {
@@ -50,6 +54,25 @@ class UserPostController extends Controller
         ]);
 
         return redirect()->route('create-deals')->with('success', 'Post created successfully!');
+    }
+
+    public function vote(Request $request,){
+        if (!Auth::check()) {
+            $response=[
+                "error"=>true,
+                "message"=>"You need to be logged in to vote.",
+                'redirect' => "/login"
+            ];
+            return response()->json( $response);
+            
+        } 
+
+        $user = Auth::user();
+        $voteType = $request->input('vote_type');
+        $postId = $request->input('post_id');
+
+        Log::info($voteType);
+        Log::info($postId);
     }
 
 }
