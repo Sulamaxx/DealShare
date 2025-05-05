@@ -39,9 +39,8 @@ class UsersController extends Controller
 
         // Handle image upload if any
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('public/users');
-            $imagePath = Storage::url($path); // This generates a URL to access the image
-            Log::info('Image Path:', [$imagePath]); // Log the generated image URL
+            $path = $request->file('image')->store('users', 'public');
+            $imagePath = Storage::url($path);
         } else {
             $imagePath = null;
         }

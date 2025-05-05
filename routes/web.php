@@ -38,17 +38,16 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    // Route::get('/dashboard', function () {
+    //     return view('dashboard');
+    // })->name('dashboard');
 
     Route::get('/create-deals', [UserPostController::class, 'index'])->name('create-deals');
-
     Route::post('/posts', [UserPostController::class, 'store'])->name('posts.store');
 
 });
 
+Route::get('/view-deal/{id}', [UserPostController::class, 'view_deal'])->name('view-deal');
 
 Route::get('/approval-pending', function () {
     return view('auth.approval-pending');

@@ -9,8 +9,14 @@ use Illuminate\Support\Facades\Storage;
 class UserPostController extends Controller
 {
 
-    public function index(){
+    public function index()
+    {
         return view('create_deal');
+    }
+    public function view_deal($id)
+    {
+        $post = Post::find($id);
+        return view('single-deal', compact('post'));
     }
 
     public function store(Request $request)
@@ -27,7 +33,7 @@ class UserPostController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('public/posts');
+            $path = $request->file('image')->store('posts', 'public');
             $imagePath = Storage::url($path);
         }
 
