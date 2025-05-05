@@ -38,24 +38,24 @@
                             </p>
                         </div>
                         <div class="tt-item-info info-bottom">
-                            <a href="#" class="tt-icon-btn">
+                            <a  class="tt-icon-btn like-button" data-post-id="{{ $post->id }}" data-vote-type="up" onclick="vote(this)">
                                 <i class="tt-icon"><svg>
                                         <use xlink:href="#icon-like"></use>
                                     </svg></i>
                                 <span class="tt-text">{{ $post->upvotes }}</span>
                             </a>
-                            <a href="#" class="tt-icon-btn">
+                            <a  class="tt-icon-btn dislike-button" data-postid="{{ $post->id }}" data-vote-type="down">
                                 <i class="tt-icon"><svg>
                                         <use xlink:href="#icon-dislike"></use>
                                     </svg></i>
                                 <span class="tt-text">{{ $post->downvotes }}</span>
                             </a>
-                            <a href="#" class="tt-icon-btn">
+                            <!-- <a href="#" class="tt-icon-btn">
                                 <i class="tt-icon"><svg>
                                         <use xlink:href="#icon-favorite"></use>
                                     </svg></i>
                                 <span class="tt-text">{{ $post->comment_count }}</span>
-                            </a>
+                            </a> -->
                             <div class="col-separator"></div>
                         </div>
                     </div>
@@ -656,3 +656,39 @@
     </main>
 
 @endsection
+
+<script>
+    function vote(element){
+       
+        const postId = element.dataset.postid;
+        const voteType = element.dataset.voteType;
+        const url = `/posts/${postId}/vote`;
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(
+                        { 
+                            vote_type: voteType ,
+                            post_id:postId
+                        })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        if (data.redirect) {
+                            window.location.href = data.redirect; 
+                        } 
+                    }else{
+
+                    }
+                    
+                })
+                .catch(error => {
+                    console.error('Error voting:', error);
+                });
+    }
+</script>
