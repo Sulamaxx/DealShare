@@ -42,13 +42,13 @@
                                 <i class="tt-icon"><svg>
                                         <use xlink:href="#icon-like"></use>
                                     </svg></i>
-                                <span class="tt-text">{{ $post->upvotes }}</span>
+                                <span class="tt-text" id="up_vote_span">{{ $post->upvotes }}</span>
                             </a>
-                            <a  class="tt-icon-btn dislike-button" data-postid="{{ $post->id }}" data-vote-type="down">
+                            <a  class="tt-icon-btn dislike-button" data-post-id="{{ $post->id }}" data-vote-type="down" onclick="vote(this)">
                                 <i class="tt-icon"><svg>
                                         <use xlink:href="#icon-dislike"></use>
                                     </svg></i>
-                                <span class="tt-text">{{ $post->downvotes }}</span>
+                                <span class="tt-text" id="down_vote_span">{{ $post->downvotes }}</span>
                             </a>
                             <!-- <a href="#" class="tt-icon-btn">
                                 <i class="tt-icon"><svg>
@@ -660,7 +660,8 @@
 <script>
     function vote(element){
        
-        const postId = element.dataset.postid;
+        const postId = element.dataset.postId;
+     
         const voteType = element.dataset.voteType;
         const url = `/posts/${postId}/vote`;
 
@@ -683,7 +684,15 @@
                             window.location.href = data.redirect; 
                         } 
                     }else{
+                        const upvoteElement = document.getElementById('up_vote_span');
+                        if (upvoteElement && data.upvotes !== undefined) {
+                            upvoteElement.textContent = data.upvotes;
+                        }
 
+                        const downvoteElement = document.getElementById('down_vote_span');
+                        if (downvoteElement && data.downvotes !== undefined) {
+                            downvoteElement.textContent = data.downvotes;
+                        }
                     }
                     
                 })

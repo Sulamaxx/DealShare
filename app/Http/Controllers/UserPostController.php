@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -56,23 +57,92 @@ class UserPostController extends Controller
         return redirect()->route('create-deals')->with('success', 'Post created successfully!');
     }
 
-    public function vote(Request $request,){
+    public function vote(Request $request)
+    {
         if (!Auth::check()) {
-            $response=[
-                "error"=>true,
-                "message"=>"You need to be logged in to vote.",
+            $response = [
+                "error" => true,
+                "message" => "You need to be logged in to vote.",
                 'redirect' => "/login"
             ];
-            return response()->json( $response);
-            
-        } 
+            return response()->json($response);
+        }
 
         $user = Auth::user();
         $voteType = $request->input('vote_type');
         $postId = $request->input('post_id');
 
-        Log::info($voteType);
-        Log::info($postId);
-    }
+        if ($voteType && $postId) {
+            $post = Post::find($postId);
 
+            if ($post) {
+                $existingVote = Vote::where('user_id', $user->id)
+                    ->where('post_id', $postId)
+                    ->first();
+
+                if (!$existingVote) {
+                    if ($voteType === 'up') {
+                        $post->increment('upvotes');
+                    } elseif ($voteType === 'down') {
+                        $post->increment('downvotes');
+                    }
+
+                    Vote::create([
+                        'user_id' => $user->id,
+                        'post_id' => $postId,
+                        'vote_type' => $voteType,
+                    ]);
+
+                    $response = [
+                        "error" => false,
+                        "message" => "Vote recorded successfully.",
+                        "upvotes" => $post->upvotes,
+                        "downvotes" => $post->downvotes,
+                    ];
+                } else {
+                    if ($existingVote->vote_type !== $voteType) {
+    
+                        if ($existingVote->vote_type === 'up') {
+                            $post->decrement('upvotes');
+                            $post->increment('downvotes');
+                        } elseif ($existingVote->vote_type === 'down') {
+                            $post->decrement('downvotes');
+                            $post->increment('upvotes');
+                        }
+    
+                        
+                        $existingVote->vote_type = $voteType;
+                        $existingVote->save();
+
+                        $response = [
+                            "error" => false,
+                            "message" => "Vote changed successfully!",
+                            "upvotes" => $post->upvotes,
+                            "downvotes" => $post->downvotes,
+                        ];
+    
+                    } else {
+                        $response = [
+                            "error" => false,
+                            "message" => "You have already voted.",
+                            "upvotes" => $post->upvotes,
+                            "downvotes" => $post->downvotes,
+                        ];
+                    }
+                }
+            } else {
+                $response = [
+                    "error" => true,
+                    "message" => "Post not found.",
+                ];
+            }
+            return response()->json($response);
+        } else {
+            $response = [
+                "error" => true,
+                "message" => "Missing vote type or post ID.",
+            ];
+            return response()->json($response);
+        }
+    }
 }
