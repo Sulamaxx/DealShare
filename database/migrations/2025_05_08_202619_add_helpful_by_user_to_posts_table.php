@@ -1,0 +1,29 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('posts', function (Blueprint $table) {
+            $table->integer('helpful_by_user')->default(0)->after('price_saving');
+            $table->integer('reported_count')->default(0)->after('price_saving');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('posts', function (Blueprint $table) {
+            $table->dropColumn('helpful_by_user');
+            $table->dropColumn('reported_count');
+        });
+    }
+};

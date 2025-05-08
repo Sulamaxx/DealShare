@@ -73,6 +73,9 @@
                                             @if ($deal->status == 1)
                                                 <span
                                                     class="bg-success-100 dark:bg-success-600/25 text-success-600 dark:text-success-400 border border-success-600 px-6 py-1.5 rounded font-medium text-sm">Active</span>
+                                            @elseif ($deal->status == 2)
+                                                <span
+                                                    class="bg-red-200 dark:bg-red-600 text-red-600 border border-red-400 px-6 py-1.5 rounded font-medium text-sm">Rejected</span>
                                             @else
                                                 <span
                                                     class="bg-neutral-200 dark:bg-neutral-600 text-neutral-600 border border-neutral-400 px-6 py-1.5 rounded font-medium text-sm">Inactive</span>

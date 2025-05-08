@@ -8,6 +8,7 @@ use App\Http\Controllers\AiapplicationController;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\ComponentspageController;
 use App\Http\Controllers\CryptocurrencyController;
+use App\Http\Controllers\DealHelpfulController;
 use App\Http\Controllers\FormsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
@@ -38,6 +39,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
+
     // Route::get('/dashboard', function () {
     //     return view('dashboard');
     // })->name('dashboard');
@@ -45,8 +47,12 @@ Route::middleware([
     Route::get('/my-deals', [UserPostController::class, 'myDeals'])->name('my-deals');
     Route::get('/create-deals', [UserPostController::class, 'index'])->name('create-deals');
     Route::post('/posts', [UserPostController::class, 'store'])->name('posts.store');
-    Route::put('/posts', [UserPostController::class, 'update'])->name('posts.update');
+
+    Route::post('/posts', [UserPostController::class, 'update'])->name('posts.update');
     Route::get('/edit-deals/{id}', [UserPostController::class, 'edit'])->name('edit-deals');
+
+    Route::post('/deals/{deal}/mark-helpful', [DealHelpfulController::class, 'mark'])->name('deals.markHelpful');
+    Route::delete('/deals/{deal}/unmark-helpful', [DealHelpfulController::class, 'unmark'])->name('deals.unmarkHelpful');
 
 });
 
@@ -55,6 +61,8 @@ Route::get('/view-deal/{id}', [UserPostController::class, 'view_deal'])->name('v
 Route::get('/approval-pending', function () {
     return view('auth.approval-pending');
 });
+
+
 
 
 

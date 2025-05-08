@@ -13,10 +13,9 @@ use function Laravel\Prompts\error;
 
 class UserPostController extends Controller
 {
-
     public function myDeals()
     {
-        $posts = Post::where('post_by', Auth::user()->id);
+        $posts = Post::where('post_by', Auth::user()->id)->paginate(10);
         return view('my_deals', compact('posts'));
     }
     public function index()
@@ -46,7 +45,7 @@ class UserPostController extends Controller
             }
         }
 
-        return view('single-deal', compact('post',"vote_type"));
+        return view('single-deal', compact('post', "vote_type"));
     }
 
     public function store(Request $request)
@@ -93,28 +92,31 @@ class UserPostController extends Controller
             'category' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
-
+        $post = Post::find($request->id);
         $imagePath = null;
+        // Delete old image if new one is uploaded
         if ($request->hasFile('image')) {
+            Log::info("image");
+
+            if ($post->image && Storage::disk('public')->exists(str_replace('/storage/', '', $post->image))) {
+                Storage::disk('public')->delete(str_replace('/storage/', '', $post->image));
+            }
+
             $path = $request->file('image')->store('posts', 'public');
-            $imagePath = Storage::url($path);
+            $imagePath = Storage::url($path); // update image path
         }
+        $post->title = $validated['title'];
+        $post->description = $validated['description'];
+        $post->link = $validated['link'] ?? null;
+        $post->discount_text = $validated['discount_text'] ?? null;
+        $post->price_saving = $validated['price_saving'] ?? null;
+        $post->category = $validated['category'];
+        $post->image = $imagePath;
+        $post->posted_at = now();
+        $post->save();
 
-        Post::create([
-            'title' => $validated['title'],
-            'description' => $validated['description'],
-            'link' => $validated['link'] ?? null,
-            'discount_text' => $validated['discount_text'] ?? null,
-            'price_saving' => $validated['price_saving'] ?? null,
-            'category' => $validated['category'],
-            'image' => $imagePath,
-            'posted_at' => now(),
-            'post_by' => auth()->id(), // link to current logged-in user
-        ]);
-
-        return redirect()->route('edit-deals')->with('success', 'Post updated successfully!');
+        return redirect()->route('my-deals')->with('success', 'Post updated successfully!');
     }
-
     public function vote(Request $request)
     {
         $user = Auth::user();
@@ -193,4 +195,5 @@ class UserPostController extends Controller
             return response()->json($response);
         }
     }
+
 }
