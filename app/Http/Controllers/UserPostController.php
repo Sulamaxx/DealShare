@@ -23,6 +23,13 @@ class UserPostController extends Controller
     {
         return view('create_deal');
     }
+
+    public function edit($id)
+    {
+        $post = Post::find($id);
+        return view('edit_deal', compact('post'));
+    }
+
     public function view_deal($id)
     {
         $post = Post::find($id);
@@ -62,6 +69,38 @@ class UserPostController extends Controller
         return redirect()->route('create-deals')->with('success', 'Post created successfully!');
     }
 
+    public function update(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required',
+            'link' => 'nullable|url',
+            'discount_text' => 'nullable|string|max:255',
+            'price_saving' => 'nullable|string|max:255',
+            'category' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('posts', 'public');
+            $imagePath = Storage::url($path);
+        }
+
+        Post::create([
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'link' => $validated['link'] ?? null,
+            'discount_text' => $validated['discount_text'] ?? null,
+            'price_saving' => $validated['price_saving'] ?? null,
+            'category' => $validated['category'],
+            'image' => $imagePath,
+            'posted_at' => now(),
+            'post_by' => auth()->id(), // link to current logged-in user
+        ]);
+
+        return redirect()->route('edit-deals')->with('success', 'Post updated successfully!');
+    }
 
     public function vote(Request $request)
     {
@@ -117,7 +156,6 @@ class UserPostController extends Controller
                             "upvotes" => $post->upvotes,
                             "downvotes" => $post->downvotes,
                         ];
-
                     } else {
                         $response = [
                             "error" => false,

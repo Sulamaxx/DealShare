@@ -45,6 +45,8 @@ Route::middleware([
     Route::get('/my-deals', [UserPostController::class, 'myDeals'])->name('my-deals');
     Route::get('/create-deals', [UserPostController::class, 'index'])->name('create-deals');
     Route::post('/posts', [UserPostController::class, 'store'])->name('posts.store');
+    Route::put('/posts', [UserPostController::class, 'update'])->name('posts.update');
+    Route::get('/edit-deals/{id}', [UserPostController::class, 'edit'])->name('edit-deals');
 
 });
 
