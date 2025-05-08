@@ -43,6 +43,10 @@
                                 <li class="nav-item"><a class="nav-link active" href="#">Popular Deals</a></li>
                                 <li class="nav-item"><a class="nav-link" href="#">New Deals</a></li>
                                 <li class="nav-item"><a class="nav-link" href="#">Highly Voted Deals</a></li>
+                                {{-- @if (Auth::user()) --}}
+                                    <li class="nav-item"><a class="nav-link" href="{{ route('my-deals') }}">My Deals</a>
+                                    </li>
+                                {{-- @endif --}}
 
                                 {{-- <li>
                                     <a href="page-single-user.html"><span>Pages</span></a>

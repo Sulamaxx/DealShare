@@ -48,6 +48,20 @@
     <!-- Footer -->
     @include('partials.footer')
 
+    <script>
+        $(document).ready(function() {
+            $('.toggle-mobile-menu').click(function(e) {
+                e.preventDefault();
+                $('#mobile-menu').toggleClass('d-none');
+            });
+
+            // Optional: Close menu when "Close" is clicked
+            $('.mm-closebtn').click(function() {
+                $('#mobile-menu').addClass('d-none');
+            });
+        });
+    </script>
+
 
     <script>
         @if (session('success'))
