@@ -23,6 +23,8 @@ class Post extends Model
         'discount_text',
         'price_saving',
         'post_by',
+        'helpful_by_user',
+        'reported_count',
     ];
 
     protected $casts = [
