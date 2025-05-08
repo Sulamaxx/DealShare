@@ -6027,15 +6027,19 @@ hr {
   transition: text 0.2s linear;
 }
 
-.tt-icon-btn:hover .tt-text {
+.tt-icon-btn:active{
+  color: #666f74 !important; 
+}
+
+ .tt-text {
   color: #2172cd;
 }
 
-.tt-icon-btn:hover .tt-icon svg {
+ .tt-icon svg {
   fill: #2172cd;
 }
 
-.tt-icon-btn:hover .tt-icon svg path {
+ .tt-icon svg path {
   fill: #2172cd;
 }
 
@@ -9814,6 +9818,16 @@ html.ie.gecko body.modal-open {
   transition: all 0.1s linear;
   pointer-events: none;
 }
+
+ .upvoted .tt-icon svg {
+        fill: #007bff !important; 
+        color: #007bff !important;
+    }
+
+    .downvoted .tt-icon svg {
+        fill: #e04c5b !important;
+        color: #df505e !important;
+    }
 
 @media (min-width: 1025px) {
   .tt-gallery-obj:before {
