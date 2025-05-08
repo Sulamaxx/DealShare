@@ -42,6 +42,7 @@ Route::middleware([
     //     return view('dashboard');
     // })->name('dashboard');
 
+    Route::get('/my-deals', [UserPostController::class, 'myDeals'])->name('my-deals');
     Route::get('/create-deals', [UserPostController::class, 'index'])->name('create-deals');
     Route::post('/posts', [UserPostController::class, 'store'])->name('posts.store');
 
@@ -105,10 +106,10 @@ Route::prefix('admin/deals')
             Route::get('/deals-list', 'dealsList')->name('dealsList');
             Route::get('/view-deals', 'viewDeal')->name('viewDeal');
             // Route::get('/deals',  'index')->name('deals.index');
-            Route::patch('/deals/status/{id}',  'updateStatus')->name('deal.status');
-            Route::get('/deals/{id}/view',  'show')->name('deal.profile');
-            Route::get('/deals/{id}/edit',  'edit')->name('deal.edit');
-            Route::delete('/deals/{id}',  'destroy')->name('deal.delete');
+            Route::patch('/deals/status/{id}', 'updateStatus')->name('deal.status');
+            Route::get('/deals/{id}/view', 'show')->name('deal.profile');
+            Route::get('/deals/{id}/edit', 'edit')->name('deal.edit');
+            Route::delete('/deals/{id}', 'destroy')->name('deal.delete');
 
         });
     });

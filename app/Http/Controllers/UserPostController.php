@@ -14,6 +14,11 @@ use function Laravel\Prompts\error;
 class UserPostController extends Controller
 {
 
+    public function myDeals()
+    {
+        $posts = Post::where('post_by', Auth::user()->id);
+        return view('my_deals', compact('posts'));
+    }
     public function index()
     {
         return view('create_deal');
@@ -57,17 +62,9 @@ class UserPostController extends Controller
         return redirect()->route('create-deals')->with('success', 'Post created successfully!');
     }
 
+
     public function vote(Request $request)
     {
-        if (!Auth::check()) {
-            $response = [
-                "error" => true,
-                "message" => "You need to be logged in to vote.",
-                'redirect' => "/login"
-            ];
-            return response()->json($response);
-        }
-
         $user = Auth::user();
         $voteType = $request->input('vote_type');
         $postId = $request->input('post_id');
@@ -101,7 +98,7 @@ class UserPostController extends Controller
                     ];
                 } else {
                     if ($existingVote->vote_type !== $voteType) {
-    
+
                         if ($existingVote->vote_type === 'up') {
                             $post->decrement('upvotes');
                             $post->increment('downvotes');
@@ -109,8 +106,8 @@ class UserPostController extends Controller
                             $post->decrement('downvotes');
                             $post->increment('upvotes');
                         }
-    
-                        
+
+
                         $existingVote->vote_type = $voteType;
                         $existingVote->save();
 
@@ -120,7 +117,7 @@ class UserPostController extends Controller
                             "upvotes" => $post->upvotes,
                             "downvotes" => $post->downvotes,
                         ];
-    
+
                     } else {
                         $response = [
                             "error" => false,
