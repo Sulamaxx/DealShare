@@ -16,15 +16,19 @@
                                 <div class="tt-avatar-title">
                                     <a href="javascript:void(0)">{{ $post->user->name }}</a>
                                 </div>
-                                <a href="javascript:void(0)" class="tt-info-time">
-                                    <i class="tt-icon"><svg>
+                                <a href="javascript:void(0)" class="tt-info-time d-flex">
+                                    <i class="tt-icon d-flex align-items-center justify-content-center"><svg>
                                             <use xlink:href="#icon-time"></use>
-                                        </svg></i>{{ $post->created_at }}
+                                        </svg></i>
+                                        <span class="d-block">{{ $post->created_at }}</span>
                                 </a>
                             </div>
                             <h3 class="tt-item-title">
                                 <a href="javascript:void(0)">{{ $post->title }}</a>
                             </h3>
+                            <h5 class="tt-item-category">
+                                <a >{{ $post->category }}</a>
+                            </h5>
                             <img class="mt-3" style="width: 100%;height: 400px;" src="{{ asset($post->image) }}"
                                 alt="">
                         </div>
@@ -38,18 +42,25 @@
                             </p>
                         </div>
                         <div class="tt-item-info info-bottom">
-                            <a  class="tt-icon-btn like-button" data-post-id="{{ $post->id }}" data-vote-type="up" onclick="vote(this)">
-                                <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-like"></use>
-                                    </svg></i>
-                                <span class="tt-text" id="up_vote_span">{{ $post->upvotes }}</span>
-                            </a>
-                            <a  class="tt-icon-btn dislike-button" data-post-id="{{ $post->id }}" data-vote-type="down" onclick="vote(this)">
-                                <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-dislike"></use>
-                                    </svg></i>
-                                <span class="tt-text" id="down_vote_span">{{ $post->downvotes }}</span>
-                            </a>
+                          <a class="tt-icon-btn like-button {{ $vote_type === 'up' ? 'upvoted' : '' }}"
+            data-post-id="{{ $post->id }}"
+            data-vote-type="up"
+            onclick="vote(this)">
+                <i class="tt-icon"><svg>
+                        <use xlink:href="#icon-like"></use>
+                    </svg></i>
+                <span class="tt-text" id="up_vote_span">{{ $post->upvotes }}</span>
+            </a>
+            <a class="tt-icon-btn dislike-button {{ $vote_type === 'down' ? 'downvoted' : '' }}"
+            data-post-id="{{ $post->id }}"
+            data-vote-type="down"
+            onclick="vote(this)">
+                <i class="tt-icon"><svg>
+                        <use xlink:href="#icon-dislike"></use>
+                    </svg></i>
+                <span class="tt-text" id="down_vote_span">{{ $post->downvotes }}</span>
+</a>
+
                             <!-- <a href="#" class="tt-icon-btn">
                                 <i class="tt-icon"><svg>
                                         <use xlink:href="#icon-favorite"></use>
@@ -692,6 +703,26 @@
                         const downvoteElement = document.getElementById('down_vote_span');
                         if (downvoteElement && data.downvotes !== undefined) {
                             downvoteElement.textContent = data.downvotes;
+                        }
+
+                        const likeButton = document.querySelector('.like-button');
+                        const dislikeButton = document.querySelector('.dislike-button');
+
+                        if (likeButton) {
+                            likeButton.classList.remove('upvoted');
+                        }
+                        if (dislikeButton) {
+                            dislikeButton.classList.remove('downvoted');
+                        }
+
+                        if (voteType === 'up') {
+                            if (likeButton) {
+                                likeButton.classList.add('upvoted');
+                            }
+                        } else if (voteType === 'down') {
+                            if (dislikeButton) {
+                                dislikeButton.classList.add('downvoted');
+                            }
                         }
                     }
                     

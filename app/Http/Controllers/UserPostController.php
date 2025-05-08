@@ -33,7 +33,20 @@ class UserPostController extends Controller
     public function view_deal($id)
     {
         $post = Post::find($id);
-        return view('single-deal', compact('post'));
+        $user = Auth::user();
+
+        $vote_type = "";
+        if ($user != null) {
+            $vote = Vote::where("post_id", $id)
+                ->where("user_id", $user->id)
+                ->first();
+
+            if ($vote) {
+                $vote_type = $vote->vote_type;
+            }
+        }
+
+        return view('single-deal', compact('post',"vote_type"));
     }
 
     public function store(Request $request)
