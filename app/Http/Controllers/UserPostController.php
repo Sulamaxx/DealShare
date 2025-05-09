@@ -18,6 +18,13 @@ class UserPostController extends Controller
         $posts = Post::where('post_by', Auth::user()->id)->paginate(10);
         return view('my_deals', compact('posts'));
     }
+
+    public function newDeals()
+    {
+        $new_deals = Post::where('status', 1)->orderBy('created_at', 'desc')->paginate(10);
+        return view('new_deals', compact('new_deals'));
+    }
+
     public function index()
     {
         return view('create_deal');
@@ -195,5 +202,4 @@ class UserPostController extends Controller
             return response()->json($response);
         }
     }
-
 }
