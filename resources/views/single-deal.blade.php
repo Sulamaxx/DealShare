@@ -29,6 +29,7 @@
                             <h5 class="tt-item-category">
                                 <a >{{ $post->category }}</a>
                             </h5>
+                            <span class="badge bg-warning">New</span>
                             <img class="mt-3" style="width: 100%;height: 400px;" src="{{ asset($post->image) }}"
                                 alt="">
                         </div>
@@ -43,23 +44,23 @@
                         </div>
                         <div class="tt-item-info info-bottom">
                           <a class="tt-icon-btn like-button {{ $vote_type === 'up' ? 'upvoted' : '' }}"
-            data-post-id="{{ $post->id }}"
-            data-vote-type="up"
-            onclick="vote(this)">
-                <i class="tt-icon"><svg>
-                        <use xlink:href="#icon-like"></use>
-                    </svg></i>
-                <span class="tt-text" id="up_vote_span">{{ $post->upvotes }}</span>
-            </a>
-            <a class="tt-icon-btn dislike-button {{ $vote_type === 'down' ? 'downvoted' : '' }}"
-            data-post-id="{{ $post->id }}"
-            data-vote-type="down"
-            onclick="vote(this)">
-                <i class="tt-icon"><svg>
-                        <use xlink:href="#icon-dislike"></use>
-                    </svg></i>
-                <span class="tt-text" id="down_vote_span">{{ $post->downvotes }}</span>
-</a>
+                                        data-post-id="{{ $post->id }}"
+                                        data-vote-type="up"
+                                        onclick="vote(this)">
+                                            <i class="tt-icon"><svg>
+                                                    <use xlink:href="#icon-like"></use>
+                                                </svg></i>
+                                            <span class="tt-text" id="up_vote_span">{{ $post->upvotes }}</span>
+                                        </a>
+                                        <a class="tt-icon-btn dislike-button {{ $vote_type === 'down' ? 'downvoted' : '' }}"
+                                        data-post-id="{{ $post->id }}"
+                                        data-vote-type="down"
+                                        onclick="vote(this)">
+                                            <i class="tt-icon"><svg>
+                                                    <use xlink:href="#icon-dislike"></use>
+                                                </svg></i>
+                                            <span class="tt-text" id="down_vote_span">{{ $post->downvotes }}</span>
+                            </a>
 
                             <!-- <a href="#" class="tt-icon-btn">
                                 <i class="tt-icon"><svg>
@@ -68,6 +69,7 @@
                                 <span class="tt-text">{{ $post->comment_count }}</span>
                             </a> -->
                             <div class="col-separator"></div>
+                            <button class="btn btn-success btn-sm">Subscribe</button>
                         </div>
                     </div>
                 </div>
@@ -84,8 +86,8 @@
                                 <div class="tt-avatar-title">
                                     <a href="#">vickey03</a>
                                 </div>
-                                <a href="#" class="tt-info-time">
-                                    <i class="tt-icon"><svg>
+                                <a href="#" class="tt-info-time d-flex">
+                                    <i class="tt-icon d-flex justify-content-center align-items-center"><svg>
                                             <use xlink:href="#icon-time"></use>
                                         </svg></i>6 Jan,2019
                                 </a>
@@ -165,8 +167,8 @@
                                     <a href="#">tesla02</a>
                                     <span class="tt-color13 tt-badge">best answer</span>
                                 </div>
-                                <a href="#" class="tt-info-time">
-                                    <i class="tt-icon"><svg>
+                                <a href="#" class="tt-info-time d-flex">
+                                    <i class="tt-icon d-flex align-items-center justify-content-center"><svg>
                                             <use xlink:href="#icon-time"></use>
                                         </svg></i>6 Jan,2019
                                 </a>
@@ -228,8 +230,8 @@
                                 <div class="tt-avatar-title">
                                     <a href="#">usain31</a>
                                 </div>
-                                <a href="#" class="tt-info-time">
-                                    <i class="tt-icon"><svg>
+                                <a href="#" class="tt-info-time d-flex">
+                                    <i class="tt-icon d-flex justify-content-center align-items-center"><svg>
                                             <use xlink:href="#icon-time"></use>
                                         </svg></i>6 Jan,2019
                                 </a>
@@ -268,8 +270,8 @@
                                 <div class="tt-avatar-title">
                                     <a href="#">kolis27</a>
                                 </div>
-                                <a href="#" class="tt-info-time">
-                                    <i class="tt-icon"><svg>
+                                <a href="#" class="tt-info-time d-flex">
+                                    <i class="tt-icon d-flex align-items-center justify-content-center"><svg>
                                             <use xlink:href="#icon-time"></use>
                                         </svg></i>6 Jan,2019
                                 </a>
