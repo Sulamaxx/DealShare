@@ -191,7 +191,7 @@
             <nav class="d-none d-lg-block">
                 <ul class="nav">
                     <li class="nav-item"><a class="nav-link text-white" href="#">Popular Deals</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="#">New Deals</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{{ route('new-deals') }}">New Deals</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="#">Highly Voted Deals</a></li>
                     @auth
                         <li class="nav-item"><a class="nav-link text-white" href="{{ route('my-deals') }}">My Deals</a></li>

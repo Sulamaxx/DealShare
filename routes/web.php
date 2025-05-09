@@ -33,6 +33,7 @@ Route::get('/run-seeders', function () {
 });
 
 Route::get('/', [UserFrontController::class, 'index'])->name('home');
+Route::get('/new-deals', [UserPostController::class, 'newDeals'])->name('new-deals');
 
 Route::middleware([
     'auth:sanctum',
