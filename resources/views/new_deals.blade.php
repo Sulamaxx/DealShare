@@ -4,42 +4,6 @@
 
 @section('content')
     <style>
-        .navbar-custom {
-            background-color: #111;
-        }
-
-        .navbar-brand span {
-            color: #28a745;
-            font-weight: bold;
-        }
-
-        .banner {
-            background-color: #f03c02;
-            color: white;
-            padding: 50px 20px;
-        }
-
-        .banner .tag {
-            background: yellow;
-            color: red;
-            font-weight: bold;
-            padding: 10px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            position: absolute;
-            top: 30px;
-            right: 30px;
-        }
-
-        .filters select,
-        .filters button {
-            margin: 10px 5px 0 0;
-        }
-
-        .deal-banner {
-            max-width: 100%;
-            border-radius: 15px;
-        }
 
         /* Deals */
         .deal-card {
