@@ -9,6 +9,7 @@
     <meta name="author" content="Deal Share">
     <link rel="shortcut icon" href="favicon/favicon.ico">
     <meta name="format-detection" content="telephone=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title', 'Forum')</title>
 
