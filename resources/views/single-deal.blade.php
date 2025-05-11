@@ -76,7 +76,7 @@
                     loadComments({{ $post->id }});
                 </script>
 
-                <div class="tt-item">
+                {{-- <div class="tt-item">
                     <div class="tt-single-topic">
                         <div class="tt-item-header pt-noborder">
                             <div class="tt-item-info info-top">
@@ -118,7 +118,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
             </div>
 
