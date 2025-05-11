@@ -410,7 +410,7 @@
                     <iconify-icon icon="octicon:info-24" class="menu-icon"></iconify-icon>
                     <span>Terms & Conditions</span>
                 </a>
-            </li>
+            </li> --}}
             <li class="dropdown">
                 <a href="javascript:void(0)">
                     <iconify-icon icon="icon-park-outline:setting-two" class="menu-icon"></iconify-icon>
@@ -418,35 +418,11 @@
                 </a>
                 <ul class="sidebar-submenu">
                     <li>
-                        <a href="{{ route('company') }}"><i
-                                class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Company</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('notification') }}"><i
-                                class="ri-circle-fill circle-icon text-warning-600 w-auto"></i> Notification</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('notificationAlert') }}"><i
-                                class="ri-circle-fill circle-icon text-info-600 w-auto"></i> Notification Alert</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('theme') }}"><i
-                                class="ri-circle-fill circle-icon text-danger-600 w-auto"></i> Theme</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('currencies') }}"><i
-                                class="ri-circle-fill circle-icon text-danger-600 w-auto"></i> Currencies</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('language') }}"><i
-                                class="ri-circle-fill circle-icon text-danger-600 w-auto"></i> Languages</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('paymentGateway') }}"><i
-                                class="ri-circle-fill circle-icon text-danger-600 w-auto"></i> Payment Gateway</a>
+                        <a href="{{ route('popularDeals') }}"><i
+                                class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Popular Deals</a>
                     </li>
                 </ul>
-            </li> --}}
+            </li>
         </ul>
     </div>
 </aside>
