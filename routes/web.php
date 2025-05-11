@@ -33,6 +33,19 @@ Route::get('/run-seeders', function () {
     return 'Seeders have been successfully run!';
 });
 
+Route::get('/run-storage-link', function () {
+    $target = storage_path('app/public');
+    $link = public_path('storage');
+
+    if (!file_exists($link)) {
+        symlink($target, $link);
+        return 'Storage link created!';
+    }
+
+    return 'Storage link already exists!';
+});
+
+
 Route::get('/', [UserFrontController::class, 'index'])->name('home');
 Route::get('/new-deals', [UserPostController::class, 'newDeals'])->name('new-deals');
 Route::get('/popular-deals', [UserPostController::class, 'popularDeals'])->name('popular-deals');
@@ -44,15 +57,11 @@ Route::middleware([
     'verified',
 ])->group(function () {
 
-    // Route::get('/dashboard', function () {
-    //     return view('dashboard');
-    // })->name('dashboard');
-
     Route::get('/my-deals', [UserPostController::class, 'myDeals'])->name('my-deals');
     Route::get('/create-deals', [UserPostController::class, 'index'])->name('create-deals');
-    Route::post('/posts', [UserPostController::class, 'store'])->name('posts.store');
-
-    Route::post('/posts', [UserPostController::class, 'update'])->name('posts.update');
+    // Route::post('/posts', [UserPostController::class, 'store'])->name('posts.store');
+    Route::resource('posts', UserPostController::class);
+    Route::post('/posts/update', [UserPostController::class, 'update'])->name('posts.update');
     Route::get('/edit-deals/{id}', [UserPostController::class, 'edit'])->name('edit-deals');
 
     Route::post('/deals/{deal}/mark-helpful', [DealHelpfulController::class, 'mark'])->name('deals.markHelpful');
