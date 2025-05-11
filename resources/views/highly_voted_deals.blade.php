@@ -84,7 +84,7 @@
     </style>
 
 
-    <main id="tt-pageContent" class="p-0">
+    <main id="tt-pageContent" class="p-0" style="min-height:80vh">
         <div class="container">
 
             <section class="popular-deals-section" style="margin-top: 20px;line-height: 17.5px;">

@@ -23,7 +23,13 @@ class UserPostController extends Controller
 
     public function newDeals()
     {
-        $new_deals = Post::where('status', 1)->orderBy('created_at', 'desc')->paginate(10);
+        $new_deals = Post::query()
+            ->join('users', 'posts.post_by', '=', 'users.id')
+            ->where('posts.status', 1)
+            ->select('posts.*', 'users.is_verified AS user_is_verified')
+            ->orderBy('posts.created_at', 'desc')
+            ->paginate(10);
+
         return view('new_deals', compact('new_deals'));
     }
 
@@ -47,18 +53,33 @@ class UserPostController extends Controller
         $popularityFormula = DB::raw(
             // Calculate score: (upvotes * upvote weight) + (downvotes * downvote weight) + (comment count * comment weight)
             "(COALESCE(upvotes, 0) * {$upvoteWeight}) + " .
-            "(COALESCE(downvotes, 0) * {$downvoteWeight}) + " .
-            "(COALESCE(comment_count, 0) * {$commentWeight}) " .
-            "AS popularity_score"
+                "(COALESCE(downvotes, 0) * {$downvoteWeight}) + " .
+                "(COALESCE(comment_count, 0) * {$commentWeight}) " .
+                "AS popularity_score"
         );
 
-        $popular_deals = Post::where('status', 1)->select('posts.*', $popularityFormula)->orderByDesc('popularity_score')->paginate(10);
+        /* $popular_deals = Post::where('status', 1)->select('posts.*', $popularityFormula)->orderByDesc('popularity_score')->paginate(10);
+         */
+
+        $popular_deals = Post::query()
+            ->join('users', 'posts.post_by', '=', 'users.id')
+            ->where('posts.status', 1)
+            ->select('posts.*', 'users.is_verified AS user_is_verified')
+            ->select('posts.*', $popularityFormula)
+            ->orderByDesc('popularity_score')
+            ->paginate(10);
+
         return view('popular_deals', compact('popular_deals'));
     }
 
     public function highlyVotedDeals()
     {
-        $highly_voted_deals = Post::where('status', 1)->orderBy('upvotes', 'desc')->paginate(10);
+        $highly_voted_deals = Post::query()
+            ->join('users', 'posts.post_by', '=', 'users.id')
+            ->where('posts.status', 1)
+            ->select('posts.*', 'users.is_verified AS user_is_verified')
+            ->orderBy('posts.upvotes', 'desc')
+            ->paginate(10);
         return view('highly_voted_deals', compact('highly_voted_deals'));
     }
 
