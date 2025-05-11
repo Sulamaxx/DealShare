@@ -14,6 +14,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TableController;
+use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\UserFrontController;
 use App\Http\Controllers\UserPostController;
 use App\Http\Middleware\AdminMiddleware;
@@ -56,6 +57,9 @@ Route::middleware([
 
     Route::post('/deals/{deal}/mark-helpful', [DealHelpfulController::class, 'mark'])->name('deals.markHelpful');
     Route::delete('/deals/{deal}/unmark-helpful', [DealHelpfulController::class, 'unmark'])->name('deals.unmarkHelpful');
+    Route::post('/start-thread', [ThreadController::class, 'store']);
+    Route::get('/comments/{post}', [ThreadController::class, 'index']);
+    Route::post('/comments', [ThreadController::class, 'storeChild']);
 
 });
 

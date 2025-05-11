@@ -3,6 +3,7 @@
 @section('title', 'Forum')
 
 @section('content')
+    <input type="text" id="post_id" value="{{ $post->id }}" hidden />
     <main id="tt-pageContent">
         <div class="container">
             <div class="tt-single-topic-list">
@@ -20,14 +21,14 @@
                                     <i class="tt-icon d-flex align-items-center justify-content-center"><svg>
                                             <use xlink:href="#icon-time"></use>
                                         </svg></i>
-                                        <span class="d-block">{{ $post->created_at }}</span>
+                                    <span class="d-block">{{ $post->created_at }}</span>
                                 </a>
                             </div>
                             <h3 class="tt-item-title">
                                 <a href="javascript:void(0)">{{ $post->title }}</a>
                             </h3>
                             <h5 class="tt-item-category">
-                                <a >{{ $post->category }}</a>
+                                <a>{{ $post->category }}</a>
                             </h5>
                             <span class="badge bg-warning">New</span>
                             <img class="mt-3" style="width: 100%;height: 400px;" src="{{ asset($post->image) }}"
@@ -43,36 +44,37 @@
                             </p>
                         </div>
                         <div class="tt-item-info info-bottom">
-                          <a class="tt-icon-btn like-button {{ $vote_type === 'up' ? 'upvoted' : '' }}"
-                                        data-post-id="{{ $post->id }}"
-                                        data-vote-type="up"
-                                        onclick="vote(this)">
-                                            <i class="tt-icon"><svg>
-                                                    <use xlink:href="#icon-like"></use>
-                                                </svg></i>
-                                            <span class="tt-text" id="up_vote_span">{{ $post->upvotes }}</span>
-                                        </a>
-                                        <a class="tt-icon-btn dislike-button {{ $vote_type === 'down' ? 'downvoted' : '' }}"
-                                        data-post-id="{{ $post->id }}"
-                                        data-vote-type="down"
-                                        onclick="vote(this)">
-                                            <i class="tt-icon"><svg>
-                                                    <use xlink:href="#icon-dislike"></use>
-                                                </svg></i>
-                                            <span class="tt-text" id="down_vote_span">{{ $post->downvotes }}</span>
+                            <a class="tt-icon-btn like-button {{ $vote_type === 'up' ? 'upvoted' : '' }}"
+                                data-post-id="{{ $post->id }}" data-vote-type="up" onclick="vote(this)">
+                                <i class="tt-icon"><svg>
+                                        <use xlink:href="#icon-like"></use>
+                                    </svg></i>
+                                <span class="tt-text" id="up_vote_span">{{ $post->upvotes }}</span>
+                            </a>
+                            <a class="tt-icon-btn dislike-button {{ $vote_type === 'down' ? 'downvoted' : '' }}"
+                                data-post-id="{{ $post->id }}" data-vote-type="down" onclick="vote(this)">
+                                <i class="tt-icon"><svg>
+                                        <use xlink:href="#icon-dislike"></use>
+                                    </svg></i>
+                                <span class="tt-text" id="down_vote_span">{{ $post->downvotes }}</span>
                             </a>
 
                             <!-- <a href="#" class="tt-icon-btn">
-                                <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-favorite"></use>
-                                    </svg></i>
-                                <span class="tt-text">{{ $post->comment_count }}</span>
-                            </a> -->
+                                                                                                                                            <i class="tt-icon"><svg>
+                                                                                                                                                    <use xlink:href="#icon-favorite"></use>
+                                                                                                                                                </svg></i>
+                                                                                                                                            <span class="tt-text">{{ $post->comment_count }}</span>
+                                                                                                                                        </a> -->
                             <div class="col-separator"></div>
                             <button class="btn btn-success btn-sm">Subscribe</button>
                         </div>
                     </div>
                 </div>
+
+                <div id="comments-container" data-post-id="{{ $post->id }}"></div>
+                <script>
+                    loadComments({{ $post->id }});
+                </script>
 
                 <div class="tt-item">
                     <div class="tt-single-topic">
@@ -115,367 +117,34 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tt-item-info info-bottom">
-                            <a href="#" class="tt-icon-btn">
-                                <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-like"></use>
-                                    </svg></i>
-                                <span class="tt-text">671</span>
-                            </a>
-                            <a href="#" class="tt-icon-btn">
-                                <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-dislike"></use>
-                                    </svg></i>
-                                <span class="tt-text">39</span>
-                            </a>
-                            <a href="#" class="tt-icon-btn">
-                                <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-favorite"></use>
-                                    </svg></i>
-                                <span class="tt-text">12</span>
-                            </a>
-                            <div class="col-separator"></div>
-                            <a href="#" class="tt-icon-btn tt-hover-02 tt-small-indent">
-                                <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-share"></use>
-                                    </svg></i>
-                            </a>
-                            <a href="#" class="tt-icon-btn tt-hover-02 tt-small-indent">
-                                <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-flag"></use>
-                                    </svg></i>
-                            </a>
-                            <a href="#" class="tt-icon-btn tt-hover-02 tt-small-indent">
-                                <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-reply"></use>
-                                    </svg></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tt-item tt-wrapper-success">
-                    <div class="tt-single-topic">
-                        <div class="tt-item-header pt-noborder">
-                            <div class="tt-item-info info-top">
-                                <div class="tt-avatar-icon">
-                                    <i class="tt-icon"><svg>
-                                            <use xlink:href="#icon-ava-t"></use>
-                                        </svg></i>
-                                </div>
-                                <div class="tt-avatar-title">
-                                    <a href="#">tesla02</a>
-                                    <span class="tt-color13 tt-badge">best answer</span>
-                                </div>
-                                <a href="#" class="tt-info-time d-flex">
-                                    <i class="tt-icon d-flex align-items-center justify-content-center"><svg>
-                                            <use xlink:href="#icon-time"></use>
-                                        </svg></i>6 Jan,2019
-                                </a>
-                            </div>
-                        </div>
-                        <div class="tt-item-description">
-                            Finally!<br>
-                            Are there any special recommendations for design or an updated guide that includes new preview
-                            sizes, including retina displays?
-                        </div>
-                        <div class="tt-item-info info-bottom">
-                            <a href="#" class="tt-icon-btn">
-                                <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-like"></use>
-                                    </svg></i>
-                                <span class="tt-text">671</span>
-                            </a>
-                            <a href="#" class="tt-icon-btn">
-                                <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-dislike"></use>
-                                    </svg></i>
-                                <span class="tt-text">39</span>
-                            </a>
-                            <a href="#" class="tt-icon-btn">
-                                <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-favorite"></use>
-                                    </svg></i>
-                                <span class="tt-text">12</span>
-                            </a>
-                            <div class="col-separator"></div>
-                            <a href="#" class="tt-icon-btn tt-hover-02 tt-small-indent">
-                                <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-share"></use>
-                                    </svg></i>
-                            </a>
-                            <a href="#" class="tt-icon-btn tt-hover-02 tt-small-indent">
-                                <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-flag"></use>
-                                    </svg></i>
-                            </a>
-                            <a href="#" class="tt-icon-btn tt-hover-02 tt-small-indent">
-                                <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-reply"></use>
-                                    </svg></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tt-item tt-wrapper-danger">
-                    <div class="tt-single-topic">
-                        <div class="tt-item-header pt-noborder">
-                            <div class="tt-item-info info-top">
-                                <div class="tt-avatar-icon">
-                                    <i class="tt-icon"><svg>
-                                            <use xlink:href="#icon-ava-u"></use>
-                                        </svg></i>
-                                </div>
-                                <div class="tt-avatar-title">
-                                    <a href="#">usain31</a>
-                                </div>
-                                <a href="#" class="tt-info-time d-flex">
-                                    <i class="tt-icon d-flex justify-content-center align-items-center"><svg>
-                                            <use xlink:href="#icon-time"></use>
-                                        </svg></i>6 Jan,2019
-                                </a>
-                            </div>
-                        </div>
-                        <div class="tt-item-description">
-                            This post has been flagged by a moderator, received too many downvotes.
-                        </div>
-                        <div class="row">
-                            <div class="col-auto">
-                                <div class="tt-item-info info-bottom">
-                                    <a href="#" class="tt-icon-btn">
-                                        <i class="tt-icon"><svg>
-                                                <use xlink:href="#icon-dislike"></use>
-                                            </svg></i>
-                                        <span class="tt-text">39</span>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-auto ml-auto">
-                                <a href="#" class="btn btn-primary tt-offset-27">Show Reply</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tt-item">
-                    <div class="tt-single-topic">
-                        <div class="tt-item-header pt-noborder">
-                            <div class="tt-item-info info-top">
-                                <div class="tt-avatar-icon">
-                                    <i class="tt-icon"><svg>
-                                            <use xlink:href="#icon-ava-f"></use>
-                                        </svg></i>
-                                </div>
-                                <div class="tt-avatar-title">
-                                    <a href="#">kolis27</a>
-                                </div>
-                                <a href="#" class="tt-info-time d-flex">
-                                    <i class="tt-icon d-flex align-items-center justify-content-center"><svg>
-                                            <use xlink:href="#icon-time"></use>
-                                        </svg></i>6 Jan,2019
-                                </a>
-                            </div>
-                        </div>
-                        <div class="tt-item-description">
-                            <p>
-                                It’s too big preview image, it should be smaller even five in row. On one page there are 30
-                                items to 60 pages it is 1800 items in categories eg in Add-Ons category have 22749 items,
-                                why not see all of them but only those 1800 items? This is a bad thing.
-                            </p>
-                            <div class="row tt-offset-37">
-                                <div class="col-lg-10">
-                                    <div class="tt-gallery-layout">
-                                        <div class="tt-item">
-                                            <a href="images/single-topic-img03.jpg" class="tt-gallery-obj"><img
-                                                    src="images/single-topic-img03.jpg" alt=""></a>
-                                        </div>
-                                        <div class="tt-item">
-                                            <a href="images/single-topic-img04.jpg" class="tt-gallery-obj"><img
-                                                    src="images/single-topic-img04.jpg" alt=""></a>
-                                        </div>
-                                        <div class="tt-item">
-                                            <a href="images/single-topic-img05.jpg" class="tt-gallery-obj"><img
-                                                    src="images/single-topic-img05.jpg" alt=""></a>
-                                        </div>
-                                        <div class="tt-item">
-                                            <a href="images/single-topic-img06.jpg" class="tt-gallery-obj"><img
-                                                    src="images/single-topic-img06.jpg" alt=""></a>
-                                        </div>
-                                        <div class="tt-item">
-                                            <a href="images/single-topic-img07.jpg" class="tt-gallery-obj"><img
-                                                    src="images/single-topic-img07.jpg" alt=""></a>
-                                        </div>
-                                        <div class="tt-item">
-                                            <a href="images/single-topic-img08.jpg" class="tt-gallery-obj"><img
-                                                    src="images/single-topic-img08.jpg" alt=""></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tt-item-info info-bottom">
-                            <a href="#" class="tt-icon-btn">
-                                <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-like"></use>
-                                    </svg></i>
-                                <span class="tt-text">671</span>
-                            </a>
-                            <a href="#" class="tt-icon-btn">
-                                <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-dislike"></use>
-                                    </svg></i>
-                                <span class="tt-text">39</span>
-                            </a>
-                            <a href="#" class="tt-icon-btn">
-                                <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-favorite"></use>
-                                    </svg></i>
-                                <span class="tt-text">12</span>
-                            </a>
-                            <div class="col-separator"></div>
-                            <a href="#" class="tt-icon-btn tt-hover-02 tt-small-indent">
-                                <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-share"></use>
-                                    </svg></i>
-                            </a>
-                            <a href="#" class="tt-icon-btn tt-hover-02 tt-small-indent">
-                                <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-flag"></use>
-                                    </svg></i>
-                            </a>
-                            <a href="#" class="tt-icon-btn tt-hover-02 tt-small-indent">
-                                <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-reply"></use>
-                                    </svg></i>
-                            </a>
-                        </div>
                     </div>
                 </div>
 
             </div>
-            {{-- <div class="tt-wrapper-inner">
-                <h4 class="tt-title-separator"><span>You’ve reached the end of replies</span></h4>
-            </div>
-            <div class="tt-topic-list">
-                <div class="tt-item tt-item-popup">
-                    <div class="tt-col-avatar">
-                        <svg class="tt-icon">
-                            <use xlink:href="#icon-ava-f"></use>
-                        </svg>
-                    </div>
-                    <div class="tt-col-message">
-                        Looks like you are new here. Register for free, learn and contribute.
-                    </div>
-                    <div class="tt-col-btn">
-                        <button type="button" class="btn btn-primary">Log in</button>
-                        <button type="button" class="btn btn-secondary">Sign up</button>
-                        <button type="button" class="btn-icon">
-                            <svg class="tt-icon">
-                                <use xlink:href="#icon-cancel"></use>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div> --}}
+
             <div class="tt-wrapper-inner">
                 <div class="pt-editor form-default">
                     <h6 class="pt-title">Post Your Reply</h6>
-                    {{-- <div class="pt-row">
-                        <div class="col-left">
-                            <ul class="pt-edit-btn">
-                                <li><button type="button" class="btn-icon">
-                                        <svg class="tt-icon">
-                                            <use xlink:href="#icon-quote"></use>
-                                        </svg>
-                                    </button></li>
-                                <li><button type="button" class="btn-icon">
-                                        <svg class="tt-icon">
-                                            <use xlink:href="#icon-bold"></use>
-                                        </svg>
-                                    </button></li>
-                                <li><button type="button" class="btn-icon">
-                                        <svg class="tt-icon">
-                                            <use xlink:href="#icon-italic"></use>
-                                        </svg>
-                                    </button></li>
-                                <li><button type="button" class="btn-icon">
-                                        <svg class="tt-icon">
-                                            <use xlink:href="#icon-share_topic"></use>
-                                        </svg>
-                                    </button></li>
-                                <li><button type="button" class="btn-icon">
-                                        <svg class="tt-icon">
-                                            <use xlink:href="#icon-blockquote"></use>
-                                        </svg>
-                                    </button></li>
-                                <li><button type="button" class="btn-icon">
-                                        <svg class="tt-icon">
-                                            <use xlink:href="#icon-performatted"></use>
-                                        </svg>
-                                    </button></li>
-                                <li class="hr"></li>
-                                <li><button type="button" class="btn-icon">
-                                        <svg class="tt-icon">
-                                            <use xlink:href="#icon-upload_files"></use>
-                                        </svg>
-                                    </button></li>
-                                <li><button type="button" class="btn-icon">
-                                        <svg class="tt-icon">
-                                            <use xlink:href="#icon-bullet_list"></use>
-                                        </svg>
-                                    </button></li>
-                                <li><button type="button" class="btn-icon">
-                                        <svg class="tt-icon">
-                                            <use xlink:href="#icon-heading"></use>
-                                        </svg>
-                                    </button></li>
-                                <li><button type="button" class="btn-icon">
-                                        <svg class="tt-icon">
-                                            <use xlink:href="#icon-horizontal_line"></use>
-                                        </svg>
-                                    </button></li>
-                                <li><button type="button" class="btn-icon">
-                                        <svg class="tt-icon">
-                                            <use xlink:href="#icon-emoticon"></use>
-                                        </svg>
-                                    </button></li>
-                                <li><button type="button" class="btn-icon">
-                                        <svg class="tt-icon">
-                                            <use xlink:href="#icon-settings"></use>
-                                        </svg>
-                                    </button></li>
-                                <li><button type="button" class="btn-icon">
-                                        <svg class="tt-icon">
-                                            <use xlink:href="#icon-color_picker"></use>
-                                        </svg>
-                                    </button></li>
-                            </ul>
-                        </div>
-                        <div class="col-right tt-hidden-mobile">
-                            <a href="#" class="btn btn-primary">Preview</a>
-                        </div>
-                    </div> --}}
                     <div class="form-group">
-                        <textarea name="message" class="form-control" rows="5" placeholder="Lets get started"></textarea>
+                        <textarea name="message" id="new_thread" class="form-control" rows="5" placeholder="Lets get started"></textarea>
                     </div>
                     <div class="pt-row">
                         <div class="col-auto">
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="checkBox21" name="checkbox" checked="">
-                                <label for="checkBox21">
-                                    <span class="check"></span>
-                                    <span class="box"></span>
-                                    <span class="tt-text">Subscribe to this topic.</span>
-                                </label>
-                            </div>
                         </div>
                         <div class="col-auto">
-                            <a href="#" class="btn btn-secondary btn-width-lg">Reply</a>
+                            @if (Auth::user())
+                                <a href="javascript:void(0)" onclick="StartNewThread()"
+                                    class="btn btn-secondary btn-width-lg">Reply</a>
+                            @else
+                                <a href="{{ route('login') }}" class="btn btn-secondary btn-width-lg">Login to
+                                    Comment</a>
+                            @endif
+
                         </div>
                     </div>
                 </div>
             </div>
+
             {{-- <div class="tt-topic-list tt-ofset-30">
                 <div class="tt-list-search">
                     <div class="tt-title">Suggested Topics</div>
@@ -665,72 +334,225 @@
                     </button>
                 </div>
             </div> --}}
+
         </div>
     </main>
 
 @endsection
 
 <script>
-    function vote(element){
-       
+    function StartNewThread() {
+        const comment = document.getElementById('new_thread').value;
+        const post_id = document.getElementById('post_id').value;
+
+        fetch('/start-thread', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    comment: comment,
+                    post_id: post_id
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                // console.log(data);
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: data.message,
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: data.message,
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+                }
+                window.location.reload();
+            })
+            .catch(error => console.log(error));
+    }
+
+
+    function vote(element) {
+
         const postId = element.dataset.postId;
-     
+
         const voteType = element.dataset.voteType;
         const url = `/posts/${postId}/vote`;
 
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(
-                        { 
-                            vote_type: voteType ,
-                            post_id:postId
-                        })
+        fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    vote_type: voteType,
+                    post_id: postId
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        if (data.redirect) {
-                            window.location.href = data.redirect; 
-                        } 
-                    }else{
-                        const upvoteElement = document.getElementById('up_vote_span');
-                        if (upvoteElement && data.upvotes !== undefined) {
-                            upvoteElement.textContent = data.upvotes;
-                        }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    if (data.redirect) {
+                        window.location.href = data.redirect;
+                    }
+                } else {
+                    const upvoteElement = document.getElementById('up_vote_span');
+                    if (upvoteElement && data.upvotes !== undefined) {
+                        upvoteElement.textContent = data.upvotes;
+                    }
 
-                        const downvoteElement = document.getElementById('down_vote_span');
-                        if (downvoteElement && data.downvotes !== undefined) {
-                            downvoteElement.textContent = data.downvotes;
-                        }
+                    const downvoteElement = document.getElementById('down_vote_span');
+                    if (downvoteElement && data.downvotes !== undefined) {
+                        downvoteElement.textContent = data.downvotes;
+                    }
 
-                        const likeButton = document.querySelector('.like-button');
-                        const dislikeButton = document.querySelector('.dislike-button');
+                    const likeButton = document.querySelector('.like-button');
+                    const dislikeButton = document.querySelector('.dislike-button');
 
+                    if (likeButton) {
+                        likeButton.classList.remove('upvoted');
+                    }
+                    if (dislikeButton) {
+                        dislikeButton.classList.remove('downvoted');
+                    }
+
+                    if (voteType === 'up') {
                         if (likeButton) {
-                            likeButton.classList.remove('upvoted');
+                            likeButton.classList.add('upvoted');
                         }
+                    } else if (voteType === 'down') {
                         if (dislikeButton) {
-                            dislikeButton.classList.remove('downvoted');
-                        }
-
-                        if (voteType === 'up') {
-                            if (likeButton) {
-                                likeButton.classList.add('upvoted');
-                            }
-                        } else if (voteType === 'down') {
-                            if (dislikeButton) {
-                                dislikeButton.classList.add('downvoted');
-                            }
+                            dislikeButton.classList.add('downvoted');
                         }
                     }
-                    
+                }
+
+            })
+            .catch(error => {
+                console.error('Error voting:', error);
+            });
+    }
+</script>
+
+<script>
+    function loadComments(postId) {
+        fetch(`/comments/${postId}`)
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                const container = document.getElementById('comments-container');
+                container.innerHTML = renderComments(data);
+            })
+            .catch(err => console.error(err));
+    }
+
+    function renderComments(comments) {
+        let html = '';
+        comments.forEach(comment => {
+            const replies = comment.replies_recursive || [];
+            const hasReplies = replies.length > 0;
+            const toggleId = `toggle-replies-${comment.id}`;
+
+            html += `
+            <div class="tt-item" data-id="${comment.id}">
+                <div class="tt-single-topic">
+                    <div class="tt-item-header pt-noborder">
+                        <div class="tt-item-info info-top">
+                            <div class="tt-avatar-icon"><i class="tt-icon"><svg><use xlink:href="#icon-ava-v"></use></svg></i></div>
+                            <div class="tt-avatar-title"><a href="#">${comment.user?.name || 'Anonymous'}</a></div>
+                            <a href="#" class="tt-info-time d-flex">
+                                <i class="tt-icon d-flex justify-content-center align-items-center"><svg><use xlink:href="#icon-time"></use></svg></i>
+                                ${comment.created_at}
+                            </a>
+                        </div>
+                    </div>
+                    <div class="tt-item-description">
+                        ${comment.comment_text}
+                        <div>
+                            <a href="#" class="reply-btn" data-id="${comment.id}">Reply</a>
+                            <div class="reply-form-container" id="reply-form-${comment.id}"></div>
+                        </div>
+                        ${hasReplies ? `
+                            <a href="#" class="toggle-replies-btn" data-target="${toggleId}">Show Replies (${replies.length})</a>
+                            <div class="replies" id="${toggleId}" style="display: none;">
+                                ${renderComments(replies)}
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+        });
+        return html;
+    }
+
+
+    document.addEventListener('click', function(e) {
+        // Expand/collapse replies
+        if (e.target.classList.contains('toggle-replies-btn')) {
+            e.preventDefault();
+            const targetId = e.target.dataset.target;
+            const repliesDiv = document.getElementById(targetId);
+            if (repliesDiv.style.display === 'none') {
+                repliesDiv.style.display = 'block';
+                e.target.textContent = 'Hide Replies';
+            } else {
+                repliesDiv.style.display = 'none';
+                e.target.textContent = `Show Replies (${repliesDiv.children.length})`;
+            }
+        }
+    });
+</script>
+
+<script>
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('reply-btn')) {
+            e.preventDefault();
+            const parentId = e.target.dataset.id;
+            const form = `
+            <form onsubmit="submitReply(event, ${parentId})">
+                <textarea name="comment_text" required></textarea>
+                <button type="submit">Reply</button>
+            </form>
+        `;
+            document.getElementById('reply-form-' + parentId).innerHTML = form;
+        }
+    });
+
+
+    function submitReply(event, parentId) {
+        event.preventDefault();
+        const textarea = event.target.querySelector('textarea');
+        const commentText = textarea.value;
+        const postId = document.getElementById('comments-container').dataset.postId;
+
+        fetch('/comments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    comment_text: commentText,
+                    parent_id: parentId,
+                    post_id: postId
                 })
-                .catch(error => {
-                    console.error('Error voting:', error);
-                });
+            })
+            .then(res => res.json())
+            .then((data) => {
+                console.log(data);
+                loadComments(postId);
+            });
     }
 </script>
