@@ -95,7 +95,7 @@
 
 
                             <h2 style="margin-bottom: 0; font-weight: bold; font-size: 1.5rem; display: inline-block;">
-                                Popular Deals
+                                Highly Voted Deals
                             </h2>
 
                             <div style="width: 62.5px; height: 3px; background-color: #DC3545; display: inline-block;">
@@ -106,13 +106,13 @@
                     </div>
                     <div class="row">
 
-                        @foreach ($popular_deals as $deal)
+                        @foreach ($highly_voted_deals as $deal)
                             <!-- Repeat deal card -->
                             @include('deal.deal_card', [$deal])
                         @endforeach
                         <br>
                         <!-- Pagination links -->
-                        {{ $popular_deals->links() }}
+                        {{ $highly_voted_deals->links() }}
 
                     </div>
                 </div>
