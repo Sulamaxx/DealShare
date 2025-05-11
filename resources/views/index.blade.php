@@ -199,92 +199,10 @@
 
                     <div class="row">
 
-                        @for ($i = 0; $i < 6; $i++)
-                            <div class="col-sm-6 col-md-6 col-lg-6">
-
-                                <div class="single-deal-card card mb-4"
-                                    style="display: flex; flex-direction: row; border:none;border-radius:0%; overflow: hidden;">
-
-
-                                    <div class="deal-image-area position-relative"
-                                        style="flex-basis: 30%; background-image: url('placeholder-deal-image.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-
-                                    </div>
-
-
-                                    <div class="deal-details-area p-1"
-                                        style="flex-basis: 70%; display: flex; flex-direction: column;">
-
-
-                                        <h5 style="font-size: 1.125em; margin-bottom: 3px;font-weight:bolder">Save 800
-                                            LKR
-                                        </h5>
-
-
-                                        <p style="font-size: 0.875em; color: #555; margin-bottom: 3px; flex-grow: 1;">
-                                            20% Off On Total Bill Value Cremalato offers a truly indulgent experience
-                                            that
-                                            satisfies even the most discerning sweet tooth. most discerning sweet tooth.
-                                            most discerning sweet tooth.
-                                        </p>
-
-
-                                        <small class="text-muted mb-2">
-                                            <i class="fas fa-info-circle me-1"></i>
-                                            <a href="#" style="text-decoration: none; color: #555;">powertools
-                                                specialists.com.au</a>
-                                        </small>
-
-
-                                        <div class="deal-meta mt-auto">
-                                            <div class="d-flex align-items-center justify-content-between mb-1">
-
-                                                <div class="d-flex align-items-center"
-                                                    style="background-color: #ddd;padding-inline: 5px;border-radius:3.75px">
-
-                                                    <span class=" fw-bold"
-                                                        style="margin-right: 5px;font-weight: bold;font-color:#ddd">
-                                                        +10
-                                                    </span>
-                                                    <span style="margin-right: 5px;font-color:#ddd">|</span>
-                                                    <span class="fw-bold"
-                                                        style="margin-right: 5px;font-weight: bold;font-color:#ddd">
-                                                        -1
-                                                    </span>
-                                                </div>
-
-                                                <span class="text-muted">
-                                                    10min
-                                                    <i class="far fa-comment ms-2 me-1" style="font-weight: 600;"></i> 5
-                                                </span>
-                                                <div class="d-flex flex-wrap gap-1">
-
-                                                    <span class=" fw-bold" style="margin-right: 1.25px;font-color:#ddd">
-                                                        5 Hotel Deals
-                                                    </span>
-                                                    <span style="margin-right: 1.25px;font-color:#ddd">|</span>
-                                                    <span class="fw-bold" style="margin-right: 1em;font-color:#ddd">
-                                                        Top Deals
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            {{-- Tags and Verified Member --}}
-                                            <div class="d-flex flex-wrap align-items-center gap-2"
-                                                style="margin-top: 0.307rem">
-                                                <div class="verified-member d-flex align-items-center text-success">
-                                                    <i class="fas fa-star me-1"
-                                                        style="padding: 2px;background-color: #DC3545;color: white;"></i>
-                                                    {{-- Star icon placeholder --}}
-                                                    Verified Member
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        @endfor
+                        @foreach ($popular_deals as $deal)
+                            <!-- Repeat deal card -->
+                            @include('deal.deal_card', [$deal])
+                        @endforeach
 
 
                     </div>
@@ -598,90 +516,10 @@
 
                     <div class="row">
 
-                        @for ($i = 0; $i < 6; $i++)
-                            <div class="col-sm-6 col-md-6 col-lg-6">
-
-                                <div class="single-deal-card card mb-4"
-                                    style="display: flex; flex-direction: row; border:none;border-radius:0%; overflow: hidden;">
-
-
-                                    <div class="deal-image-area position-relative"
-                                        style="flex-basis: 30%; background-image: url('placeholder-deal-image.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-
-                                    </div>
-
-
-                                    <div class="deal-details-area p-1"
-                                        style="flex-basis: 70%; display: flex; flex-direction: column;">
-
-
-                                        <h5 style="font-size: 1.125em; margin-bottom: 3px;font-weight:bolder">Save 800 LKR
-                                        </h5>
-
-
-                                        <p style="font-size: 0.875em; color: #555; margin-bottom: 3px; flex-grow: 1;">
-                                            20% Off On Total Bill Value Cremalato offers a truly indulgent experience that
-                                            satisfies even the most discerning sweet tooth. most discerning sweet tooth.
-                                            most discerning sweet tooth.
-                                        </p>
-
-
-                                        <small class="text-muted mb-2">
-                                            <i class="fas fa-info-circle me-1"></i>
-                                            <a href="#" style="text-decoration: none; color: #555;">powertools
-                                                specialists.com.au</a>
-                                        </small>
-
-
-                                        <div class="deal-meta mt-auto">
-                                            <div class="d-flex align-items-center justify-content-between mb-1">
-
-                                                <div class="d-flex align-items-center"
-                                                    style="background-color: #ddd;padding-inline: 5px;border-radius:3.75px">
-
-                                                    <span class=" fw-bold"
-                                                        style="margin-right: 5px;font-weight: bold;font-color:#ddd">
-                                                        +10
-                                                    </span>
-                                                    <span style="margin-right: 5px;font-color:#ddd">|</span>
-                                                    <span class="fw-bold"
-                                                        style="margin-right: 5px;font-weight: bold;font-color:#ddd">
-                                                        -1
-                                                    </span>
-                                                </div>
-
-                                                <span class="text-muted">
-                                                    10min
-                                                    <i class="far fa-comment ms-2 me-1" style="font-weight: 600;"></i> 5
-                                                </span>
-                                                <div class="d-flex flex-wrap gap-1">
-
-                                                    <span class=" fw-bold" style="margin-right: 1.25px;font-color:#ddd">
-                                                        5 Hotel Deals
-                                                    </span>
-                                                    <span style="margin-right: 1.25px;font-color:#ddd">|</span>
-                                                    <span class="fw-bold" style="margin-right: 1em;font-color:#ddd">
-                                                        Top Deals
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            {{-- Tags and Verified Member --}}
-                                            <div class="d-flex flex-wrap align-items-center gap-2"
-                                                style="margin-top: 0.307rem">
-                                                <div class="verified-member d-flex align-items-center text-success">
-                                                    <i class="fas fa-star me-1"
-                                                        style="padding: 2px;background-color: #DC3545;color: white;"></i>
-                                                    {{-- Star icon placeholder --}}
-                                                    Verified Member
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        @endfor
+                        @foreach ($highly_voted_deals as $deal)
+                            <!-- Repeat deal card -->
+                            @include('deal.deal_card', [$deal])
+                        @endforeach
 
                     </div>
                 </div>
