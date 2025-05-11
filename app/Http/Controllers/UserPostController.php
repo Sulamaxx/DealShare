@@ -53,9 +53,9 @@ class UserPostController extends Controller
         $popularityFormula = DB::raw(
             // Calculate score: (upvotes * upvote weight) + (downvotes * downvote weight) + (comment count * comment weight)
             "(COALESCE(upvotes, 0) * {$upvoteWeight}) + " .
-                "(COALESCE(downvotes, 0) * {$downvoteWeight}) + " .
-                "(COALESCE(comment_count, 0) * {$commentWeight}) " .
-                "AS popularity_score"
+            "(COALESCE(downvotes, 0) * {$downvoteWeight}) + " .
+            "(COALESCE(comment_count, 0) * {$commentWeight}) " .
+            "AS popularity_score"
         );
 
         /* $popular_deals = Post::where('status', 1)->select('posts.*', $popularityFormula)->orderByDesc('popularity_score')->paginate(10);
@@ -126,10 +126,24 @@ class UserPostController extends Controller
         ]);
 
         $imagePath = null;
+        // if ($request->hasFile('image')) {
+        //     $path = $request->file('image')->store('posts', 'public');
+        //     $imagePath = Storage::url($path);
+        // }
         if ($request->hasFile('image')) {
+            // Store the image in the 'posts' folder under the 'public' disk
             $path = $request->file('image')->store('posts', 'public');
+
+            // Get the URL to the stored file
             $imagePath = Storage::url($path);
+
+            // Get the full path to the file on the local filesystem
+            $fullPath = storage_path('app/public/' . $path);
+
+            // Set the permissions of the file to 0755
+            chmod($fullPath, 0755);
         }
+
 
         Post::create([
             'title' => $validated['title'],
@@ -167,8 +181,20 @@ class UserPostController extends Controller
                 Storage::disk('public')->delete(str_replace('/storage/', '', $post->image));
             }
 
+            // $path = $request->file('image')->store('posts', 'public');
+            // $imagePath = Storage::url($path); // update image path
+
+            // Store the image in the 'posts' folder under the 'public' disk
             $path = $request->file('image')->store('posts', 'public');
-            $imagePath = Storage::url($path); // update image path
+
+            // Get the URL to the stored file
+            $imagePath = Storage::url($path);
+
+            // Get the full path to the file on the local filesystem
+            $fullPath = storage_path('app/public/' . $path);
+
+            // Set the permissions of the file to 0755
+            chmod($fullPath, 0755);
         }
         $post->title = $validated['title'];
         $post->description = $validated['description'];

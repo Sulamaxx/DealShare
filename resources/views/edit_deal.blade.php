@@ -17,7 +17,7 @@
                 <form class="form-default form-create-topic" action="{{ route('posts.update') }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
-
+                    {{-- @method('PUT') --}}
                     <input type="hidden" name="id" value="{{ $post->id }}">
 
                     <!-- Deal Title -->
