@@ -56,6 +56,12 @@ class UserPostController extends Controller
         return view('popular_deals', compact('popular_deals'));
     }
 
+    public function highlyVotedDeals()
+    {
+        $highly_voted_deals = Post::where('status', 1)->orderBy('upvotes', 'desc')->paginate(10);
+        return view('highly_voted_deals', compact('highly_voted_deals'));
+    }
+
     public function index()
     {
         return view('create_deal');

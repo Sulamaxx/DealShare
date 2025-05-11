@@ -95,7 +95,7 @@
 
 
                             <h2 style="margin-bottom: 0; font-weight: bold; font-size: 1.5rem; display: inline-block;">
-                                New Deals
+                                Popular Deals
                             </h2>
 
                             <div style="width: 62.5px; height: 3px; background-color: #DC3545; display: inline-block;">
