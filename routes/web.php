@@ -3,6 +3,7 @@
 use App\Http\Controllers\admin\AuthenticationController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\DealsController;
+use App\Http\Controllers\admin\SettingsController;
 use App\Http\Controllers\admin\UsersController;
 use App\Http\Controllers\AiapplicationController;
 use App\Http\Controllers\ChartController;
@@ -12,7 +13,6 @@ use App\Http\Controllers\DealHelpfulController;
 use App\Http\Controllers\FormsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\UserFrontController;
@@ -131,7 +131,16 @@ Route::prefix('admin/deals')
         });
     });
 
+// Settings
 
+Route::prefix('admin/settings')
+    ->middleware([AdminMiddleware::class])
+    ->group(function () {
+        Route::controller(SettingsController::class)->group(function () {
+            Route::get('/popular-deals', 'popularDeals')->name('popularDeals');
+            Route::post('/popular-deals/update', 'update')->name('admin.popularDeals.update');
+        });
+    });
 
 
 Route::controller(HomeController::class)->group(function () {
