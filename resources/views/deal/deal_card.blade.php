@@ -30,8 +30,7 @@
 
             <small class="text-muted mb-2">
                 <i class="fas fa-info-circle me-1"></i>
-                <a href="#" style="text-decoration: none; color: #555;">powertools
-                    specialists.com.au</a>
+                <a href="#" style="text-decoration: none; color: #555;">{{ $deal->link }}</a>
             </small>
 
 
@@ -59,13 +58,13 @@
                         <span class=" fw-bold" style="margin-right: 1.25px;font-color:#ddd">
                             {{ $deal->category }}
                         </span>
-                        <span style="margin-right: 1.25px;font-color:#ddd">|</span>
+                        {{-- <span style="margin-right: 1.25px;font-color:#ddd">|</span>
                         <span class="fw-bold" style="margin-right: 1em;font-color:#ddd">
                             Top Deals
-                        </span>
+                        </span> --}}
                     </div>
                 </div>
-                @if ($deal->verified_member)
+                @if ($deal->user_is_verified)
                     {{-- Tags and Verified Member --}}
                     <div class="d-flex flex-wrap align-items-center gap-2" style="margin-top: 0.307rem">
                         <div class="verified-member d-flex align-items-center text-success">
