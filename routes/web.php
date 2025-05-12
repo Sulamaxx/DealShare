@@ -141,7 +141,7 @@ Route::prefix('admin/deals')
 
             Route::patch('/reports/status/{id}', 'updateReportStatus')->name('report.status');
             Route::delete('/reports/{id}', 'destroyReport')->name('report.delete');
-            Route::delete('/deactivate/{id}', 'deactivateDeal')->name('report.deactivate');
+            Route::delete('/deactivate/{report}/{deal}', 'deactivateDeal')->name('report.deactivate');
         });
     });
 
