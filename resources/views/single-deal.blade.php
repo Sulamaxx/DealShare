@@ -25,8 +25,8 @@
                                         <span class="d-block">{{ $post->created_at }}</span>
                                     </a>
                                     @auth
-                                        <button class="badge bg-danger d-flex align-items-center" data-post-id="{{ $post->id }}"
-                                            onclick="reportPost(this)">
+                                        <button class="badge bg-danger d-flex align-items-center"
+                                            data-post-id="{{ $post->id }}" onclick="reportPost(this)">
                                             Report Deal
                                         </button>
                                     @endauth
@@ -69,11 +69,11 @@
                             </a>
 
                             <!-- <a href="#" class="tt-icon-btn">
-                                                                                                                                                        <i class="tt-icon"><svg>
-                                                                                                                                                                <use xlink:href="#icon-favorite"></use>
-                                                                                                                                                            </svg></i>
-                                                                                                                                                        <span class="tt-text">{{ $post->comment_count }}</span>
-                                                                                                                                                    </a> -->
+                                                                                                                                                                            <i class="tt-icon"><svg>
+                                                                                                                                                                                    <use xlink:href="#icon-favorite"></use>
+                                                                                                                                                                                </svg></i>
+                                                                                                                                                                            <span class="tt-text">{{ $post->comment_count }}</span>
+                                                                                                                                                                        </a> -->
                             <div class="col-separator"></div>
                             <button class="btn btn-success btn-sm">Subscribe</button>
                         </div>
@@ -119,21 +119,39 @@
 
 <script>
     function reportPost(element) {
-        // Get the post ID from the button's data attribute
         const postId = element.dataset.postId;
         const url = `/posts/${postId}/report`;
 
         Swal.fire({
-            title: 'Are you sure?',
-            text: "Do you want to report this deal?",
+            title: 'Report this Deal?',
+            text: 'Please provide a brief reason:',
             icon: 'warning',
+            input: 'textarea',
+            inputPlaceholder: 'Enter your reason here...',
+            inputAttributes: {
+                'aria-label': 'Enter your reason here'
+            },
             showCancelButton: true,
             confirmButtonColor: '#d33',
             cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, Report it!'
+            confirmButtonText: 'Submit Report',
+            showLoaderOnConfirm: true,
+
+
+            preConfirm: (reason) => {
+
+                if (!reason && false) { // Change 'false' to true if reason is REQUIRED
+                    Swal.showValidationMessage('Please provide a reason.');
+                    return false;
+                }
+                return reason;
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+
         }).then((result) => {
             if (result.isConfirmed) {
-                // User confirmed, send the report request
+                const reason = result.value;
+
                 fetch(url, {
                         method: 'POST',
                         headers: {
@@ -141,38 +159,56 @@
                                 'content'),
                             'Content-Type': 'application/json'
                         },
+                        body: JSON.stringify({
+                            post_id: postId,
+                            reason: reason
+                        })
                     })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            if (response.redirected) {
+                                window.location.href = response.url;
+                                return new Promise(() => {});
+                            }
+                            return response.json().then(data => {
+                                throw new Error(data.message || `Server error: ${response.status}`);
+                            });
+                        }
+                        return response.json();
+                    })
                     .then(data => {
                         if (data.success) {
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Reported!',
+                                title: 'Report Submitted!',
                                 text: data.message,
                                 timer: 3000,
                                 showConfirmButton: false
                             });
                             element.disabled = true;
                             element.textContent = 'Reported';
-
                         } else {
+                            // This block would be for custom 'success: false' responses from the server
+                            // like the 'Already reported' case (which we handle in .catch now)
+                            // or validation errors if not caught by preConfirm
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Failed!',
-                                text: data.message || 'Could not report the deal.',
+                                text: data.message || 'Could not submit the report.',
                                 timer: 3000,
                                 showConfirmButton: false
                             });
                         }
                     })
                     .catch(error => {
-                        console.error('Error reporting post:', error);
+                        // This block handles network errors OR errors thrown from the .then blocks
+                        console.error('Error submitting report:', error);
+
+                        // Display the error message (either from thrown Error or a generic one)
                         Swal.fire({
                             icon: 'error',
-                            title: 'Error!',
-                            text: 'An error occurred while reporting.',
-                            timer: 3000,
-                            showConfirmButton: false
+                            title: 'Oops...',
+                            text: error.message || 'An error occurred while submitting the report.',
                         });
                     });
             }

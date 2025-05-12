@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Report;
 use App\Models\Setting;
 use App\Models\Vote;
 use Illuminate\Http\Request;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 use function Laravel\Prompts\error;
 
@@ -289,34 +291,58 @@ class UserPostController extends Controller
 
     public function report(Request $request, Post $post)
     {
+        $validator = Validator::make($request->all(), [
+            'reason' => 'nullable|string|max:1000',
+        ]);
 
-        try {
-            // Increment the reported_count column on the post
-            $post->increment('reported_count');
-
-            // Optional: Log the report or store details in a separate 'reports' table
-            // Log::info("Post {$post->id} reported by user " . Auth::id());
-            // Report::create([
-            //     'post_id' => $post->id,
-            //     'user_id' => Auth::id(),
-            //     'reason' => $request->input('reason'), // If you add a reason input
-            // ]);
-
-
-            // Return a success JSON response
-            return response()->json([
-                'success' => true,
-                'message' => 'Deal reported successfully!',
-                'new_reported_count' => $post->reported_count,
-            ]);
-        } catch (\Exception $e) {
-            // Log the error
-            Log::error("Error reporting post {$post->id}: " . $e->getMessage());
-
-            // Return an error JSON response
+        if ($validator->fails()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to report the deal.',
+                'message' => 'Validation failed.',
+                'errors' => $validator->errors(),
+            ], 422); // Unprocessable Entity
+        }
+
+        $user = Auth::user();
+
+        $existingReport = Report::where('user_id', $user->id)
+            ->whereMorphedTo('reportable', $post)
+            ->first();
+
+        if ($existingReport) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You have already reported this deal.',
+            ], 409);
+        }
+
+        try {
+            $report = new Report();
+            $report->user_id = $user->id;
+            $report->reason = $request->input('reason'); // Get reason from request
+
+            // Associate the report with the post using the polymorphic relationship
+            $report->reportable()->associate($post); // Sets reportable_type and reportable_id
+
+            $report->save();
+
+            $post->increment('reported_count');
+
+            // Optional: Log the report
+            Log::info("Post {$post->id} reported by user {$user->id}. Reason: {$report->reason}");
+
+            // 4. Return a success JSON response
+            return response()->json([
+                'success' => true,
+                'message' => 'Deal reported successfully! Thank you for your feedback.',
+                // 'total_reports_for_post' => $post->reports()->count(), // Requires a 'reports' relationship on Post model
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Error creating report for post {$post->id} by user {$user->id}: " . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to submit report.',
             ], 500);
         }
     }
