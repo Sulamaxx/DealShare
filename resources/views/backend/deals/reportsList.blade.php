@@ -112,7 +112,7 @@
                                                     <iconify-icon icon="fluent:delete-24-regular"
                                                         class="menu-icon"></iconify-icon>
                                                 </button> --}}
-                                                <form action="{{ route('report.deactivate', $report->reportable_id) }}" method="POST"
+                                                <form action="{{ route('report.deactivate', ['report' => $report->id, 'deal' => $report->reportable_id]) }}" method="POST"
                                                     class="inline-block"
                                                     onsubmit="return confirm('Are you sure you want to deactivate the reported deal?');">
                                                     @csrf

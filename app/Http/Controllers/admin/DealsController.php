@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\Report;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class DealsController extends Controller
 {
@@ -194,12 +196,25 @@ class DealsController extends Controller
         return back()->with('success', 'Report deleted successfully.');
     }
 
-    public function deactivateDeal($id)
+    public function deactivateDeal($report, $deal)
     {
-        $deal = Post::findOrFail($id);
-        $deal->status = 0;
-        $deal->save();
 
-        return back()->with('success', 'Deal deactivated successfully.');
+        try {
+
+            $deal = Post::findOrFail($deal);
+            $deal->status = 0;
+            $deal->save();
+
+            $report = Report::findOrFail($report);
+            $report->status = 'resolved';
+            $report->save();
+
+
+            return back()->with('success', 'Deal deactivated successfully.');
+        } catch (Exception $ex) {
+            Log::error("Failed to deactivate deal ID {$deal} or update report ID {$report}. Error: " . $ex->getMessage());
+
+            return back()->with('error', 'Deal deactivation failed.');
+        }
     }
 }
