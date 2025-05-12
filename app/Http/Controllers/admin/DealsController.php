@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
+use App\Models\Report;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -33,6 +34,23 @@ class DealsController extends Controller
 
         $deals = $query->orderBy('created_at', 'desc')->paginate(8);
         return view('backend.deals.dealsList', compact('deals'));
+    }
+
+
+    public function reportsList(Request $request)
+    {
+        $query = Report::query();
+
+        if ($request->filled('search')) {
+            $query->where('reason', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $reports = $query->with(['user', 'reportable'])->orderBy('created_at', 'desc')->paginate(10);
+        return view('backend.deals.reportsList', compact('reports'));
     }
 
     public function viewDeal()
@@ -139,6 +157,15 @@ class DealsController extends Controller
         return back()->with('success', 'Deal status updated successfully.');
     }
 
+    public function updateReportStatus($id)
+    {
+        $report = Report::findOrFail($id);
+        $report->status = 'reviewed';
+        $report->save();
+
+        return back()->with('success', 'Report status updated successfully.');
+    }
+
     public function show($id)
     {
         $post = Post::findOrFail($id);
@@ -159,4 +186,20 @@ class DealsController extends Controller
         return back()->with('success', 'Deal deleted successfully.');
     }
 
+    public function destroyReport($id)
+    {
+        $report = Report::findOrFail($id);
+        $report->delete();
+
+        return back()->with('success', 'Report deleted successfully.');
+    }
+
+    public function deactivateDeal($id)
+    {
+        $deal = Post::findOrFail($id);
+        $deal->status = 0;
+        $deal->save();
+
+        return back()->with('success', 'Deal deactivated successfully.');
+    }
 }

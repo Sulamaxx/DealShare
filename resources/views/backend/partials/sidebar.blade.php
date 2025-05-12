@@ -344,10 +344,10 @@
                         <a href="{{ route('dealsList') }}"><i
                                 class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Deals List</a>
                     </li>
-                    {{-- <li>
-                        <a href="{{ route('usersGrid') }}"><i
-                                class="ri-circle-fill circle-icon text-warning-600 w-auto"></i> Users Grid</a>
-                    </li> --}}
+                    <li>
+                        <a href="{{ route('reportsList') }}"><i
+                                class="ri-circle-fill circle-icon text-warning-600 w-auto"></i> Reports List</a>
+                    </li>
                     {{-- <li>
                         <a href="{{ route('addDeal') }}"><i class="ri-circle-fill circle-icon text-info-600 w-auto"></i>
                             Add User</a>
