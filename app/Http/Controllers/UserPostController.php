@@ -53,9 +53,9 @@ class UserPostController extends Controller
         $popularityFormula = DB::raw(
             // Calculate score: (upvotes * upvote weight) + (downvotes * downvote weight) + (comment count * comment weight)
             "(COALESCE(upvotes, 0) * {$upvoteWeight}) + " .
-            "(COALESCE(downvotes, 0) * {$downvoteWeight}) + " .
-            "(COALESCE(comment_count, 0) * {$commentWeight}) " .
-            "AS popularity_score"
+                "(COALESCE(downvotes, 0) * {$downvoteWeight}) + " .
+                "(COALESCE(comment_count, 0) * {$commentWeight}) " .
+                "AS popularity_score"
         );
 
         /* $popular_deals = Post::where('status', 1)->select('posts.*', $popularityFormula)->orderByDesc('popularity_score')->paginate(10);
@@ -284,6 +284,40 @@ class UserPostController extends Controller
                 "message" => "Missing vote type or post ID.",
             ];
             return response()->json($response);
+        }
+    }
+
+    public function report(Request $request, Post $post)
+    {
+
+        try {
+            // Increment the reported_count column on the post
+            $post->increment('reported_count');
+
+            // Optional: Log the report or store details in a separate 'reports' table
+            // Log::info("Post {$post->id} reported by user " . Auth::id());
+            // Report::create([
+            //     'post_id' => $post->id,
+            //     'user_id' => Auth::id(),
+            //     'reason' => $request->input('reason'), // If you add a reason input
+            // ]);
+
+
+            // Return a success JSON response
+            return response()->json([
+                'success' => true,
+                'message' => 'Deal reported successfully!',
+                'new_reported_count' => $post->reported_count,
+            ]);
+        } catch (\Exception $e) {
+            // Log the error
+            Log::error("Error reporting post {$post->id}: " . $e->getMessage());
+
+            // Return an error JSON response
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to report the deal.',
+            ], 500);
         }
     }
 }

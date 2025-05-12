@@ -63,13 +63,13 @@ Route::middleware([
     Route::resource('posts', UserPostController::class);
     Route::post('/posts/update', [UserPostController::class, 'update'])->name('posts.update');
     Route::get('/edit-deals/{id}', [UserPostController::class, 'edit'])->name('edit-deals');
+    Route::post('/posts/{post}/report', [UserPostController::class, 'report']);
 
     Route::post('/deals/{deal}/mark-helpful', [DealHelpfulController::class, 'mark'])->name('deals.markHelpful');
     Route::delete('/deals/{deal}/unmark-helpful', [DealHelpfulController::class, 'unmark'])->name('deals.unmarkHelpful');
     Route::post('/start-thread', [ThreadController::class, 'store']);
     Route::get('/comments/{post}', [ThreadController::class, 'index']);
     Route::post('/comments', [ThreadController::class, 'storeChild']);
-
 });
 
 Route::get('/view-deal/{id}', [UserPostController::class, 'view_deal'])->name('view-deal');
@@ -136,7 +136,6 @@ Route::prefix('admin/deals')
             Route::get('/deals/{id}/view', 'show')->name('deal.profile');
             Route::get('/deals/{id}/edit', 'edit')->name('deal.edit');
             Route::delete('/deals/{id}', 'destroy')->name('deal.delete');
-
         });
     });
 
@@ -168,7 +167,6 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('terms-condition', 'termsCondition')->name('termsCondition');
     Route::get('veiw-details', 'veiwDetails')->name('veiwDetails');
     Route::get('widgets', 'widgets')->name('widgets');
-
 });
 
 // aiApplication
