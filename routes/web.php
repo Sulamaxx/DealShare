@@ -130,12 +130,18 @@ Route::prefix('admin/deals')
         Route::controller(DealsController::class)->group(function () {
             Route::get('/add-deals', 'addDeal')->name('addDeal');
             Route::get('/deals-list', 'dealsList')->name('dealsList');
+            Route::get('/reports-list', 'reportsList')->name('reportsList');
             Route::get('/view-deals', 'viewDeal')->name('viewDeal');
             // Route::get('/deals',  'index')->name('deals.index');
             Route::patch('/deals/status/{id}', 'updateStatus')->name('deal.status');
             Route::get('/deals/{id}/view', 'show')->name('deal.profile');
             Route::get('/deals/{id}/edit', 'edit')->name('deal.edit');
             Route::delete('/deals/{id}', 'destroy')->name('deal.delete');
+
+
+            Route::patch('/reports/status/{id}', 'updateReportStatus')->name('report.status');
+            Route::delete('/reports/{id}', 'destroyReport')->name('report.delete');
+            Route::delete('/deactivate/{id}', 'deactivateDeal')->name('report.deactivate');
         });
     });
 

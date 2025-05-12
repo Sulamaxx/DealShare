@@ -50,6 +50,9 @@
                     <div class="col-auto">
                         <strong>Comments:</strong> {{ $post->comment_count }}
                     </div>
+                    <div class="col-auto">
+                        <strong>Reports:</strong> {{ $post->reported_count }}
+                    </div>
                 </div>
             </div>
         </div>
