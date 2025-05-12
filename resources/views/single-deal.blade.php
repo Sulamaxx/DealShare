@@ -17,12 +17,21 @@
                                 <div class="tt-avatar-title">
                                     <a href="javascript:void(0)">{{ $post->user->name }}</a>
                                 </div>
-                                <a href="javascript:void(0)" class="tt-info-time d-flex">
-                                    <i class="tt-icon d-flex align-items-center justify-content-center"><svg>
-                                            <use xlink:href="#icon-time"></use>
-                                        </svg></i>
-                                    <span class="d-block">{{ $post->created_at }}</span>
-                                </a>
+                                <div class="d-flex align-items-center">
+                                    <a href="javascript:void(0)" class="tt-info-time d-flex justify-content-end mr-3">
+                                        <i class="tt-icon d-flex align-items-center justify-content-center"><svg>
+                                                <use xlink:href="#icon-time"></use>
+                                            </svg></i>
+                                        <span class="d-block">{{ $post->created_at }}</span>
+                                    </a>
+                                    @auth
+                                        <button class="badge bg-danger d-flex align-items-center" data-post-id="{{ $post->id }}"
+                                            onclick="reportPost(this)">
+                                            Report Deal
+                                        </button>
+                                    @endauth
+                                </div>
+
                             </div>
                             <h3 class="tt-item-title">
                                 <a href="javascript:void(0)">{{ $post->title }}</a>
@@ -60,11 +69,11 @@
                             </a>
 
                             <!-- <a href="#" class="tt-icon-btn">
-                                                                                                                                            <i class="tt-icon"><svg>
-                                                                                                                                                    <use xlink:href="#icon-favorite"></use>
-                                                                                                                                                </svg></i>
-                                                                                                                                            <span class="tt-text">{{ $post->comment_count }}</span>
-                                                                                                                                        </a> -->
+                                                                                                                                                        <i class="tt-icon"><svg>
+                                                                                                                                                                <use xlink:href="#icon-favorite"></use>
+                                                                                                                                                            </svg></i>
+                                                                                                                                                        <span class="tt-text">{{ $post->comment_count }}</span>
+                                                                                                                                                    </a> -->
                             <div class="col-separator"></div>
                             <button class="btn btn-success btn-sm">Subscribe</button>
                         </div>
@@ -76,49 +85,6 @@
                     loadComments({{ $post->id }});
                 </script>
 
-                {{-- <div class="tt-item">
-                    <div class="tt-single-topic">
-                        <div class="tt-item-header pt-noborder">
-                            <div class="tt-item-info info-top">
-                                <div class="tt-avatar-icon">
-                                    <i class="tt-icon"><svg>
-                                            <use xlink:href="#icon-ava-v"></use>
-                                        </svg></i>
-                                </div>
-                                <div class="tt-avatar-title">
-                                    <a href="#">vickey03</a>
-                                </div>
-                                <a href="#" class="tt-info-time d-flex">
-                                    <i class="tt-icon d-flex justify-content-center align-items-center"><svg>
-                                            <use xlink:href="#icon-time"></use>
-                                        </svg></i>6 Jan,2019
-                                </a>
-                            </div>
-                        </div>
-                        <div class="tt-item-description">
-                            Finally!<br>
-                            Are there any special recommendations for design or an updated guide that includes new preview
-                            sizes, including retina displays?
-                            <div class="topic-inner-list">
-                                <div class="topic-inner">
-                                    <div class="topic-inner-title">
-                                        <div class="topic-inner-avatar">
-                                            <i class="tt-icon"><svg>
-                                                    <use xlink:href="#icon-ava-s"></use>
-                                                </svg></i>
-                                        </div>
-                                        <div class="topic-inner-title"><a href="#">summit92</a></div>
-                                    </div>
-                                    <div class="topic-inner-description">
-                                        Finally!<br>
-                                        Are there any special recommendations for design or an updated guide that includes
-                                        new preview sizes, including retina displays?
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
 
             </div>
 
@@ -145,195 +111,6 @@
                 </div>
             </div>
 
-            {{-- <div class="tt-topic-list tt-ofset-30">
-                <div class="tt-list-search">
-                    <div class="tt-title">Suggested Topics</div>
-                    <!-- tt-search -->
-                    <div class="tt-search">
-                        <form class="search-wrapper">
-                            <div class="search-form">
-                                <input type="text" class="tt-search__input" placeholder="Search for topics">
-                                <button class="tt-search__btn" type="submit">
-                                    <svg class="tt-icon">
-                                        <use xlink:href="#icon-search"></use>
-                                    </svg>
-                                </button>
-                                <button class="tt-search__close">
-                                    <svg class="tt-icon">
-                                        <use xlink:href="#icon-cancel"></use>
-                                    </svg>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                    <!-- /tt-search -->
-                </div>
-                <div class="tt-list-header tt-border-bottom">
-                    <div class="tt-col-topic">Topic</div>
-                    <div class="tt-col-category">Category</div>
-                    <div class="tt-col-value hide-mobile">Likes</div>
-                    <div class="tt-col-value hide-mobile">Replies</div>
-                    <div class="tt-col-value hide-mobile">Views</div>
-                    <div class="tt-col-value">Activity</div>
-                </div>
-                <div class="tt-item">
-                    <div class="tt-col-avatar">
-                        <svg class="tt-icon">
-                            <use xlink:href="#icon-ava-n"></use>
-                        </svg>
-                    </div>
-                    <div class="tt-col-description">
-                        <h6 class="tt-title"><a href="#">
-                                Does Envato act against the authors of Envato markets?
-                            </a></h6>
-                        <div class="row align-items-center no-gutters hide-desktope">
-                            <div class="col-11">
-                                <ul class="tt-list-badge">
-                                    <li class="show-mobile"><a href="#"><span
-                                                class="tt-color05 tt-badge">music</span></a></li>
-                                </ul>
-                            </div>
-                            <div class="col-1 ml-auto show-mobile">
-                                <div class="tt-value">1d</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tt-col-category"><span class="tt-color05 tt-badge">music</span></div>
-                    <div class="tt-col-value hide-mobile">358</div>
-                    <div class="tt-col-value tt-color-select hide-mobile">68</div>
-                    <div class="tt-col-value hide-mobile">8.3k</div>
-                    <div class="tt-col-value hide-mobile">1d</div>
-                </div>
-                <div class="tt-item">
-                    <div class="tt-col-avatar">
-                        <svg class="tt-icon">
-                            <use xlink:href="#icon-ava-h"></use>
-                        </svg>
-                    </div>
-                    <div class="tt-col-description">
-                        <h6 class="tt-title"><a href="#">
-                                <svg class="tt-icon">
-                                    <use xlink:href="#icon-locked"></use>
-                                </svg>
-                                We Want to Hear From You! What Would You Like?
-                            </a></h6>
-                        <div class="row align-items-center no-gutters hide-desktope">
-                            <div class="col-11">
-                                <ul class="tt-list-badge">
-                                    <li class="show-mobile"><a href="#"><span
-                                                class="tt-color06 tt-badge">movies</span></a></li>
-                                </ul>
-                            </div>
-                            <div class="col-1 ml-auto show-mobile">
-                                <div class="tt-value">2d</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tt-col-category"><span class="tt-color06 tt-badge">movies</span></div>
-                    <div class="tt-col-value hide-mobile">674</div>
-                    <div class="tt-col-value tt-color-select  hide-mobile">29</div>
-                    <div class="tt-col-value hide-mobile">1.3k</div>
-                    <div class="tt-col-value hide-mobile">2d</div>
-                </div>
-                <div class="tt-item">
-                    <div class="tt-col-avatar">
-                        <svg class="tt-icon">
-                            <use xlink:href="#icon-ava-j"></use>
-                        </svg>
-                    </div>
-                    <div class="tt-col-description">
-                        <h6 class="tt-title"><a href="#">
-                                Seeking partner backend developer
-                            </a></h6>
-                        <div class="row align-items-center no-gutters">
-                            <div class="col-11">
-                                <ul class="tt-list-badge">
-                                    <li class="show-mobile"><a href="#"><span
-                                                class="tt-color03 tt-badge">exchange</span></a></li>
-                                    <li><a href="#"><span class="tt-badge">themeforest</span></a></li>
-                                    <li><a href="#"><span class="tt-badge">elements</span></a></li>
-                                </ul>
-                            </div>
-                            <div class="col-1 ml-auto show-mobile">
-                                <div class="tt-value">2d</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tt-col-category"><span class="tt-color13 tt-badge">movies</span></div>
-                    <div class="tt-col-value hide-mobile">278</div>
-                    <div class="tt-col-value tt-color-select  hide-mobile">27</div>
-                    <div class="tt-col-value hide-mobile">1.4k</div>
-                    <div class="tt-col-value hide-mobile">2d</div>
-                </div>
-                <div class="tt-item">
-                    <div class="tt-col-avatar">
-                        <svg class="tt-icon">
-                            <use xlink:href="#icon-ava-t"></use>
-                        </svg>
-                    </div>
-                    <div class="tt-col-description">
-                        <h6 class="tt-title"><a href="#">
-                                Cannot customize my intro
-                            </a></h6>
-                        <div class="row align-items-center no-gutters">
-                            <div class="col-11">
-                                <ul class="tt-list-badge">
-                                    <li class="show-mobile"><a href="#"><span class="tt-color07 tt-badge">video
-                                                games</span></a></li>
-                                    <li><a href="#"><span class="tt-badge">videohive</span></a></li>
-                                    <li><a href="#"><span class="tt-badge">photodune</span></a></li>
-                                </ul>
-                            </div>
-                            <div class="col-1 ml-auto show-mobile">
-                                <div class="tt-value">2d</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tt-col-category"><span class="tt-color07 tt-badge">video games</span></div>
-                    <div class="tt-col-value hide-mobile">364</div>
-                    <div class="tt-col-value tt-color-select  hide-mobile">36</div>
-                    <div class="tt-col-value  hide-mobile">982</div>
-                    <div class="tt-col-value hide-mobile">2d</div>
-                </div>
-                <div class="tt-item">
-                    <div class="tt-col-avatar">
-                        <svg class="tt-icon">
-                            <use xlink:href="#icon-ava-k"></use>
-                        </svg>
-                    </div>
-                    <div class="tt-col-description">
-                        <h6 class="tt-title"><a href="#">
-                                <svg class="tt-icon">
-                                    <use xlink:href="#icon-verified"></use>
-                                </svg>
-                                Microsoft Word and Power Point
-                            </a></h6>
-                        <div class="row align-items-center no-gutters hide-desktope">
-                            <div class="col-11">
-                                <ul class="tt-list-badge">
-                                    <li class="show-mobile"><a href="#"><span
-                                                class="tt-color08 tt-badge">youtube</span></a></li>
-                                </ul>
-                            </div>
-                            <div class="col-1 ml-auto show-mobile">
-                                <div class="tt-value">3d</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tt-col-category"><span class="tt-color08 tt-badge">youtube</span></div>
-                    <div class="tt-col-value  hide-mobile">698</div>
-                    <div class="tt-col-value tt-color-select  hide-mobile">78</div>
-                    <div class="tt-col-value  hide-mobile">2.1k</div>
-                    <div class="tt-col-value hide-mobile">3d</div>
-                </div>
-                <div class="tt-row-btn">
-                    <button type="button" class="btn-icon js-topiclist-showmore">
-                        <svg class="tt-icon">
-                            <use xlink:href="#icon-load_lore_icon"></use>
-                        </svg>
-                    </button>
-                </div>
-            </div> --}}
 
         </div>
     </main>
@@ -341,6 +118,68 @@
 @endsection
 
 <script>
+    function reportPost(element) {
+        // Get the post ID from the button's data attribute
+        const postId = element.dataset.postId;
+        const url = `/posts/${postId}/report`;
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you want to report this deal?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, Report it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // User confirmed, send the report request
+                fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                'content'),
+                            'Content-Type': 'application/json'
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Reported!',
+                                text: data.message,
+                                timer: 3000,
+                                showConfirmButton: false
+                            });
+                            element.disabled = true;
+                            element.textContent = 'Reported';
+
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Failed!',
+                                text: data.message || 'Could not report the deal.',
+                                timer: 3000,
+                                showConfirmButton: false
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error reporting post:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'An error occurred while reporting.',
+                            timer: 3000,
+                            showConfirmButton: false
+                        });
+                    });
+            }
+        })
+    }
+
+
     function StartNewThread() {
         const comment = document.getElementById('new_thread').value;
         const post_id = document.getElementById('post_id').value;
