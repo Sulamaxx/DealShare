@@ -303,7 +303,7 @@
     }
 </style>
 
-<footer class="footer">
+<footer class="footer" style="margin-top: 20px">
     <div class="footer-container">
         <div class="footer-left">
             <h2><span class="logo-bold">Buy</span><span class="logo-orange">Me</span></h2>
