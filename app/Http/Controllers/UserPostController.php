@@ -346,4 +346,33 @@ class UserPostController extends Controller
             ], 500);
         }
     }
+
+    public function search(Request $request)
+    {
+        // --- Get filters from the request ---
+        $search = $request->input('search');
+        $category = $request->input('category');
+        // --- Build the query for the main deals list
+        $query = Post::where('status', 1);
+
+        // --- Apply search filter if a search term is present ---
+        if ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%')
+                    ->orWhere('link', 'like', '%' . $search . '%')
+                    ->orWhere('discount_text', 'like', '%' . $search . '%');
+            });
+        }
+
+        if ($category && $category !== '') {
+            $query->where('category', $category);
+        }
+
+        $query->orderBy('created_at', 'desc');
+
+        $search_deals = $query->paginate(10)->withQueryString();
+
+        return view('search_deals', compact('search_deals'));
+    }
 }
