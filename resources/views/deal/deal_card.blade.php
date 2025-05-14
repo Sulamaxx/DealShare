@@ -33,7 +33,7 @@
             </p>
 
 
-            <small class="text-muted mb-2">
+            <small class="text-muted mb-2 deal-info-line">
                 <i class="fas fa-info-circle me-1"></i>
                 <a href="{{ $deal->link }}" target="_blank" class="deal-link-clamp"
                     style="text-decoration: none; color: #555;">{{ $deal->link }}</a>
@@ -118,13 +118,13 @@
 
     .deal-description-clamp {
         display: -webkit-box;
-        -webkit-line-clamp: 3;
+        -webkit-line-clamp: 4;
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: normal;
         /* Add line-height and height here too if you want description to always have space for 3 lines */
-        line-height: 1.25em;
+        line-height: 1.2em;
         /* Use a line height appropriate for the description's font-size (0.875em) */
         height: 3.15em;
         /* Set height to line-height * 3 */
@@ -144,11 +144,38 @@
         text-overflow: ellipsis;
     }
 
+    .deal-info-line {
+        display: flex;
+        /* Enable flexbox for the container */
+        align-items: center;
+        /* Vertically align items to the center */
+        /* gap: 5px; */
+        /* Optional: Add gap between items if needed */
+    }
+
+    @media(max-width:1025px) {
+
+
+        .deal-description-clamp {
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: normal;
+            /* Add line-height and height here too if you want description to always have space for 3 lines */
+            line-height: 1.35em !important;
+            /* Use a line height appropriate for the description's font-size (0.875em) */
+            height: 3.15em;
+            /* Set height to line-height * 3 */
+        }
+
+    }
 
     @media(max-width:769px) {
 
         .card-mobile {
-            max-width: 100%;
+            max-width: 100% !important;
         }
 
         .mobile-single-card {
@@ -157,6 +184,20 @@
 
         .mobile-image {
             min-height: 330px;
+        }
+
+        .deal-description-clamp {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: normal;
+            /* Add line-height and height here too if you want description to always have space for 3 lines */
+            line-height: 1.05em !important;
+            /* Use a line height appropriate for the description's font-size (0.875em) */
+            height: 3.15em;
+            /* Set height to line-height * 3 */
         }
 
     }
