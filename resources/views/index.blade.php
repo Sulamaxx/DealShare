@@ -117,6 +117,18 @@
             color: #888 !important;
             /* Example: Change text color on hover */
         }
+
+        @media(max-width:1025px) {
+            .search-width {
+                min-width: 50vw !important;
+            }
+        }
+
+        @media(max-width:426px) {
+            .search-width {
+                min-width: 97.5vw !important;
+            }
+        }
     </style>
 
     <div class="banner position-relative col-12"
@@ -134,8 +146,8 @@
 
                     <form class="filters d-flex flex-wrap gap-2" method="GET" action="{{ route('deals.index') }}">
 
-                        <input type="text" name="search" placeholder="Search deals..." class="form-control"
-                            style="border-radius: 20px; margin-top: auto; width:15vw;min-width:15vw;">
+                        <input type="text" name="search" placeholder="Search deals..." class="form-control search-width"
+                            style="border-radius: 20px; margin-top: auto; width:15vw;min-width:21vw;">
 
                         <select name="category" class="form-select w-auto" style="border-radius: 20px; margin-top: auto;">
 
