@@ -133,11 +133,21 @@
             margin-top: 20px;
         }
 
-        /* ... other CSS rules for clamping, etc. ... */
+        @media(max-width:1025px) {
+            .search-width {
+                min-width: 50vw !important;
+            }
+        }
+
+        @media(max-width:426px) {
+            .search-width {
+                min-width: 97.5vw !important;
+            }
+        }
     </style>
 
     <div class="banner position-relative col-12"
-        style="background-color: #fe4c01; color: white; padding: 40px 0;background-image: url('https://i.ibb.co/DMWPR9v/deal-phone.png'); background-size: cover; background-position: center right; background-repeat: no-repeat; min-height: 300px;">
+        style="background-color: #fe4c01; color: white; padding: 40px 0;/* background-image: url('https://i.ibb.co/DMWPR9v/deal-phone.png'); */ background-size: cover; background-position: center right; background-repeat: no-repeat; min-height: 300px;">
 
         <div class="container">
             <div class="row align-items-center">
@@ -151,8 +161,8 @@
 
                     <form class="filters d-flex flex-wrap gap-2" method="GET" action="{{ route('deals.index') }}">
 
-                        <input type="text" name="search" placeholder="Search deals..." class="form-control"
-                            style="border-radius: 20px; margin-top: auto; width:15vw;min-width:15vw;"
+                        <input type="text" name="search" placeholder="Search deals..." class="form-control search-width"
+                            style="border-radius: 20px; margin-top: auto; width:15vw;min-width:21vw;"
                             value="{{ request('search') }}">
 
                         <select name="category" class="form-select w-auto" style="border-radius: 20px; margin-top: auto;">
