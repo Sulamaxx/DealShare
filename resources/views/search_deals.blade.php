@@ -117,6 +117,23 @@
             color: #888 !important;
             /* Example: Change text color on hover */
         }
+
+        /* CSS to center the empty state image */
+        .empty-state-image {
+            display: block;
+            /* Treat the image as a block-level element */
+            margin-left: auto;
+            /* Set left margin to auto */
+            margin-right: auto;
+            /* Set right margin to auto */
+            /* margin: 0 auto; */
+            /* Shorthand for margin-top: 0, margin-right: auto, margin-bottom: 0, margin-left: auto */
+
+            max-width: 200px;
+            margin-top: 20px;
+        }
+
+        /* ... other CSS rules for clamping, etc. ... */
     </style>
 
     <div class="banner position-relative col-12"
@@ -167,13 +184,33 @@
 
                     <div class="row">
 
-                        @foreach ($search_deals as $deal)
-                            <!-- Repeat deal card -->
+                        @forelse ($search_deals as $deal)
+                            {{-- If the collection is NOT empty, render the deal card --}}
                             @include('deal.deal_card', [$deal])
-                        @endforeach
+                        @empty
+                            {{-- If the collection IS empty, render this block --}}
+                            <div class="col-12">
+                                <div class="alert alert-info text-center my-4" role="alert">
+                                    <img src="{{ asset('images/not_found.svg') }}" alt="No results found"
+                                        class="empty-state-image" {{-- Added class --}}
+                                        style="max-width: 200px; margin-top: 20px;"> {{-- Keep other inline styles if needed --}}
+
+                                    <h4 class="alert-heading">No Deals Found!</h4>
+                                    <p>Your search "{{ request('search') }}" @if (request('category'))
+                                            in category "{{ request('category') }}"
+                                        @endif did not match any deals.</p>
+                                    <hr>
+                                    <p class="mb-0">Try adjusting your search terms or filters.</p>
+
+                                </div>
+                            </div>
+                        @endforelse
                         <br>
                         <!-- Pagination links -->
-                        {{ $search_deals->links() }}
+
+                        @if ($search_deals->hasPages())
+                            {{ $search_deals->links() }}
+                        @endif
 
                     </div>
                 </div>
