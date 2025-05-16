@@ -132,7 +132,7 @@
     </style>
 
     <div class="banner position-relative col-12"
-        style="background-color: #fe4c01; color: white; padding: 40px 0;background-image: url('https://i.ibb.co/DMWPR9v/deal-phone.png'); background-size: cover; background-position: center right; background-repeat: no-repeat; min-height: 300px;">
+        style="background-color: #fe4c01; color: white; padding: 40px 0;/* background-image: url('https://i.ibb.co/DMWPR9v/deal-phone.png'); */ background-size: cover; background-position: center right; background-repeat: no-repeat; min-height: 300px;">
 
         <div class="container">
             <div class="row align-items-center">
