@@ -5,6 +5,7 @@ use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\DealsController;
 use App\Http\Controllers\admin\SettingsController;
 use App\Http\Controllers\admin\UsersController;
+use App\Http\Controllers\admin\BadgeController;
 use App\Http\Controllers\AiapplicationController;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\ComponentspageController;
@@ -157,6 +158,18 @@ Route::prefix('admin/settings')
         });
     });
 
+Route::prefix('admin/badges')
+    ->middleware([AdminMiddleware::class])
+    ->group(function () {
+        Route::controller(BadgeController::class)->group(function () {
+            Route::get('/add-badge', 'addBadge')->name('addBadge');
+            Route::post('/add-badge', 'store')->name('admin.addBadge');
+            Route::get('/update-badge/{id}', 'show')->name('updateBadge');
+            Route::post('/update-badge/{id}', 'update')->name('admin.updateBadge');
+            Route::get('/badges', 'badgesList')->name('getBadges');
+            Route::delete('/badges/{id}', 'destroy')->name('badge.delete');
+        });
+    });
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('calendar-Main', 'calendarMain')->name('calendarMain');

@@ -361,26 +361,23 @@
 
             {{-- <li class="sidebar-menu-group-title">Application</li> --}}
 
-            {{-- <li class="dropdown">
+            <li class="dropdown">
                 <a href="javascript:void(0)">
-                    <iconify-icon icon="simple-line-icons:vector" class="menu-icon"></iconify-icon>
-                    <span>Authentication</span>
+                    <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
+                    <span>Badge</span>
                 </a>
                 <ul class="sidebar-submenu">
                     <li>
-                        <a href="{{ route('signin') }}"><i
-                                class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Sign In</a>
+                        <a href="{{ route('addBadge') }}"><i
+                                class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Add Badge</a>
                     </li>
                     <li>
-                        <a href="{{ route('signup') }}"><i
-                                class="ri-circle-fill circle-icon text-warning-600 w-auto"></i> Sign Up</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('forgotPassword') }}"><i
-                                class="ri-circle-fill circle-icon text-info-600 w-auto"></i> Forgot Password</a>
+                        <a href="{{ route('getBadges') }}"><i
+                                class="ri-circle-fill circle-icon text-warning-600 w-auto"></i> Badge List</a>
                     </li>
                 </ul>
             </li>
+            {{--
             <li>
                 <a href="{{ route('gallery') }}">
                     <iconify-icon icon="solar:gallery-wide-linear" class="menu-icon"></iconify-icon>

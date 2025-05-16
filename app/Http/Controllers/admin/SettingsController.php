@@ -22,7 +22,7 @@ class SettingsController extends Controller
             ->pluck('value', 'key')
             ->toArray();
 
-        return view('backend.settings/popular_deals', compact('settings'));
+        return view('backend.settings.popular_deals', compact('settings'));
     }
 
     public function update(Request $request)
