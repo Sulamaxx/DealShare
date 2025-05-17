@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\Report;
 use App\Models\Setting;
 use App\Models\Vote;
+use App\Models\Badge;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,8 +20,18 @@ class UserPostController extends Controller
 {
     public function myDeals()
     {
+        $user = Auth::user();
+
+        $totalUpvotes = $user->posts()->sum('upvotes');
+        $totalDownvotes = $user->posts()->sum('downvotes');
+        $netVoteCount = $totalUpvotes - $totalDownvotes;
+
+        $badge = Badge::where('vote-count', '<=', $netVoteCount)
+            ->orderBy('vote-count', 'desc') // Order by vote_count descending
+            ->first();
+
         $posts = Post::where('post_by', Auth::user()->id)->paginate(10);
-        return view('my_deals', compact('posts'));
+        return view('my_deals', compact('posts','badge'));
     }
 
     public function newDeals()

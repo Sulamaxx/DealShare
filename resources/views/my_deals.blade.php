@@ -21,7 +21,28 @@
                             <a href="javascript::void(0)">{{ Auth::user()->name }}</a>
                         </div>
                         <ul class="tt-list-badge">
-                            <li><a href="javascript::void(0)"><span class="tt-color14 tt-badge">LVL : 26</span></a></li>
+
+                            @if ($badge) {{-- Check if a badge was found --}}
+                                <li>
+                                    <a href="#" title="{{ $badge->description }}">
+                                        <span class="tt-color-default tt-badge">
+                                            @if ($badge->icon)
+                                                {{-- Assuming badge->icon is the image path --}}
+                                                <img src="{{ asset($badge->icon) }}" alt="{{ $badge->name }}"
+                                                    style="max-width: 20px; height: auto; vertical-align: middle; margin-right: 5px;">
+                                            @else
+                                                {{-- Fallback if no image, maybe use name or text --}}
+                                                {{ $badge->name }}
+                                            @endif
+                                            {{-- ({{ $badge->vote_count }}) --}}
+                                        </span>
+                                    </a>
+                                </li>
+                            @else
+                                {{-- Show this if no qualifying badge was found --}}
+                                <li><span class="tt-color-none tt-badge" style="color:black">No Badges Earned Yet</span>
+                                </li>
+                            @endif
                         </ul>
                     </div>
                     <div class="tt-col-btn" id="js-settings-btn">
@@ -94,8 +115,7 @@
                                     </div>
 
                                     <div class="tt-col-value-large hide-mobile"> <!-- Edit Button -->
-                                        <a href="{{ route('edit-deals', $post->id) }}"
-                                            class="btn btn-sm btn-primary mb-2">
+                                        <a href="{{ route('edit-deals', $post->id) }}" class="btn btn-sm btn-primary mb-2">
                                             Edit
                                         </a>
 
@@ -130,4 +150,5 @@
                 </div>
             </div>
         </div>
-</main>@endsection
+    </main>
+@endsection
