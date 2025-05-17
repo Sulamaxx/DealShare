@@ -84,5 +84,11 @@ class User extends Authenticatable
         return $this->hasMany(Post::class, 'post_by');
     }
 
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+
 
 }
