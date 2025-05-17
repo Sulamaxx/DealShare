@@ -101,6 +101,14 @@
         </div>
     </nav> --}}
 
+    <style>
+        @media (min-width: 471px) {
+            .tt-loginpages-wrapper .tt-loginpages {
+                width: 50vw !important;
+            }
+        }
+    </style>
+
     <main id="tt-pageContent" class="tt-offset-none" style="margin-top: 50px">
         <div class="container">
             <div class="tt-loginpages-wrapper">
