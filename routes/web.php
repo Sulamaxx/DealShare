@@ -28,6 +28,15 @@ Route::get('/run-migrations', function () {
     return 'Migrations have been successfully run!';
 });
 
+Route::get('/run-setting-seeder', function () {
+    Artisan::call('db:seed', [
+        '--class' => 'SettingSeeder',
+        '--force' => true // Required for production environment
+    ]);
+
+    return response()->json(['message' => 'SettingSeeder executed successfully']);
+});
+
 Route::get('/run-seeders', function () {
     // Run the seeders
     Artisan::call('db:seed');

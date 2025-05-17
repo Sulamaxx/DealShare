@@ -12,7 +12,8 @@
                         <div class="tt-item-header">
                             <div class="tt-item-info info-top">
                                 <div class="tt-avatar-icon">
-                                    <img src="{{ asset($post->user->profile_photo_path) }}" alt="">
+                                    <img style="height: 50px; width: 50px; border-radius: 50%;"
+                                        src="{{ asset($post->user->profile_photo_path) }}" alt="">
                                 </div>
                                 <div class="tt-avatar-title">
                                     <a href="javascript:void(0)">{{ $post->user->name }}</a>
@@ -40,8 +41,13 @@
                                 <a>{{ $post->category }}</a>
                             </h5>
                             <span class="badge bg-warning">New</span>
-                            <img class="mt-3" style="width: 100%;height: 400px;" src="{{ asset($post->image) }}"
-                                alt="">
+                            {{-- <img class="mt-3" style="width: 100%; height: 60vh; object-fit: cover;" src="{{ asset($post->image) }}" alt=""> --}}
+                            <div id="image-viewer-{{ $post->id }}">
+                                <img class="mt-3" style="width: 100%; height: 60vh; object-fit: cover; cursor: zoom-in;"
+                                    src="{{ asset($post->image) }}" alt="{{ $post->title }}">
+                            </div>
+
+
                         </div>
                         <div class="tt-item-description">
                             <p>
@@ -53,27 +59,44 @@
                             </p>
                         </div>
                         <div class="tt-item-info info-bottom">
-                            <a class="tt-icon-btn like-button {{ $vote_type === 'up' ? 'upvoted' : '' }}"
-                                data-post-id="{{ $post->id }}" data-vote-type="up" onclick="vote(this)">
-                                <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-like"></use>
-                                    </svg></i>
-                                <span class="tt-text" id="up_vote_span">{{ $post->upvotes }}</span>
-                            </a>
-                            <a class="tt-icon-btn dislike-button {{ $vote_type === 'down' ? 'downvoted' : '' }}"
-                                data-post-id="{{ $post->id }}" data-vote-type="down" onclick="vote(this)">
-                                <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-dislike"></use>
-                                    </svg></i>
-                                <span class="tt-text" id="down_vote_span">{{ $post->downvotes }}</span>
-                            </a>
+                            @if (Auth::user())
+                                <a class="tt-icon-btn like-button cursor-pointer {{ $vote_type === 'up' ? 'upvoted' : '' }}"
+                                    data-post-id="{{ $post->id }}" data-vote-type="up" onclick="vote(this)">
+                                    <i class="tt-icon"><svg>
+                                            <use xlink:href="#icon-like"></use>
+                                        </svg></i>
+                                    <span class="tt-text" id="up_vote_span">{{ $post->upvotes }}</span>
+                                </a>
+                                <a class="tt-icon-btn dislike-button cursor-pointer {{ $vote_type === 'down' ? 'downvoted' : '' }}"
+                                    data-post-id="{{ $post->id }}" data-vote-type="down" onclick="vote(this)">
+                                    <i class="tt-icon"><svg>
+                                            <use xlink:href="#icon-dislike"></use>
+                                        </svg></i>
+                                    <span class="tt-text" id="down_vote_span">{{ $post->downvotes }}</span>
+                                </a>
+                            @else
+                                <a class="tt-icon-btn like-button cursor-pointer {{ $vote_type === 'up' ? 'upvoted' : '' }}"
+                                    data-post-id="{{ $post->id }}" data-vote-type="up" onclick="loginMessage(this)">
+                                    <i class="tt-icon"><svg>
+                                            <use xlink:href="#icon-like"></use>
+                                        </svg></i>
+                                    <span class="tt-text" id="up_vote_span">{{ $post->upvotes }}</span>
+                                </a>
+                                <a class="tt-icon-btn dislike-button cursor-pointer {{ $vote_type === 'down' ? 'downvoted' : '' }}"
+                                    data-post-id="{{ $post->id }}" data-vote-type="down" onclick="loginMessage(this)">
+                                    <i class="tt-icon"><svg>
+                                            <use xlink:href="#icon-dislike"></use>
+                                        </svg></i>
+                                    <span class="tt-text" id="down_vote_span">{{ $post->downvotes }}</span>
+                                </a>
+                            @endif
 
-                            <!-- <a href="#" class="tt-icon-btn">
-                                                                                                                                                                            <i class="tt-icon"><svg>
-                                                                                                                                                                                    <use xlink:href="#icon-favorite"></use>
-                                                                                                                                                                                </svg></i>
-                                                                                                                                                                            <span class="tt-text">{{ $post->comment_count }}</span>
-                                                                                                                                                                        </a> -->
+                            <a href="javascript:void(0)" class="tt-icon-btn">
+                                <i class="tt-icon"><svg>
+                                        <use xlink:href="#icon-reply"></use>
+                                    </svg></i>
+                                <span class="tt-text">{{ $post->comment_count }}</span>
+                            </a>
                             <div class="col-separator"></div>
                             <button class="btn btn-success btn-sm">Subscribe</button>
                         </div>
@@ -116,6 +139,38 @@
     </main>
 
 @endsection
+
+<script>
+    function loginMessage(x) {
+        Swal.fire({
+            icon: 'info',
+            title: 'Info',
+            text: "Please Login first to make your vote",
+            timer: 3000,
+            showConfirmButton: false
+        });
+        setTimeout(() => {
+            window.location.href = "/login";
+        }, 500);
+    }
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const image = document.getElementById('image-viewer-{{ $post->id }}');
+        if (image) {
+            new Viewer(image, {
+                toolbar: false,
+                navbar: false,
+                title: false,
+                movable: true,
+                scalable: false,
+                zoomable: true,
+                transition: true,
+            });
+        }
+    });
+</script>
 
 <script>
     function reportPost(element) {
@@ -215,7 +270,6 @@
         })
     }
 
-
     function StartNewThread() {
         const comment = document.getElementById('new_thread').value;
         const post_id = document.getElementById('post_id').value;
@@ -255,7 +309,6 @@
             })
             .catch(error => console.log(error));
     }
-
 
     function vote(element) {
 
