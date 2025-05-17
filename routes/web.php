@@ -19,6 +19,7 @@ use App\Http\Controllers\TableController;
 use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\UserFrontController;
 use App\Http\Controllers\UserPostController;
+use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -180,6 +181,14 @@ Route::prefix('admin/badges')
             Route::post('/update-badge/{id}', 'update')->name('admin.updateBadge');
             Route::get('/badges', 'badgesList')->name('getBadges');
             Route::delete('/badges/{id}', 'destroy')->name('badge.delete');
+        });
+    });
+
+Route::prefix('user/settings')
+    ->middleware([AdminMiddleware::class])
+    ->group(function () {
+        Route::controller(UserController::class)->group(function () {
+            Route::put('/', 'updateSettings')->name('user.updateSettings');
         });
     });
 
