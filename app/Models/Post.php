@@ -37,4 +37,10 @@ class Post extends Model
         return $this->belongsTo(User::class, 'post_by');
     }
 
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+
 }

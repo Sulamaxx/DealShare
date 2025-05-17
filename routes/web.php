@@ -14,6 +14,7 @@ use App\Http\Controllers\DealHelpfulController;
 use App\Http\Controllers\FormsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\UserFrontController;
@@ -81,6 +82,8 @@ Route::middleware([
     Route::post('/start-thread', [ThreadController::class, 'store']);
     Route::get('/comments/{post}', [ThreadController::class, 'index']);
     Route::post('/comments', [ThreadController::class, 'storeChild']);
+    Route::post('/subscription', [SubscriptionController::class, 'index'])->name('subscription');
+    Route::post('/subscription/destroy', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
 });
 
 Route::get('/view-deal/{id}', [UserPostController::class, 'view_deal'])->name('view-deal');

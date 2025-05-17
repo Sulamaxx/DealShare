@@ -3,6 +3,63 @@
 @section('title', 'Forum')
 
 @section('content')
+    <meta name="user-authenticated" content="{{ Auth::check() ? 'true' : 'false' }}">
+    <style>
+        .comment-item {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .comment-actions {
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .comment-actions a {
+            white-space: nowrap;
+        }
+
+        .comment-body p {
+            margin-bottom: 0;
+            line-height: 1.4;
+        }
+
+        /* Ensure tighter spacing */
+        .user-info img {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .user-info {
+            font-size: 0.85rem;
+            max-width: 60px;
+            word-wrap: break-word;
+        }
+
+        .replies {
+            margin-left: 1rem;
+            border-left: 2px solid #ddd;
+            padding-left: 1rem;
+        }
+
+        /* Mobile-specific tweaks */
+        @media (max-width: 768px) {
+            .comment-actions {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .comment-actions a {
+                margin-bottom: 5px;
+            }
+
+            .user-info {
+                max-width: 100%;
+                flex-direction: row;
+                gap: 0.5rem;
+                align-items: center;
+            }
+        }
+    </style>
     <input type="text" id="post_id" value="{{ $post->id }}" hidden />
     <main id="tt-pageContent">
         <div class="container">
@@ -25,6 +82,11 @@
                                             </svg></i>
                                         <span class="d-block">{{ $post->created_at }}</span>
                                     </a>
+                                    @if ($post->helpful_by_user != 0)
+                                        <button class="badge bg-success d-flex align-items-center mr-3">
+                                            Helpfull
+                                        </button>
+                                    @endif
                                     @auth
                                         <button class="badge bg-danger d-flex align-items-center"
                                             data-post-id="{{ $post->id }}" onclick="reportPost(this)">
@@ -98,7 +160,35 @@
                                 <span class="tt-text">{{ $post->comment_count }}</span>
                             </a>
                             <div class="col-separator"></div>
-                            <button class="btn btn-success btn-sm">Subscribe</button>
+
+                            @php
+                                $isFound = false;
+                                $id = null;
+                            @endphp
+
+                            @foreach ($post->subscriptions as $item)
+                                @if (Auth::user() && $item->user_id == Auth::user()->id)
+                                    @php
+                                        $isFound = true;
+                                        $id = $item->id;
+                                    @endphp
+                                @endif
+                            @endforeach
+
+                            @if ($isFound)
+                                <form action="{{ route('subscription.destroy') }}" method="post">
+                                    @csrf
+                                    <input type="text" name="id" value="{{ $id }}" hidden />
+                                    <button class="btn btn-warning btn-sm" type="submit">Remove Subscribe</button>
+                                </form>
+                            @else
+                                <form action="{{ route('subscription') }}" method="post">
+                                    @csrf
+                                    <input type="text" name="post_id" value="{{ $post->id }}" hidden />
+                                    <button class="btn btn-success btn-sm" type="submit">Subscribe</button>
+                                </form>
+                            @endif
+
                         </div>
                     </div>
                 </div>
@@ -385,6 +475,46 @@
             .catch(err => console.error(err));
     }
 
+    // function renderComments(comments) {
+    //     let html = '';
+    //     comments.forEach(comment => {
+    //         const replies = comment.replies_recursive || [];
+    //         const hasReplies = replies.length > 0;
+    //         const toggleId = `toggle-replies-${comment.id}`;
+
+    //         html += `
+    //         <div class="tt-item" data-id="${comment.id}">
+    //             <div class="tt-single-topic">
+    //                 <div class="tt-item-header pt-noborder">
+    //                     <div class="tt-item-info info-top">
+    //                         <div class="tt-avatar-icon"><i class="tt-icon"><svg><use xlink:href="#icon-ava-v"></use></svg></i></div>
+    //                         <div class="tt-avatar-title"><a href="#">${comment.user?.name || 'Anonymous'}</a></div>
+    //                         <a href="#" class="tt-info-time d-flex">
+    //                             <i class="tt-icon d-flex justify-content-center align-items-center"><svg><use xlink:href="#icon-time"></use></svg></i>
+    //                             ${comment.created_at}
+    //                         </a>
+    //                     </div>
+    //                 </div>
+    //                 <div class="tt-item-description">
+    //                     ${comment.comment_text}
+    //                     <div>
+    //                         <a href="#" class="reply-btn" data-id="${comment.id}">Reply</a>
+    //                         <div class="reply-form-container" id="reply-form-${comment.id}"></div>
+    //                     </div>
+    //                     ${hasReplies ? `
+    //                         <a href="#" class="toggle-replies-btn" data-target="${toggleId}">Show Replies (${replies.length})</a>
+    //                         <div class="replies" id="${toggleId}" style="display: none;">
+    //                             ${renderComments(replies)}
+    //                         </div>
+    //                     ` : ''}
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     `;
+    //     });
+    //     return html;
+    // }
+
     function renderComments(comments) {
         let html = '';
         comments.forEach(comment => {
@@ -393,33 +523,45 @@
             const toggleId = `toggle-replies-${comment.id}`;
 
             html += `
-            <div class="tt-item" data-id="${comment.id}">
-                <div class="tt-single-topic">
-                    <div class="tt-item-header pt-noborder">
-                        <div class="tt-item-info info-top">
-                            <div class="tt-avatar-icon"><i class="tt-icon"><svg><use xlink:href="#icon-ava-v"></use></svg></i></div>
-                            <div class="tt-avatar-title"><a href="#">${comment.user?.name || 'Anonymous'}</a></div>
-                            <a href="#" class="tt-info-time d-flex">
-                                <i class="tt-icon d-flex justify-content-center align-items-center"><svg><use xlink:href="#icon-time"></use></svg></i>
-                                ${comment.created_at}
-                            </a>
-                        </div>
+        <div class="comment-item p-3 mb-3 bg-light rounded shadow-sm" data-id="${comment.id}">
+            <div class="d-flex gap-3 align-items-start flex-wrap">
+                <!-- User Info -->
+                <div class="user-info text-center" style="width: 60px;">
+                    <img src="${comment.user?.profile_photo_path || 'https://via.placeholder.com/50'}" class="rounded mb-1" width="50" height="50" alt="avatar">
+                    <div class="small fw-semibold">${comment.user?.name || 'Anonymous'}</div>
+                    <!-- <div class="text-muted small">Cred: ${comment.user?.credit || 0}</div> -->
+                </div>
+
+                <!-- Comment Content -->
+                <div class="flex-grow-1">
+                    <div class="text-muted small mb-1">
+                        Posted ${comment.created_at}
                     </div>
-                    <div class="tt-item-description">
-                        ${comment.comment_text}
-                        <div>
-                            <a href="#" class="reply-btn" data-id="${comment.id}">Reply</a>
-                            <div class="reply-form-container" id="reply-form-${comment.id}"></div>
-                        </div>
+                    <div class="comment-body mb-2">
+                        <p class="mb-1">${comment.comment_text}</p>
+                    </div>
+                    <div class="comment-actions d-flex flex-wrap align-items-center gap-3 small">
+                        <!-- <a href="#" class="vote-btn upvote text-decoration-none d-flex align-items-center"> -->
+                        <!--     👍 <span class="ms-1">Vote</span> -->
+                        <!-- </a> -->
+                        <a href="#" class="report-btn text-decoration-none">Report Spam</a>
+                        <!-- <a href="#" class="quote-btn text-decoration-none">Quote</a> -->
+                        <a href="#" class="reply-btn text-decoration-none ms-auto" data-id="${comment.id}">Reply</a>
                         ${hasReplies ? `
-                            <a href="#" class="toggle-replies-btn" data-target="${toggleId}">Show Replies (${replies.length})</a>
-                            <div class="replies" id="${toggleId}" style="display: none;">
-                                ${renderComments(replies)}
-                            </div>
+                            <a href="#" class="toggle-replies-btn text-decoration-none ms-3" data-target="${toggleId}">
+                                Show Replies (${replies.length})
+                            </a>
                         ` : ''}
                     </div>
+                    <div class="reply-form-container mt-3" id="reply-form-${comment.id}"></div>
+                    ${hasReplies ? `
+                        <div class="replies mt-3 border-start ps-3" id="${toggleId}" style="display: none;">
+                            ${renderComments(replies)}
+                        </div>
+                    ` : ''}
                 </div>
             </div>
+        </div>
         `;
         });
         return html;
@@ -444,19 +586,50 @@
 </script>
 
 <script>
+    // document.addEventListener('click', function(e) {
+    //     if (e.target.classList.contains('reply-btn')) {
+    //         e.preventDefault();
+    //         const parentId = e.target.dataset.id;
+    //         const form = `
+    //         <form onsubmit="submitReply(event, ${parentId})">
+    //             <textarea name="comment_text" required></textarea>
+    //             <button type="submit">Reply</button>
+    //         </form>
+    //     `;
+    //         document.getElementById('reply-form-' + parentId).innerHTML = form;
+    //     }
+    // });
+
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('reply-btn')) {
             e.preventDefault();
             const parentId = e.target.dataset.id;
             const form = `
-            <form onsubmit="submitReply(event, ${parentId})">
-                <textarea name="comment_text" required></textarea>
-                <button type="submit">Reply</button>
-            </form>
+            <div class="tt-wrapper-inner">
+                <div class="pt-editor form-default">
+                    <h6 class="pt-title">Post Your Reply</h6>
+                    <form onsubmit="submitReply(event, ${parentId})">
+                        <div class="form-group">
+                            <textarea name="comment_text" class="form-control" rows="5" placeholder="Let's get started" required></textarea>
+                        </div>
+                        <div class="pt-row">
+                            <div class="col-auto"></div>
+                            <div class="col-auto">
+                                ${document.querySelector('meta[name="user-authenticated"]').getAttribute('content') === 'true' ? `
+                                    <button type="submit" class="btn btn-secondary btn-width-lg">Reply</button>
+                                ` : `
+                                    <a href="/login" class="btn btn-secondary btn-width-lg">Login to Comment</a>
+                                `}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         `;
             document.getElementById('reply-form-' + parentId).innerHTML = form;
         }
     });
+
 
 
     function submitReply(event, parentId) {

@@ -55,9 +55,9 @@ class UserPostController extends Controller
         $popularityFormula = DB::raw(
             // Calculate score: (upvotes * upvote weight) + (downvotes * downvote weight) + (comment count * comment weight)
             "(COALESCE(upvotes, 0) * {$upvoteWeight}) + " .
-                "(COALESCE(downvotes, 0) * {$downvoteWeight}) + " .
-                "(COALESCE(comment_count, 0) * {$commentWeight}) " .
-                "AS popularity_score"
+            "(COALESCE(downvotes, 0) * {$downvoteWeight}) + " .
+            "(COALESCE(comment_count, 0) * {$commentWeight}) " .
+            "AS popularity_score"
         );
 
         /* $popular_deals = Post::where('status', 1)->select('posts.*', $popularityFormula)->orderByDesc('popularity_score')->paginate(10);
@@ -98,9 +98,9 @@ class UserPostController extends Controller
 
     public function view_deal($id)
     {
-        $post = Post::find($id);
+        $post = Post::with('subscriptions')->find($id);
         $user = Auth::user();
-
+        // Log::info($post);
         $vote_type = "";
         if ($user != null) {
             $vote = Vote::where("post_id", $id)
