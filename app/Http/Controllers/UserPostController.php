@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PostVoted;
 use App\Models\Post;
 use App\Models\Report;
 use App\Models\Setting;
@@ -247,6 +248,8 @@ class UserPostController extends Controller
                         'post_id' => $postId,
                         'vote_type' => $voteType,
                     ]);
+
+                    event(new PostVoted($post));
 
                     $response = [
                         "error" => false,
