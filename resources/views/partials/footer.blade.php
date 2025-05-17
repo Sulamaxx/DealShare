@@ -128,12 +128,14 @@
 @php
     $user = Auth::user(); // Get the authenticated user
 
-    $joinedDate = $user->created_at->format('F d, Y'); // e.g., "May 17, 2023"
-    $totalDealsSubmitted = $user->posts()->count();
-    $totalUpvotesReceived = $user->posts()->sum('upvotes');
-    $totalDownvotesReceived = $user->posts()->sum('downvotes');
-    $totalCommentsMade = $user->comments()->count();
+    $joinedDate = $user && $user->created_at ? $user->created_at->format('F d, Y') : '';
+
+    $totalDealsSubmitted = $user ? $user->posts()->count() : 0;
+    $totalUpvotesReceived = $user ? $user->posts()->sum('upvotes') : 0;
+    $totalDownvotesReceived = $user ? $user->posts()->sum('downvotes') : 0;
+    $totalCommentsMade = $user ? $user->comments()->count() : 0;
 @endphp
+
 
 <div id="js-popup-settings" class="tt-popup-settings">
     <div class="tt-btn-col-close">
@@ -154,7 +156,7 @@
         </a>
     </div>
     <form class="form-default" action="{{ route('user.updateSettings') }}" method="POST" enctype="multipart/form-data">
-        @csrf 
+        @csrf
         @method('PUT')
 
         <div class="tt-form-upload">
@@ -164,8 +166,8 @@
                         {{-- --- Display user's avatar or a default image --- --}}
                         {{-- Always include an img tag with an ID for JS to target --}}
                         <img id="avatarPreview"
-                            src="{{ Auth::user()->profile_photo_path ? asset('storage/' . Auth::user()->profile_photo_path) : asset('assets/images/user.png') }}"
-                            alt="{{ Auth::user()->name }}'s avatar" style="width:40px;height:40px;">
+                            src="{{ Auth::user() ? asset('storage/' . Auth::user()->profile_photo_path) : asset('assets/images/user.png') }}"
+                            alt="{{ Auth::user() ? Auth::user()->name : '' }}'s avatar" style="width:40px;height:40px;">
 
                         {{-- @if (!Auth::user()->profile_photo_path)
                             <svg id="avatarSvgPlaceholder">
