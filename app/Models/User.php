@@ -89,6 +89,8 @@ class User extends Authenticatable
         return $this->hasMany(Subscription::class);
     }
 
-
-
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'user_id'); // Or your foreign key column name
+    }
 }

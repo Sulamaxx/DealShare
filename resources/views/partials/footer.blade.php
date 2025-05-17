@@ -125,6 +125,16 @@
 </div>
 <!-- End of .container --> --}}
 
+@php
+    $user = Auth::user(); // Get the authenticated user
+
+    $joinedDate = $user->created_at->format('F d, Y'); // e.g., "May 17, 2023"
+    $totalDealsSubmitted = $user->posts()->count();
+    $totalUpvotesReceived = $user->posts()->sum('upvotes');
+    $totalDownvotesReceived = $user->posts()->sum('downvotes');
+    $totalCommentsMade = $user->comments()->count();
+@endphp
+
 <div id="js-popup-settings" class="tt-popup-settings">
     <div class="tt-btn-col-close">
         <a href="#">
@@ -143,51 +153,103 @@
             </span>
         </a>
     </div>
-    <form class="form-default">
+    <form class="form-default" action="{{ route('user.updateSettings') }}" method="POST" enctype="multipart/form-data">
+        @csrf 
+        @method('PUT')
+
         <div class="tt-form-upload">
             <div class="row no-gutter">
                 <div class="col-auto">
                     <div class="tt-avatar">
-                        <svg>
-                            <use xlink:href="#icon-ava-d"></use>
-                        </svg>
+                        {{-- --- Display user's avatar or a default image --- --}}
+                        {{-- Always include an img tag with an ID for JS to target --}}
+                        <img id="avatarPreview"
+                            src="{{ Auth::user()->profile_photo_path ? asset('storage/' . Auth::user()->profile_photo_path) : asset('assets/images/user.png') }}"
+                            alt="{{ Auth::user()->name }}'s avatar" style="width:40px;height:40px;">
+
+                        {{-- @if (!Auth::user()->profile_photo_path)
+                            <svg id="avatarSvgPlaceholder">
+                                <use xlink:href="#icon-ava-d"></use>
+                            </svg>
+                        @endif --}}
                     </div>
                 </div>
                 <div class="col-auto ml-auto">
-                    <a href="#" class="btn btn-primary">Upload Picture</a>
+                    {{-- The file input is hidden, the label triggers it --}}
+                    <input type='file' id="imageUpload" name="image" accept=".png, .jpg, .jpeg" hidden>
+                    <label for="imageUpload" class="btn btn-primary">Upload Picture</label>
                 </div>
             </div>
         </div>
+        @error('image')
+            <div class="text-danger">{{ $message }}</div>
+        @enderror
+
+
         <div class="form-group">
-            <label for="settingsUserName">Username</label>
-            <input type="text" name="name" class="form-control" id="settingsUserName" placeholder="azyrusmax">
+            <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
+                Joined Date
+            </label>
+            <p class="form-control-static">{{ $joinedDate }}</p> {{-- Display joined date --}}
+        </div>
+
+        <div class="form-group">
+            <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
+                Total Deals Submitted
+            </label>
+            <p class="form-control-static">{{ $totalDealsSubmitted }}</p> {{-- Display total deals --}}
+        </div>
+
+        <div class="form-group">
+            <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
+                Total Upvotes Received
+            </label>
+            <p class="form-control-static">{{ $totalUpvotesReceived }}</p> {{-- Display total upvotes --}}
+        </div>
+
+        <div class="form-group">
+            <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
+                Total Downvotes Received
+            </label>
+            <p class="form-control-static">{{ $totalDownvotesReceived }}</p> {{-- Display total downvotes --}}
+        </div>
+
+        <div class="form-group">
+            <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
+                Total Comments Made
+            </label>
+            <p class="form-control-static">{{ $totalCommentsMade }}</p> {{-- Display total comments --}}
+        </div>
+        <div class="form-group">
+            <label for="settingsUserName">Name</label>
+            <input type="text" name="name" class="form-control" id="settingsUserName" placeholder="azyrusmax"
+                value="{{ old('name', $user->name ?? '') }}">
+            @error('name')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
         </div>
         <div class="form-group">
             <label for="settingsUserEmail">Email</label>
-            <input type="text" name="name" class="form-control" id="settingsUserEmail"
-                placeholder="Sample@sample.com">
+            <input type="text" name="email" class="form-control" id="settingsUserEmail"
+                placeholder="Sample@sample.com" value="{{ old('email', $user->email ?? '') }}">
+            @error('email')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
         </div>
         <div class="form-group">
-            <label for="settingsUserPassword">Password</label>
-            <input type="password" name="name" class="form-control" id="settingsUserPassword"
-                placeholder="************">
-        </div>
-        <div class="form-group">
-            <label for="settingsUserLocation">Location</label>
-            <input type="text" name="name" class="form-control" id="settingsUserLocation" placeholder="Slovakia">
-        </div>
-        <div class="form-group">
-            <label for="settingsUserWebsite">Website</label>
-            <input type="text" name="name" class="form-control" id="settingsUserWebsite" placeholder="Sample.com">
-        </div>
-        <div class="form-group">
-            <label for="settingsUserAbout">About</label>
-            <textarea name="" placeholder="Few words about you" class="form-control" id="settingsUserAbout"></textarea>
+            <div class="checkbox-group">
+                <input type="checkbox" id="settingsCheckBox04" name="is_private">
+                <label for="settingsCheckBox04">
+                    <span class="check"></span>
+                    <span class="box"></span>
+                    <span class="tt-text">Private Account</span>
+                </label>
+            </div>
         </div>
         <div class="form-group">
             <label for="settingsUserAbout">Notify me via Email</label>
             <div class="checkbox-group">
-                <input type="checkbox" id="settingsCheckBox01" name="checkbox">
+                <input type="checkbox" id="settingsCheckBox01" name="email_thread_reply">
                 <label for="settingsCheckBox01">
                     <span class="check"></span>
                     <span class="box"></span>
@@ -195,7 +257,7 @@
                 </label>
             </div>
             <div class="checkbox-group">
-                <input type="checkbox" id="settingsCheckBox02" name="checkbox">
+                <input type="checkbox" id="settingsCheckBox02" name="email_thread_reply_like">
                 <label for="settingsCheckBox02">
                     <span class="check"></span>
                     <span class="box"></span>
@@ -203,7 +265,7 @@
                 </label>
             </div>
             <div class="checkbox-group">
-                <input type="checkbox" id="settingsCheckBox03" name="checkbox">
+                <input type="checkbox" id="settingsCheckBox03" name="email_mention">
                 <label for="settingsCheckBox03">
                     <span class="check"></span>
                     <span class="box"></span>
@@ -212,7 +274,7 @@
             </div>
         </div>
         <div class="form-group">
-            <a href="#" class="btn btn-secondary">Save</a>
+            <button type="submit" class="btn btn-primary">Save Settings</button>
         </div>
     </form>
 </div>
@@ -331,3 +393,60 @@
         </div>
     </div>
 </footer>
+
+<script>
+    function readURL(input) {
+        // Check if a file was selected
+        if (input.files && input.files[0]) {
+            var reader = new FileReader(); // Create a FileReader object
+
+            // Define what happens when the file is successfully read
+            reader.onload = function(e) {
+                // Get the image element where the preview should be displayed
+                var avatarImg = document.getElementById('avatarPreview');
+
+                // Set the src attribute of the image to the data URL of the selected file
+                avatarImg.src = e.target.result;
+
+                // Ensure the image is displayed (in case the SVG was initially shown)
+                avatarImg.style.display = 'block';
+
+                // Hide the SVG placeholder if it exists
+                var avatarSvg = document.getElementById('avatarSvgPlaceholder');
+                if (avatarSvg) {
+                    avatarSvg.style.display = 'none';
+                }
+
+                $(avatarImg).hide().fadeIn(650);
+            }
+
+            // Read the selected file as a data URL (base64 encoded string)
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            // Optional: Handle the case where the file input is cleared
+            // Reset to the default image or show the SVG placeholder
+            var avatarImg = document.getElementById('avatarPreview');
+            var avatarSvg = document.getElementById('avatarSvgPlaceholder');
+
+            // Set the image source back to the default
+            avatarImg.src = "{{ asset('assets/images/user.png') }}";
+
+            // If the SVG placeholder exists, hide the image and show the SVG
+            if (avatarSvg) {
+                avatarImg.style.display = 'none';
+                avatarSvg.style.display = 'block';
+            }
+        }
+    }
+
+    // Attach the change event listener to the hidden file input
+    // When a file is selected in the input with id="imageUpload", call the readURL function
+    document.getElementById('imageUpload').addEventListener('change', function() {
+        readURL(this);
+    });
+
+    // If you are using jQuery and the #imageUpload element is loaded via AJAX or dynamically:
+    // $(document).on('change', '#imageUpload', function() {
+    //     readURL(this);
+    // });
+</script>
