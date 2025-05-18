@@ -43,6 +43,8 @@ class DealsController extends Controller
     {
         $query = Report::query();
 
+        $query->where('reportable_type', Post::class);
+
         if ($request->filled('search')) {
             $query->where('reason', 'like', '%' . $request->search . '%');
         }
