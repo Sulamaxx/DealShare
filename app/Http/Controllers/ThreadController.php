@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class ThreadController extends Controller
 {
@@ -57,5 +60,57 @@ class ThreadController extends Controller
         return response()->json(['message' => 'Comment added', 'id' => $comment->id]);
     }
 
+    public function report(Request $request, Comment $comment)
+    {
+        $validator = Validator::make($request->all(), [
+            'reason' => 'nullable|string|max:1000',
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed.',
+                'errors' => $validator->errors(),
+            ], 422); // Unprocessable Entity
+        }
+
+        $user = Auth::user();
+
+        $existingReport = Report::where('user_id', $user->id)
+            ->whereMorphedTo('reportable', $comment)
+            ->first();
+
+        if ($existingReport) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You have already reported this comment.',
+            ], 409);
+        }
+
+        try {
+            $report = new Report();
+            $report->user_id = $user->id;
+            $report->reason = $request->input('reason'); // Get reason from request
+
+            // Associate the report with the post using the polymorphic relationship
+            $report->reportable()->associate($comment); // Sets reportable_type and reportable_id
+
+            $report->save();
+
+            Log::info("Comment {$comment->id} reported by user {$user->id}. Reason: {$report->reason}");
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Comment reported successfully! Thank you for your feedback.',
+                // 'total_reports_for_post' => $post->reports()->count(), // Requires a 'reports' relationship on Post model
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Error creating report for comment {$comment->id} by user {$user->id}: " . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to submit report.',
+            ], 500);
+        }
+    }
 }

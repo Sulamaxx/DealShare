@@ -85,6 +85,7 @@ Route::middleware([
     Route::post('/start-thread', [ThreadController::class, 'store']);
     Route::get('/comments/{post}', [ThreadController::class, 'index']);
     Route::post('/comments', [ThreadController::class, 'storeChild']);
+    Route::post('/comments/{comment}/report', [ThreadController::class, 'report']);
     Route::post('/subscription', [SubscriptionController::class, 'index'])->name('subscription');
     Route::post('/subscription/destroy', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
 });
