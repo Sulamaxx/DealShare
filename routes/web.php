@@ -57,7 +57,6 @@ Route::get('/run-storage-link', function () {
     return 'Storage link already exists!';
 });
 
-
 Route::get('/', [UserFrontController::class, 'index'])->name('home');
 Route::get('/new-deals', [UserPostController::class, 'newDeals'])->name('new-deals');
 Route::get('/popular-deals', [UserPostController::class, 'popularDeals'])->name('popular-deals');
@@ -73,6 +72,7 @@ Route::middleware([
 ])->group(function () {
 
     Route::get('/my-deals', [UserPostController::class, 'myDeals'])->name('my-deals');
+    Route::get('/my-activities', [UserPostController::class, 'myActivities'])->name('my-activities');
     Route::get('/create-deals', [UserPostController::class, 'index'])->name('create-deals');
     // Route::post('/posts', [UserPostController::class, 'store'])->name('posts.store');
     Route::resource('posts', UserPostController::class);

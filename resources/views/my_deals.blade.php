@@ -7,29 +7,30 @@
         <div class="tt-wrapper-section">
             <div class="container">
                 <div class="tt-user-header">
-                    <div class="tt-col-avatar">
+                    <div class="tt-col-avatar" style="width: fit-content;">
                         <div class="tt-icon">
                             @if (Auth::user()->profile_photo_path)
-                                <img src="{{ asset(Auth::user()->profile_photo_path) }}" alt="">
+                                <img src="{{ asset('storage/' . Auth::user()->profile_photo_path) }}" alt=""
+                                    style="width:40px;height:40px;border-radius:30px;">
                             @else
                                 <img src="{{ asset('assets/images/user.png') }}" alt="">
                             @endif
                         </div>
                     </div>
-                    <div class="tt-col-title">
+                    <div class="tt-col-title" style="padding-left: 0px;">
                         <div class="tt-title">
                             <a href="javascript::void(0)">{{ Auth::user()->name }}</a>
                         </div>
-                        <ul class="tt-list-badge">
+                        <ul class="tt-list-badge" style="margin-left: 0px;">
 
                             @if ($badge) {{-- Check if a badge was found --}}
                                 <li>
                                     <a href="#" title="{{ $badge->description }}">
-                                        <span class="tt-color-default tt-badge">
+                                        <span class="tt-color-default tt-badge" style="padding-left: 0px;">
                                             @if ($badge->icon)
                                                 {{-- Assuming badge->icon is the image path --}}
                                                 <img src="{{ asset($badge->icon) }}" alt="{{ $badge->name }}"
-                                                    style="max-width: 20px; height: auto; vertical-align: middle; margin-right: 5px;">
+                                                    style="max-width: 22.5px; height: auto; vertical-align: middle; margin-right: 5px;">
                                             @else
                                                 {{-- Fallback if no image, maybe use name or text --}}
                                                 {{ $badge->name }}
@@ -60,7 +61,7 @@
 
         <div class="container mb-5">
             <div class="tt-tab-wrapper">
-                
+
                 <div class="tab-content">
 
                     <div class="tab-pane tt-indent-none  show active" id="tt-tab-01" role="tabpanel">

@@ -32,7 +32,48 @@ class UserPostController extends Controller
             ->first();
 
         $posts = Post::where('post_by', Auth::user()->id)->paginate(10);
-        return view('my_deals', compact('posts','badge'));
+        return view('my_deals', compact('posts', 'badge'));
+    }
+
+    public function myActivities()
+    {
+        $user = Auth::user();
+
+        $totalUpvotes = $user->posts()->sum('upvotes');
+        $totalDownvotes = $user->posts()->sum('downvotes');
+        $netVoteCount = $totalUpvotes - $totalDownvotes;
+
+        $badge = Badge::where('vote-count', '<=', $netVoteCount)
+            ->orderBy('vote-count', 'desc') // Order by vote_count descending
+            ->first();
+
+        //$posts = Post::where('post_by', Auth::user()->id)->paginate(10);
+
+        $commentedPostIds = $user->comments() // Access the user's comments relationship
+            ->distinct('post_id') // Get only unique post IDs
+            ->pluck('post_id'); // Get a collection of just the 'post_id' values
+
+        $subscribedPostIds = $user->subscriptions()
+            ->distinct('post_id')
+            ->pluck('post_id');
+
+        $votedPostIds = $user->votes()
+            ->distinct('post_id')
+            ->pluck('post_id');
+
+        $commentedPosts = Post::whereIn('id', $commentedPostIds)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        $subscribedPosts = Post::whereIn('id', $subscribedPostIds)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        $votedPosts = Post::whereIn('id', $votedPostIds)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('activities', compact('commentedPosts','subscribedPosts','votedPosts', 'badge'));
     }
 
     public function newDeals()
@@ -67,9 +108,9 @@ class UserPostController extends Controller
         $popularityFormula = DB::raw(
             // Calculate score: (upvotes * upvote weight) + (downvotes * downvote weight) + (comment count * comment weight)
             "(COALESCE(upvotes, 0) * {$upvoteWeight}) + " .
-            "(COALESCE(downvotes, 0) * {$downvoteWeight}) + " .
-            "(COALESCE(comment_count, 0) * {$commentWeight}) " .
-            "AS popularity_score"
+                "(COALESCE(downvotes, 0) * {$downvoteWeight}) + " .
+                "(COALESCE(comment_count, 0) * {$commentWeight}) " .
+                "AS popularity_score"
         );
 
         /* $popular_deals = Post::where('status', 1)->select('posts.*', $popularityFormula)->orderByDesc('popularity_score')->paginate(10);
