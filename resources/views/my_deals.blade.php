@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Forum')
+@section('title', 'My Deals')
 
 @section('content')
     <main id="tt-pageContent" class="tt-offset-small" style="min-height: 80vh">
