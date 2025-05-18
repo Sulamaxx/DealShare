@@ -73,7 +73,138 @@
                                         src="{{ asset($post->user->profile_photo_path) }}" alt="">
                                 </div>
                                 <div class="tt-avatar-title">
-                                    <a href="javascript:void(0)">{{ $post->user->name }}</a>
+                                    <a href="javascript:void(0)" class="post-author-link"
+                                        data-user-id="{{ $post->user->id }}">
+                                        {{ $post->user->name }}
+                                    </a>
+                                </div>
+                                <div id="js-popup-setting" class="tt-popup-settings" style="display: none;">
+                                    {{-- Initially hidden --}}
+                                    <div class="tt-btn-col-close">
+                                        {{-- Close button --}}
+                                        <a href="#" style="padding: 9px 0 22px;">
+                                            <span class="tt-icon-text">
+                                                Settings
+                                            </span>
+                                            <span class="tt-icon-close" style="top: 17px;">
+                                                {{-- Replace with your actual SVG icon for close --}}
+                                                <svg>
+                                                    <use xlink:href="#icon-cancel"></use>
+                                                </svg>
+                                            </span>
+                                        </a>
+                                    </div>
+
+                                    {{-- Content area for the user profile details --}}
+                                    <div class="tt-popup-settings-content"> {{-- Added a content wrapper --}}
+
+                                        {{-- User Avatar Section --}}
+                                        <div class="tt-form-upload"> {{-- Reusing a class from your form snippet --}}
+                                            <div class="row no-gutter align-items-center"> {{-- Added align-items-center --}}
+                                                <div class="col-auto">
+                                                    <div class="tt-avatar">
+                                                        {{--
+                            This img tag will be populated by JavaScript.
+                            Include a default src and alt.
+                            The SVG placeholder can be included and toggled by JS/CSS.
+                        --}}
+                                                        <img id="avatarPreview" src="{{ asset('assets/images/user.png') }}"
+                                                            {{-- Default image --}} alt="User Avatar"
+                                                            style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                                                        {{-- Basic styling --}}
+
+                                                        {{-- Optional: SVG placeholder, hidden if image is shown --}}
+                                                        {{-- <svg id="avatarSvgPlaceholder" style="display: none;"><use xlink:href="#icon-ava-d"></use></svg> --}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-auto ml-auto">
+                                                    {{-- This button/label is for the *authenticated* user's settings form.
+                         You might want to hide this when viewing *other* users' profiles. --}}
+                                                    {{-- <input type='file' id="imageUpload" name="image" accept=".png, .jpg, .jpeg" hidden> --}}
+                                                    {{-- <label for="imageUpload" class="btn btn-primary">Upload Picture</label> --}}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {{-- User Name Display --}}
+                                        <div class="form-group"> {{-- Reusing a class --}}
+                                            <label
+                                                class="inline-block font-bold text-neutral-600 text-sm mb-1">Name</label>
+                                            {{-- This element will display the user's name --}}
+                                            <p id="popupUserName" class="form-control-static">{{-- Name will be inserted here by JS --}}</p>
+                                        </div>
+
+                                        {{-- Badges Section --}}
+                                        <div class="form-group"> {{-- Reusing a class --}}
+                                            <label
+                                                class="inline-block font-bold text-neutral-600  text-sm mb-1">Badges</label>
+                                            {{-- This ul will contain the badges --}}
+                                            <ul id="popupUserBadges" class="tt-list-badge d-flex align-items-center gap-1">
+                                                {{-- Badges will be populated here by JS --}}
+                                                {{-- Example structure for a badge:
+                 <li>
+                     <a href="#">
+                         <span class="tt-color-default tt-badge">
+                             <img src="..." alt="Badge Name" style="max-width: 20px; height: auto; vertical-align: middle; margin-right: 5px;">
+                             Badge Name (Vote Count)
+                         </span>
+                     </a>
+                 </li>
+                 --}}
+                                            </ul>
+                                        </div>
+
+
+                                        {{-- User Statistics --}}
+                                        <div class="form-group"> {{-- Reusing a class --}}
+                                            <label
+                                                class="inline-block font-bold text-neutral-600  text-sm mb-1">Statistics</label>
+                                            {{-- This element will display the combined stats --}}
+                                            <p id="popupUserStats" class="form-control-static">{{-- Stats will be inserted here by JS --}}</p>
+                                        </div>
+
+                                        {{-- Joined Date --}}
+                                        <div class="form-group"> {{-- Reusing a class --}}
+                                            <label
+                                                class="inline-block font-bold text-neutral-600  text-sm mb-1">Member
+                                                Since</label>
+                                            {{-- This element will display the joined date --}}
+                                            <p id="popupUserJoinedDate" class="form-control-static">{{-- Joined date will be inserted here by JS --}}
+                                            </p>
+                                        </div>
+
+                                        {{-- Last Seen --}}
+                                        <div class="form-group"> {{-- Reusing a class --}}
+                                            <label
+                                                class="inline-block font-bold text-neutral-600  text-sm mb-1">Last
+                                                Seen</label>
+                                            {{-- This element will display the last seen date --}}
+                                            <p id="popupUserLastSeen" class="form-control-static">{{-- Last seen will be inserted here by JS --}}</p>
+                                        </div>
+
+                                        {{-- Location --}}
+                                        <div class="form-group"> {{-- Reusing a class --}}
+                                            <label
+                                                class="inline-block font-bold text-neutral-600  text-sm mb-1">Location</label>
+                                            {{-- This element will display the location --}}
+                                            <p id="popupUserLocation" class="form-control-static">{{-- Location will be inserted here by JS --}}</p>
+                                        </div>
+
+                                        {{--
+            Add other fields here if needed, like email (be cautious with privacy),
+            or any other user attributes you want to display in the popup.
+            Make sure to add IDs or classes so the JavaScript can target them.
+        --}}
+
+                                        {{--
+            Note: If your #js-popup-settings was originally a form for editing the *authenticated* user,
+            it might contain input fields for name, email, checkboxes, etc.
+            When displaying *another* user's profile, you should hide or disable these editing fields
+            using CSS or JavaScript.
+        --}}
+
+                                    </div> {{-- End tt-popup-settings-content --}}
+
                                 </div>
                                 <div class="d-flex align-items-center">
                                     <a href="javascript:void(0)" class="tt-info-time d-flex justify-content-end mr-3">
@@ -84,7 +215,7 @@
                                     </a>
                                     @if ($post->helpful_by_user != 0)
                                         <button class="badge bg-success d-flex align-items-center mr-3">
-                                            Helpfull
+                                            Helpful
                                         </button>
                                     @endif
                                     @auth
@@ -145,7 +276,8 @@
                                     <span class="tt-text" id="up_vote_span">{{ $post->upvotes }}</span>
                                 </a>
                                 <a class="tt-icon-btn dislike-button cursor-pointer {{ $vote_type === 'down' ? 'downvoted' : '' }}"
-                                    data-post-id="{{ $post->id }}" data-vote-type="down" onclick="loginMessage(this)">
+                                    data-post-id="{{ $post->id }}" data-vote-type="down"
+                                    onclick="loginMessage(this)">
                                     <i class="tt-icon"><svg>
                                             <use xlink:href="#icon-dislike"></use>
                                         </svg></i>
@@ -228,6 +360,8 @@
         </div>
     </main>
 
+
+
 @endsection
 <!-- Pusher & Echo CDN scripts -->
 <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
@@ -266,6 +400,170 @@
 </script>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // Find all author links on the page
+        const authorLinks = document.querySelectorAll('.post-author-link');
+
+        // Add a click event listener to each author link
+        authorLinks.forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent the default link behavior (navigating)
+
+                // Get the user ID from the data attribute of the clicked link
+                const userId = this.dataset.userId;
+
+                // Check if userId was successfully retrieved
+                if (!userId) {
+                    console.error('User ID not found on the clicked link.');
+                    return;
+                }
+
+                const profileDataUrl = `/users/${userId}/profile-data`;
+
+                fetch(profileDataUrl)
+                    .then(response => {
+                        // Check if the response was successful (status code 2xx)
+                        if (!response.ok) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: `Could not load user profile data.`,
+                            });
+                        }
+                        // Parse the JSON response body
+                        return response.json();
+                    })
+                    .then(userData => {
+                        // --- Populate the popup with the fetched data ---
+                        console.log(userData);
+                        populateUserProfilePopup(userData);
+
+                        showUserProfilePopup();
+                    })
+                    .catch(error => {
+                        // Handle any errors during the fetch operation (network issues, server errors, etc.)
+                        console.error('Error fetching user profile data:', error);
+                        // Optional: Display a user-friendly error message (e.g., using SweetAlert2)
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Could not load user profile data.',
+                        });
+                    });
+            });
+        });
+
+        // --- Function to populate the popup HTML with data ---
+        // This function assumes the structure of your #js-popup-settings div
+        function populateUserProfilePopup(userData) {
+            const popup = document.getElementById('js-popup-setting');
+            if (!popup) {
+                console.error('Popup element #js-popup-setting not found!');
+                return;
+            }
+
+            // Populate Avatar
+            const avatarImg = popup.querySelector('#avatarPreview');
+            if (avatarImg) {
+                avatarImg.src = userData.profile_photo_url || '{{ asset('assets/images/user.png') }}';
+                avatarImg.alt = `${userData.name || 'User'}'s avatar`;
+            }
+
+            // Populate User Name
+            const userNameElement = popup.querySelector('#popupUserName');
+            if (userNameElement) {
+                userNameElement.textContent = userData.name || 'Anonymous';
+            }
+
+            // Populate Badges
+            const badgesList = popup.querySelector('#popupUserBadges');
+            if (badgesList) {
+                badgesList.innerHTML = ''; // Clear existing content
+                if (userData.highest_qualifying_badge) {
+                    const badge = userData.highest_qualifying_badge;
+                    const badgeHtml = `
+                <li>
+                    <a href="#" title="${badge.description || ''}">
+                        <span class="tt-color${badge.color || 'default'} tt-badge">
+                            ${badge.icon_url ? `<img src="${badge.icon_url}" alt="${badge.name || ''}" style="max-width: 20px; height: auto; vertical-align: middle; margin-right: 5px;">` : ''}
+                            ${badge.name || ''}
+                        </span>
+                    </a>
+                </li>
+            `;
+                    badgesList.innerHTML = badgeHtml;
+                } else {
+                    badgesList.innerHTML = '<li><span class="tt-color-none tt-badge">No Badge Yet</span></li>';
+                }
+            }
+
+            // Populate Statistics
+            const statsElement = popup.querySelector('#popupUserStats');
+            if (statsElement) {
+                statsElement.textContent =
+                    `Posts: ${userData.total_deals_submitted || 0} / Comments: ${userData.total_comments_made || 0}`;
+            }
+
+            // Populate Joined Date
+            const joinedDateElement = popup.querySelector('#popupUserJoinedDate');
+            if (joinedDateElement) {
+                joinedDateElement.textContent = userData.joined_date || 'N/A';
+            }
+
+            // Populate Last Seen
+            const lastSeenElement = popup.querySelector('#popupUserLastSeen');
+            if (lastSeenElement) {
+                lastSeenElement.textContent = userData.last_seen || 'N/A';
+            }
+
+            // Populate Location
+            const locationElement = popup.querySelector('#popupUserLocation');
+            if (locationElement) {
+                locationElement.textContent = userData.location || 'Not specified';
+            }
+        }
+
+        function showUserProfilePopup() {
+            const popup = document.getElementById('js-popup-setting');
+            if (popup) {
+                // Apply styles
+                popup.style.position = 'fixed';
+                popup.style.top = '50%';
+                popup.style.left = '50%';
+                popup.style.transform = 'translate(-50%, -50%)';
+                popup.style.zIndex = '1000';
+                popup.style.background = 'white';
+                popup.style.padding = '20px';
+                popup.style.border = '1px solid #ccc';
+                popup.style.height = 'fit-content';
+                popup.style.display = 'block';
+
+                console.log('Popup display set to block');
+            } else {
+                console.error('Popup element not found when trying to show!');
+            }
+        }
+
+        function hideUserProfilePopup() {
+            const popup = document.getElementById('js-popup-setting');
+            if (popup) {
+                popup.style.display = 'none';
+            }
+        }
+
+        // Add event listener to the close button of the popup
+        const closeButton = document.querySelector('#js-popup-setting .tt-btn-col-close a');
+        if (closeButton) {
+            closeButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                hideUserProfilePopup();
+            });
+        }
+
+    });
+
+
     function reportPost(element) {
         const postId = element.dataset.postId;
         const url = `/posts/${postId}/report`;
