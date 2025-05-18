@@ -93,4 +93,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comment::class, 'user_id'); // Or your foreign key column name
     }
+
+    public function votes()
+    {
+        return $this->hasMany(Vote::class, 'user_id'); // Or your foreign key column name
+    }
 }

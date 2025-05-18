@@ -196,6 +196,9 @@
                     @auth
                         <li class="nav-item"><a class="nav-link text-white" href="{{ route('my-deals') }}">My Deals</a></li>
                     @endauth
+                    @auth
+                        <li class="nav-item"><a class="nav-link text-white" href="{{ route('my-activities') }}">My Activities</a></li>
+                    @endauth
                 </ul>
             </nav>
 
@@ -234,6 +237,9 @@
             <li class="nav-item"><a class="nav-link text-dark" href="#">Highly Voted Deals</a></li>
             @auth
                 <li class="nav-item"><a class="nav-link text-dark" href="{{ route('my-deals') }}">My Deals</a></li>
+            @endauth
+            @auth
+                <li class="nav-item"><a class="nav-link text-dark" href="{{ route('my-activities') }}">My Activities</a></li>
             @endauth
             @guest
                 <li class="nav-item"><a class="nav-link text-dark" href="{{ route('login') }}">Log In</a></li>
