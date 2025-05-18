@@ -229,6 +229,9 @@
     </main>
 
 @endsection
+<!-- Pusher & Echo CDN scripts -->
+<script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.3/dist/echo.iife.js"></script>
 
 <script>
     function loginMessage(x) {
@@ -399,6 +402,30 @@
             })
             .catch(error => console.log(error));
     }
+
+
+    // Replace with your own values
+    const POST_ID = "{{ $post->id }}";
+    const PUSHER_APP_KEY = "{{ env('PUSHER_APP_KEY') }}";
+    const PUSHER_CLUSTER = "{{ env('PUSHER_APP_CLUSTER') }}";
+
+    Pusher.logToConsole = false;
+
+    window.Echo = new Echo({
+        broadcaster: 'pusher',
+        key: PUSHER_APP_KEY,
+        cluster: PUSHER_CLUSTER,
+        encrypted: true
+    });
+
+    window.Echo.channel('post.' + POST_ID)
+        .listen('.PostVoted', (e) => {
+            // Update counts in real time
+            document.getElementById('up_vote_span').textContent = e.post.upvotes;
+            document.getElementById('down_vote_span').textContent = e.post.downvotes;
+        });
+
+
 
     function vote(element) {
 
