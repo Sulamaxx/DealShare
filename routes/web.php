@@ -64,6 +64,8 @@ Route::get('/popular-deals', [UserPostController::class, 'popularDeals'])->name(
 Route::get('/highly-voted-deals', [UserPostController::class, 'highlyVotedDeals'])->name('highly-voted-deals');
 Route::get('/deals', [UserPostController::class, 'search'])->name('deals.index');
 
+Route::get('/users/{id}/profile-data', [UserController::class, 'getProfileData']);
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

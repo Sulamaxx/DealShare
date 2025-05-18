@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Badge;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -57,6 +59,60 @@ class UserController extends Controller
             // --- Log the error and set an error flash message ---
             Log::error("Error updating user settings for user {$user->id}: " . $e->getMessage());
             return redirect()->route('my-deals')->with('error', 'Failed to update profile settings. Please try again.');
+        }
+    }
+
+    public function getProfileData($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+
+            $totalUpvotes = $user->posts()->sum('upvotes');
+            $totalDownvotes = $user->posts()->sum('downvotes');
+            $netVoteCount = $totalUpvotes - $totalDownvotes;
+
+            $totalDealsSubmitted = $user->posts()->count();
+            $totalCommentsMade = $user->comments()->count();
+
+            $highestQualifyingBadge = Badge::where('vote-count', '<=', $netVoteCount)
+                ->orderBy('vote-count', 'desc') 
+                ->first();
+
+            $responseData = [
+                'id' => $user->id,
+                'name' => $user->name,
+                // 'email' => $user->email,
+                // Provide the full URL for the profile photo
+                'profile_photo_url' => $user->profile_photo_path ? asset($user->profile_photo_path) : asset('assets/images/user.png'),
+                // Format dates for display
+                'joined_date' => $user->created_at->format('F d, Y'),
+                // Assuming 'last_seen' column exists and is a Carbon instance
+                'last_seen' => $user->last_seen?->format('F d, Y') ?? 'N/A',
+                // Assuming 'location' column exists
+                'location' => $user->location ?? 'Not specified',
+                'total_deals_submitted' => $totalDealsSubmitted,
+                'total_upvotes_received' => $totalUpvotes,
+                'total_downvotes_received' => $totalDownvotes,
+                'total_comments_made' => $totalCommentsMade,
+                // Include badge data if a badge was found
+                'highest_qualifying_badge' => $highestQualifyingBadge ? [
+                    'id' => $highestQualifyingBadge->id,
+                    'name' => $highestQualifyingBadge->name,
+                    'description' => $highestQualifyingBadge->description,
+                    // Provide the full URL for the badge icon
+                    'icon_url' => $highestQualifyingBadge->icon ? asset($highestQualifyingBadge->icon) : null, // The threshold for this badge
+                ] : null,
+            ];
+
+            // Return the data as a JSON response
+            return response()->json($responseData);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // If findOrFail did not find the user, return a 404 response
+            return response()->json(['error' => 'User not found'], 404);
+        } catch (Exception $e) {
+            // Catch any other exceptions, log them, and return a 500 error response
+            Log::error("Error fetching profile data for user {$id}: " . $e->getMessage());
+            return response()->json(['error' => 'Could not fetch profile data'], 500);
         }
     }
 }
