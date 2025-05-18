@@ -661,6 +661,103 @@
         })
     }
 
+    function reportComment(element) {
+        const commentId = element.dataset.commentId;
+        const url = `/comments/${commentId}/report`;
+
+        Swal.fire({
+            title: 'Report this Comment?',
+            text: 'Please provide a brief reason:',
+            icon: 'warning',
+            input: 'textarea',
+            inputPlaceholder: 'Enter your reason here...',
+            inputAttributes: {
+                'aria-label': 'Enter your reason here'
+            },
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Submit Report',
+            showLoaderOnConfirm: true,
+
+
+            preConfirm: (reason) => {
+
+                if (!reason && false) { // Change 'false' to true if reason is REQUIRED
+                    Swal.showValidationMessage('Please provide a reason.');
+                    return false;
+                }
+                return reason;
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const reason = result.value;
+
+                fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                'content'),
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            comment_id: commentId,
+                            reason: reason
+                        })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            if (response.redirected) {
+                                window.location.href = response.url;
+                                return new Promise(() => {});
+                            }
+                            return response.json().then(data => {
+                                throw new Error(data.message || `Server error: ${response.status}`);
+                            });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Report Submitted!',
+                                text: data.message,
+                                timer: 3000,
+                                showConfirmButton: false
+                            });
+                            element.disabled = true;
+                            element.textContent = 'Reported';
+                        } else {
+                            // This block would be for custom 'success: false' responses from the server
+                            // like the 'Already reported' case (which we handle in .catch now)
+                            // or validation errors if not caught by preConfirm
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Failed!',
+                                text: data.message || 'Could not submit the report.',
+                                timer: 3000,
+                                showConfirmButton: false
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        // This block handles network errors OR errors thrown from the .then blocks
+                        console.error('Error submitting report:', error);
+
+                        // Display the error message (either from thrown Error or a generic one)
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: error.message || 'An error occurred while submitting the report.',
+                        });
+                    });
+            }
+        })
+    }
+
     function StartNewThread() {
         const comment = document.getElementById('new_thread').value;
         const post_id = document.getElementById('post_id').value;
@@ -869,7 +966,7 @@
                         <!-- <a href="#" class="vote-btn upvote text-decoration-none d-flex align-items-center"> -->
                         <!--     👍 <span class="ms-1">Vote</span> -->
                         <!-- </a> -->
-                        <a href="#" class="report-btn text-decoration-none">Report Spam</a>
+                        <a href="javascript:void(0)" class="report-btn text-decoration-none" data-comment-id="${comment.id}" onclick="reportComment(this)">Report Spam</a>
                         <!-- <a href="#" class="quote-btn text-decoration-none">Quote</a> -->
                         <a href="#" class="reply-btn text-decoration-none ms-auto" data-id="${comment.id}">Reply</a>
                         ${hasReplies ? `
