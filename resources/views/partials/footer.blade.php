@@ -127,12 +127,13 @@
 
 @php
     $user = Auth::user(); // Get the authenticated user
-
-    $joinedDate = $user->created_at->format('F d, Y'); // e.g., "May 17, 2023"
-    $totalDealsSubmitted = $user->posts()->count();
-    $totalUpvotesReceived = $user->posts()->sum('upvotes');
-    $totalDownvotesReceived = $user->posts()->sum('downvotes');
-    $totalCommentsMade = $user->comments()->count();
+    if ($user) {
+        $joinedDate = $user->created_at->format('F d, Y'); // e.g., "May 17, 2023"
+        $totalDealsSubmitted = $user->posts()->count();
+        $totalUpvotesReceived = $user->posts()->sum('upvotes');
+        $totalDownvotesReceived = $user->posts()->sum('downvotes');
+        $totalCommentsMade = $user->comments()->count();
+    }
 @endphp
 
 <div id="js-popup-settings" class="tt-popup-settings">
@@ -154,18 +155,16 @@
         </a>
     </div>
     <form class="form-default" action="{{ route('user.updateSettings') }}" method="POST" enctype="multipart/form-data">
-        @csrf 
+        @csrf
         @method('PUT')
 
         <div class="tt-form-upload">
             <div class="row no-gutter">
                 <div class="col-auto">
                     <div class="tt-avatar">
-                        {{-- --- Display user's avatar or a default image --- --}}
-                        {{-- Always include an img tag with an ID for JS to target --}}
                         <img id="avatarPreview"
-                            src="{{ Auth::user()->profile_photo_path ? asset('storage/' . Auth::user()->profile_photo_path) : asset('assets/images/user.png') }}"
-                            alt="{{ Auth::user()->name }}'s avatar" style="width:40px;height:40px;">
+                            src="{{ $user && Auth::user()->profile_photo_path ? asset('storage/' . Auth::user()->profile_photo_path) : asset('assets/images/user.png') }}"
+                            alt="{{$user && Auth::user()->name ? Auth::user()->name : 'User'}}'s avatar" style="width:40px;height:40px;">
 
                         {{-- @if (!Auth::user()->profile_photo_path)
                             <svg id="avatarSvgPlaceholder">
@@ -190,35 +189,35 @@
             <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
                 Joined Date
             </label>
-            <p class="form-control-static">{{ $joinedDate }}</p> {{-- Display joined date --}}
+            <p class="form-control-static">{{ $user && $joinedDate ? $joinedDate : ''}}</p> {{-- Display joined date --}}
         </div>
 
         <div class="form-group">
             <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
                 Total Deals Submitted
             </label>
-            <p class="form-control-static">{{ $totalDealsSubmitted }}</p> {{-- Display total deals --}}
+            <p class="form-control-static">{{ $user && $totalDealsSubmitted ? $totalDealsSubmitted : ''}}</p> {{-- Display total deals --}}
         </div>
 
         <div class="form-group">
             <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
                 Total Upvotes Received
             </label>
-            <p class="form-control-static">{{ $totalUpvotesReceived }}</p> {{-- Display total upvotes --}}
+            <p class="form-control-static">{{ $user && $totalUpvotesReceived ? $totalUpvotesReceived : ''}}</p> {{-- Display total upvotes --}}
         </div>
 
         <div class="form-group">
             <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
                 Total Downvotes Received
             </label>
-            <p class="form-control-static">{{ $totalDownvotesReceived }}</p> {{-- Display total downvotes --}}
+            <p class="form-control-static">{{ $user && $totalDownvotesReceived ? $totalDownvotesReceived : ''}}</p> {{-- Display total downvotes --}}
         </div>
 
         <div class="form-group">
             <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
                 Total Comments Made
             </label>
-            <p class="form-control-static">{{ $totalCommentsMade }}</p> {{-- Display total comments --}}
+            <p class="form-control-static">{{ $user && $totalCommentsMade ? $totalCommentsMade : '' }}</p> {{-- Display total comments --}}
         </div>
         <div class="form-group">
             <label for="settingsUserName">Name</label>
