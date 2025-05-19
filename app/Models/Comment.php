@@ -45,13 +45,13 @@ class Comment extends Model
      */
     public function replies()
     {
-        return $this->hasMany(Comment::class, 'parent_id');
+        return $this->hasMany(Comment::class, 'parent_id')
+            ->where('status', 1);
     }
 
     public function repliesRecursive()
     {
-        return $this->hasMany(Comment::class, 'parent_id')->with('user', 'repliesRecursive');
+        return $this->hasMany(Comment::class, 'parent_id')->with('user', 'repliesRecursive')
+            ->where('status', 1);
     }
-
-
 }

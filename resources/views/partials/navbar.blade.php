@@ -179,12 +179,12 @@
     }
 </style>
 
-<header class="bg-dark py-2">
+<header class="bg-dark py-4">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center">
             <!-- Logo -->
             <a href="/" class="navbar-brand">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo" height="40">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" height="60" width="120">
             </a>
 
             <!-- Desktop Menu -->
