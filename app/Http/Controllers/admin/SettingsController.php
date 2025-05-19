@@ -59,4 +59,23 @@ class SettingsController extends Controller
         // Redirect to the popular deals settings page with a success message
         return redirect()->route('popularDeals')->with('success', 'Popular Deals settings updated successfully!');
     }
+
+    public function highlyVotedUpdate(Request $request)
+    {
+        // Validate the form data
+        $validated = $request->validate([
+            'highly_voted_deal_upvote_count' => 'nullable|numeric',
+        ]);
+
+        // Update settings
+        foreach ($request->all() as $key => $value) {
+            Setting::updateOrCreate(
+                ['key' => $key],
+                ['value' => $value]
+            );
+        }
+
+        // Redirect to the popular deals settings page with a success message
+        return redirect()->route('highlyVotedDeals')->with('success', 'Highly Voted Deals settings updated successfully!');
+    }
 }
