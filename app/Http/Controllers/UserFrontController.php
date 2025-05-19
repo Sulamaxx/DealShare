@@ -22,6 +22,7 @@ class UserFrontController extends Controller
             'popular_deal_upvote_weight',
             'popular_deal_downvote_weight',
             'popular_deal_comment_weight',
+            'highly_voted_deal_upvote_count',
 
         ])
             ->pluck('value', 'key')
@@ -30,7 +31,7 @@ class UserFrontController extends Controller
         $upvoteWeight = (float) ($settings['popular_deal_upvote_weight'] ?? 1.0);
         $downvoteWeight = (float) ($settings['popular_deal_downvote_weight'] ?? -0.5);
         $commentWeight = (float) ($settings['popular_deal_comment_weight'] ?? 0.8);
-
+        $upvoteCount = (float) ($settings['highly_voted_deal_upvote_count'] ?? 50);
 
         $popularityFormula = DB::raw(
             // Calculate score: (upvotes * upvote weight) + (downvotes * downvote weight) + (comment count * comment weight)
@@ -54,6 +55,7 @@ class UserFrontController extends Controller
         $highly_voted_deals = Post::query()
             ->join('users', 'posts.post_by', '=', 'users.id')
             ->where('posts.status', 1)
+            ->where('posts.upvotes', '>=', $upvoteCount)
             ->select('posts.*', 'users.is_verified AS user_is_verified')
             ->orderBy('posts.upvotes', 'desc')
             ->limit(6)->get();

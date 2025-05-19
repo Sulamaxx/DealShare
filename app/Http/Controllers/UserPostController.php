@@ -108,9 +108,9 @@ class UserPostController extends Controller
         $popularityFormula = DB::raw(
             // Calculate score: (upvotes * upvote weight) + (downvotes * downvote weight) + (comment count * comment weight)
             "(COALESCE(upvotes, 0) * {$upvoteWeight}) + " .
-            "(COALESCE(downvotes, 0) * {$downvoteWeight}) + " .
-            "(COALESCE(comment_count, 0) * {$commentWeight}) " .
-            "AS popularity_score"
+                "(COALESCE(downvotes, 0) * {$downvoteWeight}) + " .
+                "(COALESCE(comment_count, 0) * {$commentWeight}) " .
+                "AS popularity_score"
         );
 
         /* $popular_deals = Post::where('status', 1)->select('posts.*', $popularityFormula)->orderByDesc('popularity_score')->paginate(10);
@@ -129,9 +129,19 @@ class UserPostController extends Controller
 
     public function highlyVotedDeals()
     {
+        $settings = Setting::whereIn('key', [
+            'highly_voted_deal_upvote_count',
+
+        ])
+            ->pluck('value', 'key')
+            ->toArray();
+
+        $upvoteCount = (float) ($settings['highly_voted_deal_upvote_count'] ?? 50);
+
         $highly_voted_deals = Post::query()
             ->join('users', 'posts.post_by', '=', 'users.id')
             ->where('posts.status', 1)
+            ->where('posts.upvotes', '>=', $upvoteCount)
             ->select('posts.*', 'users.is_verified AS user_is_verified')
             ->orderBy('posts.upvotes', 'desc')
             ->paginate(10);

@@ -144,7 +144,6 @@ Route::prefix('admin/users')
             Route::post('/users/{id}/ban-temp', 'temporaryBan')->name('user.ban.temp');
             Route::post('/users/{id}/ban', 'banUser')->name('user.ban');
             Route::patch('/user/{id}/activate',  'activate')->name('user.activate');
-
         });
     });
 
@@ -183,6 +182,7 @@ Route::prefix('admin/settings')
             Route::get('/popular-deals', 'popularDeals')->name('popularDeals');
             Route::post('/popular-deals/update', 'update')->name('admin.popularDeals.update');
             Route::get('/highly-voted-deals', 'highlyVotedDeals')->name('highlyVotedDeals');
+            Route::post('/highly-voted-deals/update', 'highlyVotedUpdate')->name('admin.highlyVotedDeals.update');
         });
     });
 
