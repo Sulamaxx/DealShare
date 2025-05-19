@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Mail\WarningEmail;
 use App\Models\Badge;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Log;
 use Exception;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -75,7 +77,7 @@ class UserController extends Controller
             $totalCommentsMade = $user->comments()->count();
 
             $highestQualifyingBadge = Badge::where('vote-count', '<=', $netVoteCount)
-                ->orderBy('vote-count', 'desc') 
+                ->orderBy('vote-count', 'desc')
                 ->first();
 
             $responseData = [
@@ -115,4 +117,5 @@ class UserController extends Controller
             return response()->json(['error' => 'Could not fetch profile data'], 500);
         }
     }
+
 }

@@ -95,6 +95,10 @@ class ThreadController extends Controller
             // Associate the report with the post using the polymorphic relationship
             $report->reportable()->associate($comment); // Sets reportable_type and reportable_id
 
+            if ($report->reportable_type == "App\Models\Comment") {
+                $comment->user->increment('comment_report_count');
+            }
+
             $report->save();
 
             Log::info("Comment {$comment->id} reported by user {$user->id}. Reason: {$report->reason}");
