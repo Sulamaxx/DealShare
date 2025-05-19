@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\WarningEmail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class UsersController extends Controller
@@ -72,9 +74,51 @@ class UsersController extends Controller
             $query->where('status', $request->status);
         }
 
-        $users = $query->where('user_type', 'user')->orderBy('created_at', 'desc')->paginate(8);
+        $users = $query->where('user_type', 'user')->where(function ($q) {
+            $q->where('status', 1)->orWhere('status', 0);
+        })->orderBy('created_at', 'desc')->paginate(8);
 
         return view('backend.users/usersList', compact('users'));
+    }
+    public function reportedUsersList(Request $request)
+    {
+        $query = User::query();
+
+        if ($request->search) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                    ->orWhere('email', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        $users = $query->where('user_type', 'user')->where(function ($q) {
+            $q->where('post_report_count', '>', 0)
+                ->orWhere('comment_report_count', '>', 0);
+        })->where('status', 1)->orderBy('created_at', 'desc')->paginate(8);
+
+        return view('backend.users/reportedUsersList', compact('users'));
+    }
+
+    public function bannedUsersList(Request $request)
+    {
+        $query = User::query();
+
+        if ($request->search) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                    ->orWhere('email', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        if ($request->status) {
+            $query->where('status', $request->status);
+        }
+
+        $users = $query->where('user_type', 'user')->where(function ($q) {
+            $q->where('status', 2)->orWhere('status', 3);
+        })->orderBy('created_at', 'desc')->paginate(8);
+
+        return view('backend.users/bannedUsersList', compact('users'));
     }
 
     public function viewProfile($id)
@@ -98,6 +142,43 @@ class UsersController extends Controller
         $user->delete();
 
         return redirect()->back()->with('success', 'User deleted successfully!');
+    }
+
+    public function sendWarningEmail($id)
+    {
+        $user = User::findOrFail($id);
+        try {
+            Mail::to($user->email)->send(new WarningEmail($user));
+            return back()->with('success', 'Warning email sent to user.');
+        } catch (\Exception $e) {
+            Log::error('Mail Send Failed: ' . $e->getMessage());
+            return back()->with('error', 'Failed to send warning email.');
+        }
+    }
+
+    public function temporaryBan($id)
+    {
+        $user = User::findOrFail($id);
+        $user->status = 2;
+        $user->save();
+        return back()->with('success', 'User temporarily banned.');
+    }
+
+    public function banUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->status = 3;
+        $user->save();
+        return back()->with('success', 'User permanently banned.');
+    }
+
+    public function activate($id)
+    {
+        $user = User::findOrFail($id);
+        $user->status = 1; // Set status to Active
+        $user->save();
+
+        return redirect()->back()->with('success', 'User account activated.');
     }
 
 

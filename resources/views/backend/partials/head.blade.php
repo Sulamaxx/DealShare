@@ -1,7 +1,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wowdash - Tailwind CSS Admin Dashboard Laravel-11 Template</title>
+    <title>Buy Me Bargain | Admin</title>
     <link rel="icon" type="image/png') }}" href="{{ asset('assets/images/favicon.png') }}" sizes="16x16">
     <!-- google fonts -->
     <link

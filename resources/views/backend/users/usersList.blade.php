@@ -21,7 +21,7 @@
                                 class="bg-white dark:bg-neutral-700 h-10 w-auto">
 
                             <select name="status"
-                                class="form-select form-select-sm w-auto dark:bg-neutral-600 dark:text-white border-neutral-200 dark:border-neutral-500 rounded-lg">
+                                class="form-select form-select-md w-auto dark:bg-neutral-600 dark:text-white border-neutral-200 dark:border-neutral-500 rounded-lg">
                                 <option value="">Status</option>
                                 <option value="1" {{ request('status') == 1 ? 'selected' : '' }}>Active</option>
                                 <option value="0" {{ request('status') == 0 ? 'selected' : '' }}>Inactive
@@ -57,7 +57,7 @@
                                                 <input class="form-check-input rounded border input-form-dark"
                                                     type="checkbox" name="checkbox" id="selectAll">
                                             </div> --}}
-                                           NO
+                                            NO
                                         </div>
                                     </th>
                                     <th scope="col">Join Date</th>
@@ -95,14 +95,25 @@
                                                 class="text-base mb-0 font-normal text-secondary-light">{{ $user->email }}</span>
                                         </td>
                                         <td class="text-center">
-                                            @if ($user->status == 1)
-                                                <span
-                                                    class="bg-success-100 dark:bg-success-600/25 text-success-600 dark:text-success-400 border border-success-600 px-6 py-1.5 rounded font-medium text-sm">Active</span>
-                                            @else
-                                                <span
-                                                    class="bg-neutral-200 dark:bg-neutral-600 text-neutral-600 border border-neutral-400 px-6 py-1.5 rounded font-medium text-sm">Inactive</span>
-                                            @endif
+                                            @php
+                                                $statusClasses = [
+                                                    1 => 'bg-success-100 dark:bg-success-600/25 text-success-600 dark:text-success-400 border border-success-600',
+                                                    0 => 'bg-neutral-200 dark:bg-neutral-600 text-neutral-600 border border-neutral-400',
+                                                    2 => 'bg-warning-100 dark:bg-warning-600/25 text-warning-600 dark:text-warning-400 border border-warning-600',
+                                                    3 => 'bg-danger-100 dark:bg-danger-600/25 text-danger-600 dark:text-danger-400 border border-danger-600',
+                                                ];
 
+                                                $statusLabels = [
+                                                    1 => 'Active',
+                                                    0 => 'Inactive',
+                                                    2 => 'Temporarily Banned',
+                                                    3 => 'Permanently Banned',
+                                                ];
+                                            @endphp
+                                            <span
+                                                class="{{ $statusClasses[$user->status] ?? 'bg-gray-200 text-gray-600 border border-gray-400' }} px-6 py-1.5 rounded font-medium text-sm">
+                                                {{ $statusLabels[$user->status] ?? 'Unknown' }}
+                                            </span>
 
                                         </td>
                                         <td class="text-center">
