@@ -128,8 +128,7 @@
 
                                         {{-- User Name Display --}}
                                         <div class="form-group"> {{-- Reusing a class --}}
-                                            <label
-                                                class="inline-block font-bold text-neutral-600 text-sm mb-1">Name</label>
+                                            <label class="inline-block font-bold text-neutral-600 text-sm mb-1">Name</label>
                                             {{-- This element will display the user's name --}}
                                             <p id="popupUserName" class="form-control-static">{{-- Name will be inserted here by JS --}}</p>
                                         </div>
@@ -165,8 +164,7 @@
 
                                         {{-- Joined Date --}}
                                         <div class="form-group"> {{-- Reusing a class --}}
-                                            <label
-                                                class="inline-block font-bold text-neutral-600  text-sm mb-1">Member
+                                            <label class="inline-block font-bold text-neutral-600  text-sm mb-1">Member
                                                 Since</label>
                                             {{-- This element will display the joined date --}}
                                             <p id="popupUserJoinedDate" class="form-control-static">{{-- Joined date will be inserted here by JS --}}
@@ -175,8 +173,7 @@
 
                                         {{-- Last Seen --}}
                                         <div class="form-group"> {{-- Reusing a class --}}
-                                            <label
-                                                class="inline-block font-bold text-neutral-600  text-sm mb-1">Last
+                                            <label class="inline-block font-bold text-neutral-600  text-sm mb-1">Last
                                                 Seen</label>
                                             {{-- This element will display the last seen date --}}
                                             <p id="popupUserLastSeen" class="form-control-static">{{-- Last seen will be inserted here by JS --}}</p>
@@ -949,8 +946,8 @@
             <div class="d-flex gap-3 align-items-start flex-wrap">
                 <!-- User Info -->
                 <div class="user-info text-center" style="width: 60px;">
-                    <img src="${comment.user?.profile_photo_path || 'https://via.placeholder.com/50'}" class="rounded mb-1" width="50" height="50" alt="avatar">
-                    <div class="small fw-semibold">${comment.user?.name || 'Anonymous'}</div>
+                    <img src="${comment.user?.profile_photo_path || 'https://via.placeholder.com/50'}" class="rounded mb-1 post-author-link" width="50" height="50" alt="avatar" data-user-id="${ comment.user?.id }">
+                    <div class="small fw-semibold post-author-link" data-user-id="${ comment.user?.id }">${comment.user?.name || 'Anonymous'}</div>
                     <!-- <div class="text-muted small">Cred: ${comment.user?.credit || 0}</div> -->
                 </div>
 

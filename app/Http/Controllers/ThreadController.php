@@ -36,6 +36,7 @@ class ThreadController extends Controller
     {
         $comments = Comment::with('user', 'repliesRecursive')
             ->where('post_id', $postId)
+            ->where('status', 1)
             ->whereNull('parent_id')
             ->get();
 
