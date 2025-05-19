@@ -16,23 +16,23 @@
                 <div
                     class="card-header border-b border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-700 py-4 px-6 flex items-center flex-wrap gap-3 justify-between">
                     <div class="flex items-center flex-wrap gap-3">
-                        <form action="{{ route('usersList') }}" method="GET" class="navbar-search flex items-center gap-2">
+                        <form action="{{ route('bannedUsersList') }}" method="GET"
+                            class="navbar-search flex items-center gap-2">
                             <input type="text" name="search" value="{{ request('search') }}" placeholder="Search"
                                 class="bg-white dark:bg-neutral-700 h-10 w-auto">
-
                             <select name="status"
                                 class="form-select form-select-md w-auto dark:bg-neutral-600 dark:text-white border-neutral-200 dark:border-neutral-500 rounded-lg">
                                 <option value="">Status</option>
-                                <option value="1" {{ request('status') == 1 ? 'selected' : '' }}>Active</option>
-                                <option value="0" {{ request('status') == 0 ? 'selected' : '' }}>Inactive
+                                <option value="2" {{ request('status') == 2 ? 'selected' : '' }}>Temporary Banned
+                                </option>
+                                <option value="3" {{ request('status') == 3 ? 'selected' : '' }}>Permanently Banned
                                 </option>
                             </select>
-
                             <button type="submit" class="btn btn-primary">
                                 <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon> Search
                             </button>
 
-                            <a href="{{ route('usersList') }}"
+                            <a href="{{ route('bannedUsersList') }}"
                                 class="btn btn-secondary bg-neutral-300 dark:bg-neutral-600 text-black dark:text-white">
                                 <iconify-icon icon="material-symbols:restart-alt-rounded" class="icon"></iconify-icon>
                                 Reset
@@ -40,11 +40,6 @@
                         </form>
 
                     </div>
-                    <a href="{{ route('addUser') }}"
-                        class="btn btn-primary text-sm btn-sm px-3 py-3 rounded-lg flex items-center gap-2">
-                        <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon>
-                        Add New User
-                    </a>
                 </div>
                 <div class="card-body p-6">
                     <div class="table-responsive scroll-sm">
@@ -53,16 +48,14 @@
                                 <tr>
                                     <th scope="col">
                                         <div class="flex items-center gap-10">
-                                            {{-- <div class="form-check style-check flex items-center">
-                                                <input class="form-check-input rounded border input-form-dark"
-                                                    type="checkbox" name="checkbox" id="selectAll">
-                                            </div> --}}
                                             NO
                                         </div>
                                     </th>
                                     <th scope="col">Join Date</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Email</th>
+                                    <th scope="col" class="text-center">Post Reports</th>
+                                    <th scope="col" class="text-center">Comment reports</th>
                                     <th scope="col" class="text-center">Status</th>
                                     <th scope="col" class="text-center">Action</th>
                                 </tr>
@@ -72,17 +65,13 @@
                                     <tr>
                                         <td>
                                             <div class="flex items-center gap-10">
-                                                {{-- <div class="form-check style-check flex items-center">
-                                                    <input class="form-check-input rounded border border-neutral-400"
-                                                        type="checkbox" name="checkbox" id="SL-1">
-                                                </div> --}}
                                                 {{ $index + 1 }}
                                             </div>
                                         </td>
                                         <td>{{ Carbon\Carbon::parse($user->created_at)->format('Y-m-d') }}</td>
                                         <td>
                                             <div class="flex items-center">
-                                                <img src="{{ $user->profile_photo_path != null ? asset($user->profile_photo_path) : asset('assets/images/user-list/user-list1.png') }}"
+                                                <img src="{{ $user->profile_photo_path != null ? asset($user->profile_photo_path) : asset('assets/images/user.png') }}"
                                                     alt=""
                                                     class="w-10 h-10 rounded-full shrink-0 me-2 overflow-hidden">
                                                 <div class="grow">
@@ -93,6 +82,12 @@
                                         </td>
                                         <td><span
                                                 class="text-base mb-0 font-normal text-secondary-light">{{ $user->email }}</span>
+                                        </td>
+                                        <td><span
+                                                class="text-base mb-0 font-normal text-secondary-light">{{ $user->post_report_count }}</span>
+                                        </td>
+                                        <td><span
+                                                class="text-base mb-0 font-normal text-secondary-light">{{ $user->comment_report_count }}</span>
                                         </td>
                                         <td class="text-center">
                                             @php
@@ -110,24 +105,18 @@
                                                     3 => 'Permanently Banned',
                                                 ];
                                             @endphp
+
                                             <span
                                                 class="{{ $statusClasses[$user->status] ?? 'bg-gray-200 text-gray-600 border border-gray-400' }} px-6 py-1.5 rounded font-medium text-sm">
                                                 {{ $statusLabels[$user->status] ?? 'Unknown' }}
                                             </span>
 
                                         </td>
+
                                         <td class="text-center">
                                             <div class="flex items-center gap-3 justify-center">
-                                                <form action="{{ route('user.status', $user->id) }}" method="POST"
-                                                    class="inline-block">
-                                                    @csrf
-                                                    @method('PATCH')
-                                                    <button type="submit"
-                                                        class="{{ $user->status == 0 ? 'bg-success-100 dark:bg-success-600/25 text-success-600 dark:text-success-400 hover:bg-success-200' : 'bg-dark-100 dark:bg-dark-600/25 text-dark-600 dark:text-dark-400 hover:bg-dark-200' }} font-medium w-10 h-10 flex justify-center items-center rounded-full">
-                                                        <iconify-icon icon="mdi:toggle-switch"
-                                                            class="menu-icon"></iconify-icon>
-                                                    </button>
-                                                </form>
+
+                                                {{-- View Profile --}}
                                                 <form method="GET" action="{{ route('user.profile', $user->id) }}">
                                                     @csrf
                                                     <button type="submit"
@@ -136,15 +125,21 @@
                                                             class="icon text-xl"></iconify-icon>
                                                     </button>
                                                 </form>
-                                                <button type="button"
-                                                    class="bg-success-100 dark:bg-success-600/25 text-success-600 dark:text-success-400 bg-hover-success-200 font-medium w-10 h-10 flex justify-center items-center rounded-full">
-                                                    <iconify-icon icon="lucide:edit" class="menu-icon"></iconify-icon>
-                                                </button>
-                                                {{-- <button type="button"
-                                                    class="remove-item-btn bg-danger-100 dark:bg-danger-600/25 hover:bg-danger-200 text-danger-600 dark:text-danger-500 font-medium w-10 h-10 flex justify-center items-center rounded-full">
-                                                    <iconify-icon icon="fluent:delete-24-regular"
-                                                        class="menu-icon"></iconify-icon>
-                                                </button> --}}
+
+                                                {{-- Activate Account (only if not already active) --}}
+                                                @if ($user->status != 1)
+                                                    <form action="{{ route('user.activate', $user->id) }}" method="POST">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit"
+                                                            class="bg-success-100 dark:bg-success-600/25 hover:bg-success-200 text-success-600 dark:text-success-400 font-medium w-10 h-10 flex justify-center items-center rounded-full"
+                                                            title="Activate Account">
+                                                            <iconify-icon icon="material-symbols:check-circle-outline"
+                                                                class="menu-icon text-xl"></iconify-icon>
+                                                        </button>
+                                                    </form>
+                                                @endif
+
                                                 <form action="{{ route('user.delete', $user->id) }}" method="POST"
                                                     class="inline-block"
                                                     onsubmit="return confirm('Are you sure you want to delete this user?');">
@@ -156,9 +151,10 @@
                                                             class="menu-icon"></iconify-icon>
                                                     </button>
                                                 </form>
-
                                             </div>
                                         </td>
+
+
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -167,39 +163,6 @@
 
                     <div class="flex items-center justify-between flex-wrap gap-2 mt-6">
                         {{ $users->appends(request()->query())->links() }}
-                        {{-- <span>Showing 1 to 10 of 12 entries</span>
-                        <ul class="pagination flex flex-wrap items-center gap-2 justify-center">
-                            <li class="page-item">
-                                <a class="page-link bg-neutral-300 dark:bg-neutral-600 text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8 text-base"
-                                    href="javascript:void(0)"><iconify-icon icon="ep:d-arrow-left"
-                                        class=""></iconify-icon></a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8 text-base bg-primary-600 text-white"
-                                    href="javascript:void(0)">1</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link bg-neutral-300 dark:bg-neutral-600 text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8"
-                                    href="javascript:void(0)">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link bg-neutral-300 dark:bg-neutral-600 text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8 text-base"
-                                    href="javascript:void(0)">3</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link bg-neutral-300 dark:bg-neutral-600 text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8 text-base"
-                                    href="javascript:void(0)">4</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link bg-neutral-300 dark:bg-neutral-600 text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8 text-base"
-                                    href="javascript:void(0)">5</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link bg-neutral-300 dark:bg-neutral-600 text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8 text-base"
-                                    href="javascript:void(0)"> <iconify-icon icon="ep:d-arrow-right"
-                                        class=""></iconify-icon> </a>
-                            </li>
-                        </ul> --}}
                     </div>
 
                 </div>

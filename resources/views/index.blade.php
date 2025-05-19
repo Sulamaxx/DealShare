@@ -14,10 +14,30 @@
         }
 
         .banner {
-            background-color: #f03c02;
-            color: white;
+            position: relative;
             padding: 50px 20px;
+            color: white;
+            background-image: url('images/banner.png');
+            background-size: cover;
+            background-position: center right;
+            background-repeat: no-repeat;
+            min-height: 400px;
+            z-index: 1;
+            overflow: hidden;
         }
+
+        .banner::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            /* Dark overlay */
+            z-index: -1;
+        }
+
 
         .banner .tag {
             background: yellow;
@@ -131,9 +151,7 @@
         }
     </style>
 
-    <div class="banner position-relative col-12"
-        style="background-color: #fe4c01; color: white; padding: 40px 0;/* background-image: url('https://i.ibb.co/DMWPR9v/deal-phone.png'); */ background-size: cover; background-position: center right; background-repeat: no-repeat; min-height: 300px;">
-
+    <div class="banner position-relative col-12">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-6">

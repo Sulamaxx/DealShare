@@ -73,7 +73,7 @@ class UserPostController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        return view('activities', compact('commentedPosts','subscribedPosts','votedPosts', 'badge'));
+        return view('activities', compact('commentedPosts', 'subscribedPosts', 'votedPosts', 'badge'));
     }
 
     public function newDeals()
@@ -108,9 +108,9 @@ class UserPostController extends Controller
         $popularityFormula = DB::raw(
             // Calculate score: (upvotes * upvote weight) + (downvotes * downvote weight) + (comment count * comment weight)
             "(COALESCE(upvotes, 0) * {$upvoteWeight}) + " .
-                "(COALESCE(downvotes, 0) * {$downvoteWeight}) + " .
-                "(COALESCE(comment_count, 0) * {$commentWeight}) " .
-                "AS popularity_score"
+            "(COALESCE(downvotes, 0) * {$downvoteWeight}) + " .
+            "(COALESCE(comment_count, 0) * {$commentWeight}) " .
+            "AS popularity_score"
         );
 
         /* $popular_deals = Post::where('status', 1)->select('posts.*', $popularityFormula)->orderByDesc('popularity_score')->paginate(10);
@@ -380,6 +380,10 @@ class UserPostController extends Controller
             $report->reportable()->associate($post); // Sets reportable_type and reportable_id
 
             $report->save();
+
+            if ($report->reportable_type == "App\Models\Post") {
+                $post->user->increment('post_report_count');
+            }
 
             $post->increment('reported_count');
 

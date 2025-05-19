@@ -33,6 +33,8 @@ class User extends Authenticatable
         'password',
         'ip',
         'profile_photo_path',
+        'post_report_count',
+        'comment_report_count',
     ];
 
     /**
