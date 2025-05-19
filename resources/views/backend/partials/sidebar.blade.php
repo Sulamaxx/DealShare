@@ -348,13 +348,14 @@
                         <a href="{{ route('reportsList') }}"><i
                                 class="ri-circle-fill circle-icon text-warning-600 w-auto"></i> Reports List</a>
                     </li>
-                    {{-- <li>
-                        <a href="{{ route('addDeal') }}"><i class="ri-circle-fill circle-icon text-info-600 w-auto"></i>
-                            Add User</a>
-                    </li> --}}
                     <li>
                         <a href="{{ route('viewDeal') }}"><i
                                 class="ri-circle-fill circle-icon text-danger-600 w-auto"></i> View Deal</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('commentReportsList') }}"><i
+                                class="ri-circle-fill circle-icon text-info-600 w-auto"></i>
+                            Comment Reports List</a>
                     </li>
                 </ul>
             </li>

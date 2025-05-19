@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Comment;
 use App\Models\Post;
 use App\Models\Report;
 use Carbon\Carbon;
@@ -55,6 +56,24 @@ class DealsController extends Controller
 
         $reports = $query->with(['user', 'reportable'])->orderBy('created_at', 'desc')->paginate(10);
         return view('backend.deals.reportsList', compact('reports'));
+    }
+
+    public function commentReportsList(Request $request)
+    {
+        $query = Report::query();
+
+        $query->where('reportable_type', Comment::class);
+
+        if ($request->filled('search')) {
+            $query->where('reason', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $reports = $query->with(['user', 'reportable'])->orderBy('created_at', 'desc')->paginate(10);
+        return view('backend.deals.commentReportList', compact('reports'));
     }
 
     public function viewDeal()
@@ -217,6 +236,49 @@ class DealsController extends Controller
             Log::error("Failed to deactivate deal ID {$deal} or update report ID {$report}. Error: " . $ex->getMessage());
 
             return back()->with('error', 'Deal deactivation failed.');
+        }
+    }
+
+    public function deactivateComment($report, $comment)
+    {
+
+        try {
+
+            $comment = Comment::findOrFail($comment);
+            $comment->status = 0;
+            $comment->save();
+
+            $report = Report::findOrFail($report);
+            $report->status = 'resolved';
+            $report->save();
+
+            return back()->with('success', 'Comment deactivated successfully.');
+        } catch (Exception $ex) {
+            Log::error("Failed to deactivate deal ID {$comment} or update report ID {$report}. Error: " . $ex->getMessage());
+
+            return back()->with('error', 'Comment deactivation failed.');
+        }
+    }
+
+    public function updateText(Request $request, Comment $comment)
+    {
+        // --- Validate the incoming request data ---
+        $request->validate([
+            'comment_text' => ['required', 'string', 'max:5000'], // Validate the updated text
+        ]);
+
+        try {
+            // --- Update the comment text ---
+            $comment->comment_text = $request->input('comment_text');
+            $comment->save(); // Save the changes
+
+            // --- Return a success JSON response ---
+            return response()->json(['success' => true, 'message' => 'Comment updated successfully.']);
+
+        } catch (Exception $e) {
+             // --- Log the error and return an error JSON response ---
+             Log::error("Error updating comment text via AJAX for comment {$comment->id}: " . $e->getMessage());
+             return response()->json(['success' => false, 'message' => 'Failed to update comment.'], 500);
         }
     }
 }

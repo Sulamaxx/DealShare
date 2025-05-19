@@ -149,6 +149,7 @@ Route::prefix('admin/deals')
             Route::get('/add-deals', 'addDeal')->name('addDeal');
             Route::get('/deals-list', 'dealsList')->name('dealsList');
             Route::get('/reports-list', 'reportsList')->name('reportsList');
+            Route::get('/comment-reports-list', 'commentReportsList')->name('commentReportsList');
             Route::get('/view-deals', 'viewDeal')->name('viewDeal');
             // Route::get('/deals',  'index')->name('deals.index');
             Route::patch('/deals/status/{id}', 'updateStatus')->name('deal.status');
@@ -156,10 +157,13 @@ Route::prefix('admin/deals')
             Route::get('/deals/{id}/edit', 'edit')->name('deal.edit');
             Route::delete('/deals/{id}', 'destroy')->name('deal.delete');
 
+            Route::put('/comments/{comment}', 'updateText')->name('comments.updateText');
 
             Route::patch('/reports/status/{id}', 'updateReportStatus')->name('report.status');
+            Route::patch('/comment/reports/status/{id}', 'updateCommentReportStatus')->name('commentReport.status');
             Route::delete('/reports/{id}', 'destroyReport')->name('report.delete');
             Route::delete('/deactivate/{report}/{deal}', 'deactivateDeal')->name('report.deactivate');
+            Route::delete('/deactivate-comment/{report}/{comment}', 'deactivateComment')->name('commentReport.deactivate');
         });
     });
 
