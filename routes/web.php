@@ -134,10 +134,17 @@ Route::prefix('admin/users')
             Route::get('/add-user', 'addUser')->name('addUser');
             Route::get('/users-grid', 'usersGrid')->name('usersGrid');
             Route::get('/users-list', 'usersList')->name('usersList');
+            Route::get('/users-list-reported', 'reportedUsersList')->name('reportedUsersList');
+            Route::get('/users-list-banned', 'bannedUsersList')->name('bannedUsersList');
             Route::get('/view-profile/{id}', 'viewProfile')->name('user.profile');
             Route::patch('/user/{id}/status', 'changeStatus')->name('user.status');
             Route::delete('/user/{id}', 'destroy')->name('user.delete');
             Route::post('/admin/users/store', 'store')->name('admin.users.store');
+            Route::post('/users/{id}/warning-email', 'sendWarningEmail')->name('user.warning.email');
+            Route::post('/users/{id}/ban-temp', 'temporaryBan')->name('user.ban.temp');
+            Route::post('/users/{id}/ban', 'banUser')->name('user.ban');
+            Route::patch('/user/{id}/activate',  'activate')->name('user.activate');
+
         });
     });
 
