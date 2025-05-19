@@ -175,6 +175,7 @@ Route::prefix('admin/settings')
         Route::controller(SettingsController::class)->group(function () {
             Route::get('/popular-deals', 'popularDeals')->name('popularDeals');
             Route::post('/popular-deals/update', 'update')->name('admin.popularDeals.update');
+            Route::get('/highly-voted-deals', 'highlyVotedDeals')->name('highlyVotedDeals');
         });
     });
 

@@ -327,10 +327,7 @@
                                 class="ri-circle-fill circle-icon text-danger-600 w-auto"></i>
                             Add User</a>
                     </li>
-                    {{-- <li>
-                        <a href="{{ route('viewProfile') }}"><i
-                                class="ri-circle-fill circle-icon text-danger-600 w-auto"></i> View Profile</a>
-                    </li> --}}
+
                 </ul>
             </li>
 
@@ -418,6 +415,10 @@
                     <li>
                         <a href="{{ route('popularDeals') }}"><i
                                 class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Popular Deals</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('highlyVotedDeals') }}"><i
+                                class="ri-circle-fill circle-icon text-danger-600 w-auto"></i> Highly Voted Deals</a>
                     </li>
                 </ul>
             </li>

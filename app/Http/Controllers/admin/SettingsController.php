@@ -25,6 +25,18 @@ class SettingsController extends Controller
         return view('backend.settings.popular_deals', compact('settings'));
     }
 
+    public function highlyVotedDeals()
+    {
+
+        $settings = Setting::whereIn('key', [
+            'highly_voted_deal_upvote_count',
+        ])
+            ->pluck('value', 'key')
+            ->toArray();
+
+        return view('backend.settings.highly_voted_deals', compact('settings'));
+    }
+
     public function update(Request $request)
     {
         // Validate the form data
