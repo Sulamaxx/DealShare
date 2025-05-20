@@ -62,4 +62,9 @@ class UserFrontController extends Controller
 
         return view('index', compact('new_deals', 'popular_deals', 'highly_voted_deals'));
     }
+
+    public function pages()
+    {
+        return view('pages');
+    }
 }

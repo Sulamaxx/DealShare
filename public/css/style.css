@@ -6028,7 +6028,7 @@ hr {
 }
 
 .tt-icon-btn:active{
-  color: #666f74 !important; 
+  color: #666f74 !important;
 }
 
  .tt-text {
@@ -9515,11 +9515,11 @@ html.ie.gecko body.modal-open {
 }
 
 .tt-tab-wrapper .nav-tabs .nav-item:first-child a {
-  padding-left: 0;
+  padding-left: 10px;
 }
 
 .tt-tab-wrapper .nav-tabs .nav-item:last-child a {
-  padding-right: 0;
+  padding-right: 10px;
 }
 
 @media (min-width: 992px) {
@@ -9820,7 +9820,7 @@ html.ie.gecko body.modal-open {
 }
 
  .upvoted .tt-icon svg {
-        fill: #007bff !important; 
+        fill: #007bff !important;
         color: #007bff !important;
     }
 

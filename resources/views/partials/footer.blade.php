@@ -165,7 +165,8 @@
                     <div class="tt-avatar">
                         <img id="avatarPreview"
                             src="{{ $user && Auth::user()->profile_photo_path ? asset('storage/' . Auth::user()->profile_photo_path) : asset('assets/images/user.png') }}"
-                            alt="{{$user && Auth::user()->name ? Auth::user()->name : 'User'}}'s avatar" style="width:40px;height:40px;">
+                            alt="{{ $user && Auth::user()->name ? Auth::user()->name : 'User' }}'s avatar"
+                            style="width:40px;height:40px;">
 
                         {{-- @if (!Auth::user()->profile_photo_path)
                             <svg id="avatarSvgPlaceholder">
@@ -190,35 +191,39 @@
             <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
                 Joined Date
             </label>
-            <p class="form-control-static">{{ $user && $joinedDate ? $joinedDate : ''}}</p> {{-- Display joined date --}}
+            <p class="form-control-static">{{ $user && $joinedDate ? $joinedDate : '' }}</p> {{-- Display joined date --}}
         </div>
 
         <div class="form-group">
             <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
                 Total Deals Submitted
             </label>
-            <p class="form-control-static">{{ $user && $totalDealsSubmitted ? $totalDealsSubmitted : ''}}</p> {{-- Display total deals --}}
+            <p class="form-control-static">{{ $user && $totalDealsSubmitted ? $totalDealsSubmitted : '' }}</p>
+            {{-- Display total deals --}}
         </div>
 
         <div class="form-group">
             <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
                 Total Upvotes Received
             </label>
-            <p class="form-control-static">{{ $user && $totalUpvotesReceived ? $totalUpvotesReceived : ''}}</p> {{-- Display total upvotes --}}
+            <p class="form-control-static">{{ $user && $totalUpvotesReceived ? $totalUpvotesReceived : '' }}</p>
+            {{-- Display total upvotes --}}
         </div>
 
         <div class="form-group">
             <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
                 Total Downvotes Received
             </label>
-            <p class="form-control-static">{{ $user && $totalDownvotesReceived ? $totalDownvotesReceived : ''}}</p> {{-- Display total downvotes --}}
+            <p class="form-control-static">{{ $user && $totalDownvotesReceived ? $totalDownvotesReceived : '' }}</p>
+            {{-- Display total downvotes --}}
         </div>
 
         <div class="form-group">
             <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
                 Total Comments Made
             </label>
-            <p class="form-control-static">{{ $user && $totalCommentsMade ? $totalCommentsMade : '' }}</p> {{-- Display total comments --}}
+            <p class="form-control-static">{{ $user && $totalCommentsMade ? $totalCommentsMade : '' }}</p>
+            {{-- Display total comments --}}
         </div>
         <div class="form-group">
             <label for="settingsUserName">Name</label>
@@ -373,13 +378,13 @@
         </div>
         <div class="footer-right">
             <div class="footer-links">
-                <a href="#">Stay Safe</a> |
-                <a href="#">FAQ</a> |
-                <a href="#">Anti-Scam</a> |
-                <a href="#">Terms</a> |
-                <a href="#">Privacy</a> |
-                <a href="#">Blog</a> |
-                <a href="#">Contact Us</a>
+                <a href="{{ route('pages') }}">Stay Safe</a> |
+                <a href="{{ route('pages') }}">FAQ</a> |
+                <a href="{{ route('pages') }}">Anti-Scam</a> |
+                <a href="{{ route('pages') }}">Terms</a> |
+                <a href="{{ route('pages') }}">Privacy</a> |
+                <a href="{{ route('pages') }}">Blog</a> |
+                <a href="{{ route('pages') }}">Contact Us</a>
             </div>
             <div class="footer-social">
                 <a href="#"><i class="fab fa-facebook-f"></i></a>
