@@ -62,6 +62,7 @@ Route::get('/new-deals', [UserPostController::class, 'newDeals'])->name('new-dea
 Route::get('/popular-deals', [UserPostController::class, 'popularDeals'])->name('popular-deals');
 Route::get('/highly-voted-deals', [UserPostController::class, 'highlyVotedDeals'])->name('highly-voted-deals');
 Route::get('/deals', [UserPostController::class, 'search'])->name('deals.index');
+Route::get('/pages', [UserFrontController::class, 'pages'])->name('pages');
 
 Route::get('/users/{id}/profile-data', [UserController::class, 'getProfileData']);
 
