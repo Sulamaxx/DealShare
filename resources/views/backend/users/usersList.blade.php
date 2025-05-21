@@ -22,9 +22,10 @@
 
                             <select name="status"
                                 class="form-select form-select-md w-auto dark:bg-neutral-600 dark:text-white border-neutral-200 dark:border-neutral-500 rounded-lg">
-                                <option value="">Status</option>
-                                <option value="1" {{ request('status') == 1 ? 'selected' : '' }}>Active</option>
-                                <option value="0" {{ request('status') == 0 ? 'selected' : '' }}>Inactive
+                                <option value="">All Status</option>
+                                <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Active
+                                </option>
+                                <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Inactive
                                 </option>
                             </select>
 
@@ -32,10 +33,13 @@
                                 <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon> Search
                             </button>
 
-                            <a href="{{ route('usersList') }}"
+                            {{-- <a href="{{ route('usersList') }}"
                                 class="btn btn-secondary bg-neutral-300 dark:bg-neutral-600 text-black dark:text-white">
                                 <iconify-icon icon="material-symbols:restart-alt-rounded" class="icon"></iconify-icon>
                                 Reset
+                            </a> --}}
+                            <a href="{{ route('usersList') }}" class="btn btn-secondary btn-sm">
+                                <iconify-icon icon="ph:arrow-counter-clockwise" style="padding: 3px;"></iconify-icon> Reset
                             </a>
                         </form>
 
@@ -167,39 +171,6 @@
 
                     <div class="flex items-center justify-between flex-wrap gap-2 mt-6">
                         {{ $users->appends(request()->query())->links() }}
-                        {{-- <span>Showing 1 to 10 of 12 entries</span>
-                        <ul class="pagination flex flex-wrap items-center gap-2 justify-center">
-                            <li class="page-item">
-                                <a class="page-link bg-neutral-300 dark:bg-neutral-600 text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8 text-base"
-                                    href="javascript:void(0)"><iconify-icon icon="ep:d-arrow-left"
-                                        class=""></iconify-icon></a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8 text-base bg-primary-600 text-white"
-                                    href="javascript:void(0)">1</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link bg-neutral-300 dark:bg-neutral-600 text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8"
-                                    href="javascript:void(0)">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link bg-neutral-300 dark:bg-neutral-600 text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8 text-base"
-                                    href="javascript:void(0)">3</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link bg-neutral-300 dark:bg-neutral-600 text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8 text-base"
-                                    href="javascript:void(0)">4</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link bg-neutral-300 dark:bg-neutral-600 text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8 text-base"
-                                    href="javascript:void(0)">5</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link bg-neutral-300 dark:bg-neutral-600 text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8 text-base"
-                                    href="javascript:void(0)"> <iconify-icon icon="ep:d-arrow-right"
-                                        class=""></iconify-icon> </a>
-                            </li>
-                        </ul> --}}
                     </div>
 
                 </div>

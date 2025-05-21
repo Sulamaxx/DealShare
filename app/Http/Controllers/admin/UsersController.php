@@ -70,13 +70,11 @@ class UsersController extends Controller
             });
         }
 
-        if ($request->status) {
+        if ($request->has('status') && ($request->input('status') === '0' || $request->input('status') === '1')) {
             $query->where('status', $request->status);
         }
 
-        $users = $query->where('user_type', 'user')->where(function ($q) {
-            $q->where('status', 1)->orWhere('status', 0);
-        })->orderBy('created_at', 'desc')->paginate(8);
+        $users = $query->where('user_type', 'user')->orderBy('created_at', 'desc')->paginate(8);
 
         return view('backend.users/usersList', compact('users'));
     }
@@ -180,6 +178,4 @@ class UsersController extends Controller
 
         return redirect()->back()->with('success', 'User account activated.');
     }
-
-
 }
