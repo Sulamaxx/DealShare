@@ -9,6 +9,7 @@ use App\Models\Report;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class DealsController extends Controller
@@ -65,7 +66,22 @@ class DealsController extends Controller
         $query->where('reportable_type', Comment::class);
 
         if ($request->filled('search')) {
-            $query->where('reason', 'like', '%' . $request->search . '%');
+            $searchTerm = '%' . $request->search . '%';
+
+            // Group the OR conditions for search
+            $query->where(function ($q) use ($searchTerm) {
+                // Condition 1: Search by the report reason (on the 'reports' table)
+                $q->where('reason', 'like', $searchTerm);
+
+                // Condition 2: Directly join the 'comments' table and search its 'comment_text'
+                // This is safe because we've already filtered reportable_type to Comment::class.
+                $q->orWhereExists(function ($subQuery) use ($searchTerm) {
+                    $subQuery->select(DB::raw(1)) // Select 1 for existence check
+                        ->from('comments')
+                        ->whereRaw('reports.reportable_id = comments.id') // Link to the reportable_id
+                        ->where('comment_text', 'like', $searchTerm);
+                });
+            });
         }
 
         if ($request->filled('status')) {
@@ -274,11 +290,10 @@ class DealsController extends Controller
 
             // --- Return a success JSON response ---
             return response()->json(['success' => true, 'message' => 'Comment updated successfully.']);
-
         } catch (Exception $e) {
-             // --- Log the error and return an error JSON response ---
-             Log::error("Error updating comment text via AJAX for comment {$comment->id}: " . $e->getMessage());
-             return response()->json(['success' => false, 'message' => 'Failed to update comment.'], 500);
+            // --- Log the error and return an error JSON response ---
+            Log::error("Error updating comment text via AJAX for comment {$comment->id}: " . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Failed to update comment.'], 500);
         }
     }
 }
