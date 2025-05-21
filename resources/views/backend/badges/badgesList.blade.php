@@ -64,7 +64,7 @@
 
                                                 <form method="GET" action="{{ route('updateBadge', $badge->id) }}">
                                                     @csrf
-                                                    <button type="submit"
+                                                    <button title="update badge" type="submit"
                                                     class="bg-success-100 dark:bg-success-600/25 text-success-600 dark:text-success-400 bg-hover-success-200 font-medium w-10 h-10 flex justify-center items-center rounded-full">
                                                     <iconify-icon icon="lucide:edit" class="menu-icon"></iconify-icon>
                                                 </button>
@@ -80,7 +80,7 @@
                                                     onsubmit="return confirm('Are you sure you want to delete this badge?');">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit"
+                                                    <button title="delete" type="submit"
                                                         class="remove-item-btn bg-danger-100 dark:bg-danger-600/25 hover:bg-danger-200 text-danger-600 dark:text-danger-500 font-medium w-10 h-10 flex justify-center items-center rounded-full">
                                                         <iconify-icon icon="fluent:delete-24-regular"
                                                             class="menu-icon"></iconify-icon>

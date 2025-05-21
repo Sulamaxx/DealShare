@@ -57,7 +57,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Reported On</th>
-                                    <th>Title</th>
+                                    <th>Reason</th>
                                     <th>Report By</th>
                                     <th class="text-center">Status</th>
                                     <th class="text-center">Action</th>
@@ -88,7 +88,7 @@
                                                     class="inline-block">
                                                     @csrf
                                                     @method('PATCH')
-                                                    <button type="submit"
+                                                    <button title="status" type="submit"
                                                         class="{{ $report->status == 'reviewed' || $report->status == 'resolved' ? 'bg-success-100 dark:bg-success-600/25 text-success-600 dark:text-success-400 hover:bg-success-200' : 'bg-dark-100 dark:bg-dark-600/25 text-dark-600 dark:text-dark-400 hover:bg-dark-200' }} font-medium w-10 h-10 flex justify-center items-center rounded-full">
                                                         <iconify-icon icon="mdi:toggle-switch"
                                                             class="menu-icon"></iconify-icon>
@@ -97,7 +97,7 @@
                                                 <form method="GET"
                                                     action="{{ route('deal.profile', $report->reportable_id) }}">
                                                     @csrf
-                                                    <button type="submit"
+                                                    <button title="view deal" type="submit"
                                                         class="bg-info-100 dark:bg-info-600/25 hover:bg-info-200 text-info-600 dark:text-info-400 font-medium w-10 h-10 flex justify-center items-center rounded-full">
                                                         <iconify-icon icon="majesticons:eye-line"
                                                             class="icon text-xl"></iconify-icon>
@@ -112,12 +112,13 @@
                                                     <iconify-icon icon="fluent:delete-24-regular"
                                                         class="menu-icon"></iconify-icon>
                                                 </button> --}}
-                                                <form action="{{ route('report.deactivate', ['report' => $report->id, 'deal' => $report->reportable_id]) }}" method="POST"
-                                                    class="inline-block"
+                                                <form
+                                                    action="{{ route('report.deactivate', ['report' => $report->id, 'deal' => $report->reportable_id]) }}"
+                                                    method="POST" class="inline-block"
                                                     onsubmit="return confirm('Are you sure you want to deactivate the reported deal?');">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit"
+                                                    <button title="deactivate report" type="submit"
                                                         class="remove-item-btn bg-danger-100 dark:bg-danger-600/25 hover:bg-danger-200 text-danger-600 dark:text-danger-500 font-medium w-10 h-10 flex justify-center items-center rounded-full">
                                                         <iconify-icon icon="ic:outline-power-settings-new"
                                                             class="menu-icon"></iconify-icon>
@@ -128,7 +129,7 @@
                                                     onsubmit="return confirm('Are you sure you want to delete this report?');">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit"
+                                                    <button title="delete" type="submit"
                                                         class="remove-item-btn bg-danger-100 dark:bg-danger-600/25 hover:bg-danger-200 text-danger-600 dark:text-danger-500 font-medium w-10 h-10 flex justify-center items-center rounded-full">
                                                         <iconify-icon icon="fluent:delete-24-regular"
                                                             class="menu-icon"></iconify-icon>

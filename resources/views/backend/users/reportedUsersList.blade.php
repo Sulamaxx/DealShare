@@ -111,7 +111,7 @@
                                                 {{-- View Profile --}}
                                                 <form method="GET" action="{{ route('user.profile', $user->id) }}">
                                                     @csrf
-                                                    <button type="submit"
+                                                    <button title="view profile" type="submit"
                                                         class="bg-info-100 dark:bg-info-600/25 hover:bg-info-200 text-info-600 dark:text-info-400 font-medium w-10 h-10 flex justify-center items-center rounded-full">
                                                         <iconify-icon icon="majesticons:eye-line"
                                                             class="icon text-xl"></iconify-icon>
@@ -122,7 +122,7 @@
                                                 <form method="POST" action="{{ route('user.warning.email', $user->id) }}"
                                                     class="inline-block">
                                                     @csrf
-                                                    <button type="submit"
+                                                    <button title="send warning email" type="submit"
                                                         class="bg-warning-100 dark:bg-warning-600/25 hover:bg-warning-200 text-warning-600 dark:text-warning-400 font-medium w-10 h-10 flex justify-center items-center rounded-full"
                                                         title="Send Warning Email">
                                                         <iconify-icon icon="mdi:email-alert-outline"
@@ -135,7 +135,7 @@
                                                     class="inline-block"
                                                     onsubmit="return confirm('Temporarily ban this user?');">
                                                     @csrf
-                                                    <button type="submit"
+                                                    <button title="temporary ban" type="submit"
                                                         class="bg-dark-100 dark:bg-dark-600/25 text-dark-600 dark:text-dark-400 hover:bg-dark-200 font-medium w-10 h-10 flex justify-center items-center rounded-full"
                                                         title="Temporary Ban">
                                                         <iconify-icon icon="mdi:account-clock-outline"
@@ -148,7 +148,7 @@
                                                     class="inline-block"
                                                     onsubmit="return confirm('Permanently ban this user?');">
                                                     @csrf
-                                                    <button type="submit"
+                                                    <button title="permanent ban" type="submit"
                                                         class="bg-danger-100 dark:bg-danger-600/25 hover:bg-danger-200 text-danger-600 dark:text-danger-500 font-medium w-10 h-10 flex justify-center items-center rounded-full"
                                                         title="Permanent Ban">
                                                         <iconify-icon icon="mdi:account-lock-outline"
