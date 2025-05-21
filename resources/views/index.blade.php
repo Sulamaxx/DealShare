@@ -170,9 +170,9 @@
                         <select name="category" class="form-select w-auto" style="border-radius: 20px; margin-top: auto;">
 
                             <option value="">All Categories</option>
-                            <option value="Electronics">Electronics</option>
-                            <option value="Clothing">Clothing</option>
-                            <option value="Food">Food</option>
+                            <option value="Shopping Advice">Shopping Advice</option>
+                            <option value="Product Reviews">Product Reviews</option>
+                            <option value="Consumer Rights">Consumer Rights</option>
 
                         </select>
 
