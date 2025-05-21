@@ -55,6 +55,10 @@
     @include('partials.footer')
 
     <script>
+        const APP_STORAGE_URL = "{{ asset('storage') }}";
+    </script>
+
+    <script>
         $(document).ready(function() {
             $('.toggle-mobile-menu').click(function(e) {
                 e.preventDefault();

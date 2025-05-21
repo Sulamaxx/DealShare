@@ -1,130 +1,3 @@
-{{-- <!-- Remove the container if you want to extend the Footer to full width. -->
-<div class="container-fluid p-0">
-    <!-- Footer -->
-    <footer class="text-center text-lg-start text-dark" style="background-color: #ECEFF1">
-        <!-- Section: Social media -->
-        <section class="d-flex justify-content-between p-4 text-white" style="background-color: #21D192">
-            <!-- Left -->
-            <div class="me-5">
-                <span>Get connected with us on social networks:</span>
-            </div>
-            <!-- Left -->
-
-            <!-- Right -->
-            <div class="d-flex gap-4">
-                <a href="" class="text-white me-4">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="" class="text-white me-4">
-                    <i class="fab fa-twitter"></i>
-                </a>
-                <a href="" class="text-white me-4">
-                    <i class="fab fa-google"></i>
-                </a>
-                <a href="" class="text-white me-4">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <a href="" class="text-white me-4">
-                    <i class="fab fa-linkedin"></i>
-                </a>
-                <a href="" class="text-white me-4">
-                    <i class="fab fa-github"></i>
-                </a>
-            </div>
-            <!-- Right -->
-        </section>
-        <!-- Section: Social media -->
-
-        <!-- Section: Links  -->
-        <section class="">
-            <div class="container text-center text-md-start mt-5">
-                <!-- Grid row -->
-                <div class="row mt-3">
-                    <!-- Grid column -->
-                    <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-                        <!-- Content -->
-                        <h6 class="text-uppercase fw-bold">Company name</h6>
-                        <hr class="mb-4 mt-0 d-inline-block mx-auto"
-                            style="width: 60px; background-color: #7c4dff; height: 2px" />
-                        <p>
-                            Here you can use rows and columns to organize your footer
-                            content. Lorem ipsum dolor sit amet, consectetur adipisicing
-                            elit.
-                        </p>
-                    </div>
-                    <!-- Grid column -->
-
-                    <!-- Grid column -->
-                    <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-                        <!-- Links -->
-                        <h6 class="text-uppercase fw-bold">Products</h6>
-                        <hr class="mb-4 mt-0 d-inline-block mx-auto"
-                            style="width: 60px; background-color: #7c4dff; height: 2px" />
-                        <p>
-                            <a href="#!" class="text-dark">MDBootstrap</a>
-                        </p>
-                        <p>
-                            <a href="#!" class="text-dark">MDWordPress</a>
-                        </p>
-                        <p>
-                            <a href="#!" class="text-dark">BrandFlow</a>
-                        </p>
-                        <p>
-                            <a href="#!" class="text-dark">Bootstrap Angular</a>
-                        </p>
-                    </div>
-                    <!-- Grid column -->
-
-                    <!-- Grid column -->
-                    <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-                        <!-- Links -->
-                        <h6 class="text-uppercase fw-bold">Useful links</h6>
-                        <hr class="mb-4 mt-0 d-inline-block mx-auto"
-                            style="width: 60px; background-color: #7c4dff; height: 2px" />
-                        <p>
-                            <a href="#!" class="text-dark">Your Account</a>
-                        </p>
-                        <p>
-                            <a href="#!" class="text-dark">Become an Affiliate</a>
-                        </p>
-                        <p>
-                            <a href="#!" class="text-dark">Shipping Rates</a>
-                        </p>
-                        <p>
-                            <a href="#!" class="text-dark">Help</a>
-                        </p>
-                    </div>
-                    <!-- Grid column -->
-
-                    <!-- Grid column -->
-                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-                        <!-- Links -->
-                        <h6 class="text-uppercase fw-bold">Contact</h6>
-                        <hr class="mb-4 mt-0 d-inline-block mx-auto"
-                            style="width: 60px; background-color: #7c4dff; height: 2px" />
-                        <p><i class="fas fa-home mr-3"></i> New York, NY 10012, US</p>
-                        <p><i class="fas fa-envelope mr-3"></i> info@example.com</p>
-                        <p><i class="fas fa-phone mr-3"></i> + 01 234 567 88</p>
-                        <p><i class="fas fa-print mr-3"></i> + 01 234 567 89</p>
-                    </div>
-                    <!-- Grid column -->
-                </div>
-                <!-- Grid row -->
-            </div>
-        </section>
-        <!-- Section: Links  -->
-
-        <!-- Copyright -->
-        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
-            © 2020 Copyright:
-            <a class="text-dark" href="https://mdbootstrap.com/">MDBootstrap.com</a>
-        </div>
-        <!-- Copyright -->
-    </footer>
-    <!-- Footer -->
-</div>
-<!-- End of .container --> --}}
-
 @php
     $user = Auth::user(); // Get the authenticated user
     if ($user) {
@@ -137,16 +10,16 @@
 @endphp
 
 
-<div id="js-popup-settings" class="tt-popup-settings">
+<div id="js-popup-settings" class="tt-popup-settings" style="padding-top: 0px;">
     <div class="tt-btn-col-close">
-        <a href="#">
-            <span class="tt-icon-title">
+        <a href="#" class="tt-popup-header-link">
+            <span class="tt-icon-title" style="top:20px">
                 <svg>
-                    <use xlink:href="#icon-settings_fill"></use>
+                    <use xlink:href="#icon-user"></use>
                 </svg>
             </span>
             <span class="tt-icon-text">
-                Settings
+                Profile Settings
             </span>
             <span class="tt-icon-close">
                 <svg>
@@ -166,7 +39,7 @@
                         <img id="avatarPreview"
                             src="{{ $user && Auth::user()->profile_photo_path ? asset('storage/' . Auth::user()->profile_photo_path) : asset('assets/images/user.png') }}"
                             alt="{{ $user && Auth::user()->name ? Auth::user()->name : 'User' }}'s avatar"
-                            style="width:40px;height:40px;">
+                            style="width:50px;height:50px;">
 
                         {{-- @if (!Auth::user()->profile_photo_path)
                             <svg id="avatarSvgPlaceholder">
@@ -175,7 +48,7 @@
                         @endif --}}
                     </div>
                 </div>
-                <div class="col-auto ml-auto">
+                <div class="col-auto ml-auto mt-2">
                     {{-- The file input is hidden, the label triggers it --}}
                     <input type='file' id="imageUpload" name="image" accept=".png, .jpg, .jpeg" hidden>
                     <label for="imageUpload" class="btn btn-primary">Upload Picture</label>
@@ -186,7 +59,32 @@
             <div class="text-danger">{{ $message }}</div>
         @enderror
 
+        @if (isset($badge) && $badge)
+            <div class="form-group">
+                <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
+                    Badge
+                </label>
+                @if ($badge) {{-- Check if a badge was found --}}
+                    <a href="#" title="{{ $badge->description }}" class="form-control-static">
+                        <span class="tt-color-default tt-badge" style="padding-left: 0px; display: block;">
+                            @if ($badge->icon)
+                                {{-- Assuming badge->icon is the image path --}}
+                                <img src="{{ asset($badge->icon) }}" alt="{{ $badge->name }}"
+                                    style="max-width: 22.5px; height: auto; vertical-align: middle; margin-right: 5px;">
+                            @else
+                                {{-- Fallback if no image, maybe use name or text --}}
+                                {{ $badge->name }}
+                            @endif
+                            {{-- ({{ $badge->vote_count }}) --}}
+                        </span>
+                    </a>
+                @else
+                    {{-- Show this if no qualifying badge was found --}}
+                    <span class="tt-color-none tt-badge" style="color:black">No Badges Earned Yet</span>
 
+                @endif
+            </div>
+        @endif
         <div class="form-group">
             <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
                 Joined Date
@@ -214,7 +112,8 @@
             <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
                 Total Downvotes Received
             </label>
-            <p class="form-control-static">{{ $user && $totalDownvotesReceived ? $totalDownvotesReceived : '' }}</p>
+            <p class="form-control-static">{{ $user && $totalDownvotesReceived ? $totalDownvotesReceived : '' }}
+            </p>
             {{-- Display total downvotes --}}
         </div>
 
@@ -355,6 +254,43 @@
 
     .call-btn i {
         margin-right: 5px;
+    }
+
+    /* Style for the link within the popup header to align items vertically */
+    .tt-popup-header-link {
+        display: flex;
+        /* Enable Flexbox */
+        align-items: center;
+        /* Vertically align items in the center */
+        gap: 8px;
+        /* Add some space between the items (adjust as needed) */
+        text-decoration: none;
+        /* Remove underline from the link */
+        color: inherit;
+        /* Inherit color from parent or set explicitly */
+        /* You might need to adjust padding/margin on the spans or the link itself */
+    }
+
+    /* Optional: Adjust spacing for the close icon if it needs to be pushed to the right */
+    .tt-popup-header-link .tt-icon-close {
+        margin-left: auto;
+        /* Pushes the close icon to the far right */
+    }
+
+    /* Basic styling for the icons and text if not already defined */
+    .tt-icon-title svg,
+    .tt-icon-close svg {
+        width: 20px;
+        /* Adjust icon size as needed */
+        height: 20px;
+        fill: currentColor;
+        /* Use current text color for SVG fill */
+    }
+
+    .tt-icon-text {
+        font-weight: bold;
+        /* Example styling for the text */
+        /* Add font-size, color etc. as per your design */
     }
 
     @media (max-width: 768px) {
