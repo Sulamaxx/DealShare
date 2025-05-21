@@ -14,9 +14,28 @@
         }
 
         .banner {
-            background-color: #f03c02;
-            color: white;
+            position: relative;
             padding: 50px 20px;
+            color: white;
+            background-image: url('images/banner.png');
+            background-size: cover;
+            background-position: center right;
+            background-repeat: no-repeat;
+            min-height: 400px;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .banner::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            /* Dark overlay */
+            z-index: -1;
         }
 
         .banner .tag {
@@ -168,11 +187,14 @@
                         <select name="category" class="form-select w-auto" style="border-radius: 20px; margin-top: auto;">
 
                             <option value="">All Categories</option>
-                            <option value="Electronics" {{ request('category') == 'Electronics' ? 'selected' : '' }}>
-                                Electronics</option>
-                            <option value="Clothing" {{ request('category') == 'Clothing' ? 'selected' : '' }}>Clothing
+                            <option value="Shopping Advice"
+                                {{ request('category') == 'Shopping Advice' ? 'selected' : '' }}>
+                                Shopping Advice</option>
+                            <option value="Product Reviews"
+                                {{ request('category') == 'Product Reviews' ? 'selected' : '' }}>Product Reviews
                             </option>
-                            <option value="Food" {{ request('category') == 'Food' ? 'selected' : '' }}>Food
+                            <option value="Consumer Rights"
+                                {{ request('category') == 'Consumer Rights' ? 'selected' : '' }}>Consumer Rights
                             </option>
 
                         </select>
