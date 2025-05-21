@@ -69,8 +69,14 @@
                         <div class="tt-item-header">
                             <div class="tt-item-info info-top">
                                 <div class="tt-avatar-icon">
-                                    <img style="height: 50px; width: 50px; border-radius: 50%;"
-                                        src="{{ asset($post->user->profile_photo_path) }}" alt="">
+                                    @php
+                                        $profilePhotoUrl =
+                                            $post->user && $post->user->profile_photo_path
+                                                ? asset('storage/' . $post->user->profile_photo_path)
+                                                : asset('assets/images/user.png');
+                                    @endphp
+                                    <img style="height: 50px; width: 50px; border-radius: 50%;" src="{{ $profilePhotoUrl }}"
+                                        alt="">
                                 </div>
                                 <div class="tt-avatar-title">
                                     <a href="javascript:void(0)" class="post-author-link"
@@ -84,7 +90,7 @@
                                         {{-- Close button --}}
                                         <a href="#" style="padding: 9px 0 22px;">
                                             <span class="tt-icon-text">
-                                                Settings
+                                                User Profile
                                             </span>
                                             <span class="tt-icon-close" style="top: 17px;">
                                                 {{-- Replace with your actual SVG icon for close --}}
@@ -136,7 +142,7 @@
                                         {{-- Badges Section --}}
                                         <div class="form-group"> {{-- Reusing a class --}}
                                             <label
-                                                class="inline-block font-bold text-neutral-600  text-sm mb-1">Badges</label>
+                                                class="inline-block font-bold text-neutral-600  text-sm mb-1">Badge</label>
                                             {{-- This ul will contain the badges --}}
                                             <ul id="popupUserBadges" class="tt-list-badge d-flex align-items-center gap-1">
                                                 {{-- Badges will be populated here by JS --}}
@@ -483,7 +489,7 @@
                 <li>
                     <a href="#" title="${badge.description || ''}">
                         <span class="tt-color${badge.color || 'default'} tt-badge">
-                            ${badge.icon_url ? `<img src="${badge.icon_url}" alt="${badge.name || ''}" style="max-width: 20px; height: auto; vertical-align: middle; margin-right: 5px;">` : ''}
+                            ${badge.icon_url ? `<img src="${badge.icon_url}" alt="${badge.name || ''}" style="max-width: 30px; height: auto; vertical-align: middle; margin-right: 5px;">` : ''}
                             ${badge.name || ''}
                         </span>
                     </a>
@@ -941,12 +947,31 @@
             const hasReplies = replies.length > 0;
             const toggleId = `toggle-replies-${comment.id}`;
 
+            let photoPath = 'assets/images/user.png';
+            if (comment.user?.profile_photo_path) {
+                photoPath = `${APP_STORAGE_URL}/${comment.user.profile_photo_path}`;
+            }
+
+            let formattedDate = '';
+            if (comment.created_at) {
+                const date = new Date(comment.created_at); // Parse the ISO string into a Date object
+
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+                const day = String(date.getDate()).padStart(2, '0');
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                const seconds = String(date.getSeconds()).padStart(2, '0');
+
+                formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            }
+
             html += `
         <div class="comment-item p-3 mb-3 bg-light rounded shadow-sm" data-id="${comment.id}">
             <div class="d-flex gap-3 align-items-start flex-wrap">
                 <!-- User Info -->
                 <div class="user-info text-center" style="width: 60px;">
-                    <img src="${comment.user?.profile_photo_path || 'https://via.placeholder.com/50'}" class="rounded mb-1 post-author-link" width="50" height="50" alt="avatar" data-user-id="${ comment.user?.id }">
+                    <img src="${photoPath}" class="rounded mb-1 post-author-link" width="50" height="50" alt="avatar" data-user-id="${ comment.user?.id }" style="width:50px;height:50px;">
                     <div class="small fw-semibold post-author-link" data-user-id="${ comment.user?.id }">${comment.user?.name || 'Anonymous'}</div>
                     <!-- <div class="text-muted small">Cred: ${comment.user?.credit || 0}</div> -->
                 </div>
@@ -954,7 +979,7 @@
                 <!-- Comment Content -->
                 <div class="flex-grow-1">
                     <div class="text-muted small mb-1">
-                        Posted ${comment.created_at}
+                        Posted ${formattedDate}
                     </div>
                     <div class="comment-body mb-2">
                         <p class="mb-1">${comment.comment_text}</p>
