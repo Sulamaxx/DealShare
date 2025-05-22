@@ -113,6 +113,13 @@
                                                             class="icon text-xl"></iconify-icon>
                                                     </button>
                                                 </form>
+                                                <form method="GET" action="{{ route('deal.edit', $deal->id) }}">
+                                                    @csrf
+                                                    <button title="edit deal" type="submit"
+                                                        class="bg-success-100 dark:bg-success-600/25 text-success-600 dark:text-success-400 bg-hover-success-200 font-medium w-10 h-10 flex justify-center items-center rounded-full">
+                                                        <iconify-icon icon="lucide:edit" class="menu-icon"></iconify-icon>
+                                                    </button>
+                                                </form>
                                                 {{-- <button type="button"
                                                     class="bg-success-100 dark:bg-success-600/25 text-success-600 dark:text-success-400 bg-hover-success-200 font-medium w-10 h-10 flex justify-center items-center rounded-full">
                                                     <iconify-icon icon="lucide:edit" class="menu-icon"></iconify-icon>

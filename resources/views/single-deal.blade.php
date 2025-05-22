@@ -178,20 +178,20 @@
                                         </div>
 
                                         {{-- Last Seen --}}
-                                        <div class="form-group"> {{-- Reusing a class --}}
+                                        {{-- <div class="form-group"> {{-- Reusing a class 
                                             <label class="inline-block font-bold text-neutral-600  text-sm mb-1">Last
                                                 Seen</label>
-                                            {{-- This element will display the last seen date --}}
-                                            <p id="popupUserLastSeen" class="form-control-static">{{-- Last seen will be inserted here by JS --}}</p>
+                                            {{-- This element will display the last seen date
+                                            <p id="popupUserLastSeen" class="form-control-static">{{-- Last seen will be inserted here by JS </p>
                                         </div>
 
-                                        {{-- Location --}}
-                                        <div class="form-group"> {{-- Reusing a class --}}
+                                        {{-- Location
+                                        <div class="form-group"> {{-- Reusing a class
                                             <label
                                                 class="inline-block font-bold text-neutral-600  text-sm mb-1">Location</label>
-                                            {{-- This element will display the location --}}
-                                            <p id="popupUserLocation" class="form-control-static">{{-- Location will be inserted here by JS --}}</p>
-                                        </div>
+                                            {{-- This element will display the location
+                                            <p id="popupUserLocation" class="form-control-static">{{-- Location will be inserted here by JS</p>
+                                        </div> --}}
 
                                         {{--
             Add other fields here if needed, like email (be cautious with privacy),
@@ -426,6 +426,20 @@
 
                 fetch(profileDataUrl)
                     .then(response => {
+
+                        if (response.status === 403) {
+                            return response.json().then(errorData => {
+                                Swal.fire({
+                                    icon: 'info', // Use info or warning icon for privacy
+                                    title: 'Private Profile',
+                                    text: errorData.error ||
+                                        'This user\'s profile is private and cannot be viewed.',
+                                });
+                                // Return a rejected promise to stop further processing in this chain
+                                return Promise.reject('Profile is private');
+                            });
+                        }
+
                         // Check if the response was successful (status code 2xx)
                         if (!response.ok) {
                             Swal.fire({
@@ -438,13 +452,21 @@
                         return response.json();
                     })
                     .then(userData => {
-                        // --- Populate the popup with the fetched data ---
-                        console.log(userData);
+
                         populateUserProfilePopup(userData);
 
                         showUserProfilePopup();
                     })
                     .catch(error => {
+
+                        if (response.status === 403) {
+                            Swal.fire({
+                                icon: 'info', // Use info or warning icon for privacy
+                                title: 'Private Profile',
+                                text: errorData.error ||
+                                    'This user\'s profile is private and cannot be viewed.',
+                            });
+                        }
                         // Handle any errors during the fetch operation (network issues, server errors, etc.)
                         console.error('Error fetching user profile data:', error);
                         // Optional: Display a user-friendly error message (e.g., using SweetAlert2)
@@ -514,7 +536,7 @@
                 joinedDateElement.textContent = userData.joined_date || 'N/A';
             }
 
-            // Populate Last Seen
+            /* // Populate Last Seen
             const lastSeenElement = popup.querySelector('#popupUserLastSeen');
             if (lastSeenElement) {
                 lastSeenElement.textContent = userData.last_seen || 'N/A';
@@ -524,7 +546,7 @@
             const locationElement = popup.querySelector('#popupUserLocation');
             if (locationElement) {
                 locationElement.textContent = userData.location || 'Not specified';
-            }
+            } */
         }
 
         function showUserProfilePopup() {

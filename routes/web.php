@@ -93,6 +93,7 @@ Route::middleware([
     Route::put('/user/settings', [UserController::class, 'updateSettings'])->name('user.updateSettings');
 });
 
+Route::get('/view-deal/{id}/{title}', [UserPostController::class, 'view_deal'])->name('view-deal');
 Route::get('/view-deal/{id}', [UserPostController::class, 'view_deal'])->name('view-deal');
 
 Route::get('/approval-pending', function () {
@@ -168,6 +169,7 @@ Route::prefix('admin/deals')
             Route::get('/deals/{id}/view', 'show')->name('deal.profile');
             Route::get('/deals/{id}/edit', 'edit')->name('deal.edit');
             Route::delete('/deals/{id}', 'destroy')->name('deal.delete');
+            Route::post('/update-deal/{id}', 'update')->name('admin.updateDeal');
 
             Route::put('/comments/{comment}', 'updateText')->name('comments.updateText');
 

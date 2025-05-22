@@ -30,8 +30,8 @@ class UserController extends Controller
             // Validate the uploaded image file
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'], // Max 2MB
             // Validate checkbox inputs (assuming they map to boolean columns)
-            /* 'is_private' => ['nullable', 'boolean'], // 'boolean' validates 0, 1, true, false, "0", "1"
-            'email_thread_reply' => ['nullable', 'boolean'],
+            'is_private' => ['nullable', 'boolean'], // 'boolean' validates 0, 1, true, false, "0", "1"
+            /*'email_thread_reply' => ['nullable', 'boolean'],
             'email_thread_reply_like' => ['nullable', 'boolean'],
             'email_mention' => ['nullable', 'boolean'], */
         ]);
@@ -49,8 +49,8 @@ class UserController extends Controller
                 $data['profile_photo_path'] = $path; // Add the new path to the data array
             }
 
-            /* $data['is_private'] = $request->has('is_private');
-            $data['email_thread_reply'] = $request->has('email_thread_reply');
+            $data['is_private'] = $request->has('is_private');
+            /*  $data['email_thread_reply'] = $request->has('email_thread_reply');
             $data['email_thread_reply_like'] = $request->has('email_thread_reply_like');
             $data['email_mention'] = $request->has('email_mention'); */
 
@@ -68,6 +68,10 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($id);
+
+            if ($user->is_private && (!Auth::check() || Auth::id() !== $user->id)) {
+                return response()->json(['error' => 'This profile is private.'], 403); // 403 Forbidden
+            }
 
             $totalUpvotes = $user->posts()->sum('upvotes');
             $totalDownvotes = $user->posts()->sum('downvotes');

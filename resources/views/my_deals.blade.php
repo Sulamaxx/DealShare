@@ -104,7 +104,7 @@
                             @foreach ($posts as $post)
                                 <div class="tt-item">
                                     <div class="tt-col-description">
-                                        <h6 class="tt-title"><a href="{{ route('view-deal', $post->id) }}">
+                                        <h6 class="tt-title"><a href="{{ route('view-deal', ['id' => $post->id, 'title' => Str::slug($post->title)]) }}">
                                                 {{ $post->title }}
                                             </a></h6>
                                         <div class="tt-col-message">

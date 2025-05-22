@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class DealsController extends Controller
 {
@@ -228,7 +229,7 @@ class DealsController extends Controller
     public function edit($id)
     {
         $deal = Post::findOrFail($id);
-        return view('deals.edit', compact('deal'));
+        return view('backend.deals.edit', compact('deal'));
     }
 
     public function destroy($id)
@@ -309,5 +310,65 @@ class DealsController extends Controller
             Log::error("Error updating comment text via AJAX for comment {$comment->id}: " . $e->getMessage());
             return response()->json(['success' => false, 'message' => 'Failed to update comment.'], 500);
         }
+    }
+
+    public function update(Request $request, $id) // Using Route Model Binding
+    {
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required',
+            'link' => 'nullable|url',
+            'discount_text' => 'nullable|string|max:255',
+            'price_saving' => 'nullable|string|max:255',
+            'category' => 'required|string|max:255',
+            'expiration_date' => 'nullable|date|after_or_equal:today', // New validation for expiration_date
+            'store' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+        $post = Post::find($id);
+        $imagePath = null;
+        // Delete old image if new one is uploaded
+        if ($request->hasFile('image')) {
+            Log::info("image");
+
+            if ($post->image && Storage::disk('public')->exists(str_replace('/storage/', '', $post->image))) {
+                Storage::disk('public')->delete(str_replace('/storage/', '', $post->image));
+            }
+
+            // $path = $request->file('image')->store('posts', 'public');
+            // $imagePath = Storage::url($path); // update image path
+
+            // Store the image in the 'posts' folder under the 'public' disk
+            $path = $request->file('image')->store('posts', 'public');
+
+            // Get the URL to the stored file
+            $imagePath = Storage::url($path);
+
+            // Get the full path to the file on the local filesystem
+            $fullPath = storage_path('app/public/' . $path);
+
+            // Set the permissions of the file to 0755
+            chmod($fullPath, 0755);
+        }
+
+        if (isset($validated['expiration_date'])) {
+            $post->expiration_date = Carbon::parse($validated['expiration_date']);
+        } else {
+            $post->expiration_date = null; // Set to null if not provided
+        }
+
+        $post->store = $validated['store'];
+        $post->title = $validated['title'];
+        $post->description = $validated['description'];
+        $post->link = $validated['link'] ?? null;
+        $post->discount_text = $validated['discount_text'] ?? null;
+        $post->price_saving = $validated['price_saving'] ?? null;
+        $post->category = $validated['category'];
+        $post->image = $imagePath;
+        $post->posted_at = now();
+        $post->save();
+
+        return redirect()->route('dealsList')->with('success', 'Post updated successfully!');
     }
 }
