@@ -25,6 +25,8 @@ class Post extends Model
         'post_by',
         'helpful_by_user',
         'reported_count',
+        'expiration_date',
+        'store',
     ];
 
     protected $casts = [

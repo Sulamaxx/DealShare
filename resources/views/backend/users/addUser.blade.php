@@ -58,7 +58,7 @@
                                         class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
                                         Full Name <span class="text-danger-600">*</span></label>
                                     <input type="text" class="form-control rounded-lg" id="name" name="name"
-                                        placeholder="Enter Full Name" required>
+                                        placeholder="Enter Full Name" value="{{ old('name') }}" required>
                                 </div>
 
                                 <!-- Email Input -->
@@ -67,7 +67,7 @@
                                         class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
                                         Email <span class="text-danger-600">*</span></label>
                                     <input type="email" class="form-control rounded-lg" id="email" name="email"
-                                        placeholder="Enter email address" required>
+                                        placeholder="Enter email address" value="{{ old('email') }}" required>
                                 </div>
 
                                 <!-- Password Input -->
@@ -76,7 +76,7 @@
                                         class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
                                         Password <span class="text-danger-600">*</span></label>
                                     <input type="password" class="form-control rounded-lg" id="password" name="password"
-                                        placeholder="Enter password" required>
+                                        placeholder="Enter password" value="{{ old('password') }}" required>
                                 </div>
 
                                 <!-- Confirm Password Input -->

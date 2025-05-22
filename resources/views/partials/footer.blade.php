@@ -142,41 +142,22 @@
         </div>
         <div class="form-group">
             <div class="checkbox-group">
-                <input type="checkbox" id="settingsCheckBox04" name="is_private">
+                {{-- --- FIX: Hidden input for unchecked checkbox value --- --}}
+                <input type="hidden" name="is_private" value="0">
+                {{-- --------------------------------------------------- --}}
+                <input type="checkbox" id="settingsCheckBox04" name="is_private" value="1" {{-- Added value="1" --}}
+                    {{ old('is_private', $user->is_private ?? false) ? 'checked' : '' }}>
                 <label for="settingsCheckBox04">
                     <span class="check"></span>
                     <span class="box"></span>
                     <span class="tt-text">Private Account</span>
                 </label>
             </div>
+            @error('is_private')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
         </div>
-        <div class="form-group">
-            <label for="settingsUserAbout">Notify me via Email</label>
-            <div class="checkbox-group">
-                <input type="checkbox" id="settingsCheckBox01" name="email_thread_reply">
-                <label for="settingsCheckBox01">
-                    <span class="check"></span>
-                    <span class="box"></span>
-                    <span class="tt-text">When someone replies to my thread</span>
-                </label>
-            </div>
-            <div class="checkbox-group">
-                <input type="checkbox" id="settingsCheckBox02" name="email_thread_reply_like">
-                <label for="settingsCheckBox02">
-                    <span class="check"></span>
-                    <span class="box"></span>
-                    <span class="tt-text">When someone likes my thread or reply</span>
-                </label>
-            </div>
-            <div class="checkbox-group">
-                <input type="checkbox" id="settingsCheckBox03" name="email_mention">
-                <label for="settingsCheckBox03">
-                    <span class="check"></span>
-                    <span class="box"></span>
-                    <span class="tt-text">When someone mentions me</span>
-                </label>
-            </div>
-        </div>
+
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Save Settings</button>
         </div>

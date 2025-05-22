@@ -49,6 +49,27 @@
                             value="{{ $post->price_saving }}">
                     </div>
 
+                    {{-- --- New: Expiration Date Input --- --}}
+                    <div class="form-group">
+                        <label for="inputExpirationDate">Expiration Date</label>
+                        <input type="date" name="expiration_date" class="form-control" id="inputExpirationDate"
+                            value="{{ old('expiration_date', $post->expiration_date ? \Carbon\Carbon::parse($post->expiration_date)->format('Y-m-d') : '') }}">
+                        @error('expiration_date')
+                            <div class="text-danger-600 text-sm mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    {{-- ---------------------------------- --}}
+
+                    {{-- --- New: Store Input --- --}}
+                    <div class="form-group">
+                        <label for="inputStore">Store</label>
+                        <input type="text" name="store" class="form-control" id="inputStore"
+                            placeholder="e.g., Amazon, Walmart" value="{{ old('store', $post->store ?? '') }}">
+                        @error('store')
+                            <div class="text-danger-600 text-sm mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                     <!-- Deal Body -->
                     <div class="form-group">
                         <label for="inputDescription">Deal Description</label>

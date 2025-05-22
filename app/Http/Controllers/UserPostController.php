@@ -8,6 +8,7 @@ use App\Models\Report;
 use App\Models\Setting;
 use App\Models\Vote;
 use App\Models\Badge;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -267,6 +268,8 @@ class UserPostController extends Controller
             'discount_text' => 'nullable|string|max:255',
             'price_saving' => 'nullable|string|max:255',
             'category' => 'required|string|max:255',
+            'expiration_date' => 'nullable|date|after_or_equal:today', // New validation for expiration_date
+            'store' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -289,6 +292,11 @@ class UserPostController extends Controller
             chmod($fullPath, 0755);
         }
 
+        if (isset($validated['expiration_date'])) {
+            $expiration_date = Carbon::parse($validated['expiration_date']);
+        } else {
+            $expiration_date = null; // Set to null if not provided
+        }
 
         Post::create([
             'title' => $validated['title'],
@@ -299,6 +307,8 @@ class UserPostController extends Controller
             'category' => $validated['category'],
             'image' => $imagePath,
             'posted_at' => now(),
+            'expiration_date' => $expiration_date,
+            'store' => $validated['store'],
             'post_by' => auth()->id(), // link to current logged-in user
         ]);
 
@@ -314,6 +324,8 @@ class UserPostController extends Controller
             'discount_text' => 'nullable|string|max:255',
             'price_saving' => 'nullable|string|max:255',
             'category' => 'required|string|max:255',
+            'expiration_date' => 'nullable|date|after_or_equal:today', // New validation for expiration_date
+            'store' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
         $post = Post::find($request->id);
@@ -341,6 +353,14 @@ class UserPostController extends Controller
             // Set the permissions of the file to 0755
             chmod($fullPath, 0755);
         }
+
+        if (isset($validated['expiration_date'])) {
+            $post->expiration_date = Carbon::parse($validated['expiration_date']);
+        } else {
+            $post->expiration_date = null; // Set to null if not provided
+        }
+
+        $post->store = $validated['store'];
         $post->title = $validated['title'];
         $post->description = $validated['description'];
         $post->link = $validated['link'] ?? null;

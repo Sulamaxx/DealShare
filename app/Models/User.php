@@ -35,6 +35,7 @@ class User extends Authenticatable
         'profile_photo_path',
         'post_report_count',
         'comment_report_count',
+        'is_private',
     ];
 
     /**
@@ -68,6 +69,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_private' => 'boolean',
         ];
     }
 

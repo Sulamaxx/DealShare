@@ -4,7 +4,8 @@
         style="display: flex; flex-direction: row; border:none;border-radius:0%; overflow: hidden;min-height:175.1px;">
 
         @if ($deal->image)
-            <a href="{{ route('view-deal', $deal->id) }}" class="deal-image-area position-relative mobile-image"
+            <a href="{{ route('view-deal', ['id' => $deal->id, 'title' => Str::slug($deal->title)]) }}"
+                class="deal-image-area position-relative mobile-image"
                 style="flex-basis: 30%; background-image: url('{{ asset($deal->image) }}'); background-size: cover; background-position: center; background-repeat: no-repeat;min-width:30%"
                 alt="{{ $deal->title }}">
 
@@ -22,7 +23,8 @@
 
 
             <h5 class="deal-title-clamp" style="font-size: 1.125em; margin-bottom: 3px;font-weight:bolder">
-                <a href="{{ route('view-deal', $deal->id) }}" style="text-decoration: none; color: inherit;">
+                <a href="{{ route('view-deal', ['id' => $deal->id, 'title' => Str::slug($deal->title)]) }}"
+                    style="text-decoration: none; color: inherit;">
                     {{ $deal->title }}
                 </a>
             </h5>
@@ -55,7 +57,7 @@
                     </div>
 
                     <span class="text-muted">
-                        {{ $deal->created_at->diffForHumans()}}
+                        {{ $deal->created_at->diffForHumans() }}
                         <i class="far fa-comment ms-2 me-1" style="font-weight: 600;"></i> {{ $deal->comment_count }}
                     </span>
                     <div class="d-flex flex-wrap gap-1">
