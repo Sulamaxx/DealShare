@@ -27,6 +27,8 @@
                                     </option>
                                     <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Inactive
                                     </option>
+                                    <option value="2" {{ request('status') == '2' ? 'selected' : '' }}>Rejected
+                                    </option>
                                 </select>
 
                                 <button type="submit" class="btn btn-primary btn-sm">
@@ -39,7 +41,7 @@
                             </div>
                         </form>
                     </div>
-                    <a href="{{ route('addDeal') }}"
+                    <a href="{{ route('create-deals') }}"
                         class="btn btn-primary text-sm btn-sm px-3 py-3 rounded-lg flex items-center gap-2">
                         <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon>
                         Add New Deal
@@ -88,8 +90,18 @@
                                                     @csrf
                                                     @method('PATCH')
                                                     <button title="status" type="submit"
-                                                        class="{{ $deal->status == 0 ? 'bg-success-100 dark:bg-success-600/25 text-success-600 dark:text-success-400 hover:bg-success-200' : 'bg-dark-100 dark:bg-dark-600/25 text-dark-600 dark:text-dark-400 hover:bg-dark-200' }} font-medium w-10 h-10 flex justify-center items-center rounded-full">
+                                                        class="{{ $deal->status == 0 || $deal->status == 2 ? 'bg-success-100 dark:bg-success-600/25 text-success-600 dark:text-success-400 hover:bg-success-200' : 'bg-dark-100 dark:bg-dark-600/25 text-dark-600 dark:text-dark-400 hover:bg-dark-200' }} font-medium w-10 h-10 flex justify-center items-center rounded-full">
                                                         <iconify-icon icon="mdi:toggle-switch"
+                                                            class="menu-icon"></iconify-icon>
+                                                    </button>
+                                                </form>
+                                                <form action="{{ route('deal.reject', $deal->id) }}" method="POST"
+                                                    class="inline-block">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button title="reject" type="submit"
+                                                        class="{{ $deal->status == 2 ? 'bg-success-100 dark:bg-success-600/25 text-success-600 dark:text-success-400 hover:bg-success-200' : 'bg-dark-100 dark:bg-dark-600/25 text-dark-600 dark:text-dark-400 hover:bg-dark-200' }} font-medium w-10 h-10 flex justify-center items-center rounded-full">
+                                                        <iconify-icon icon="mdi:close-circle"
                                                             class="menu-icon"></iconify-icon>
                                                     </button>
                                                 </form>
@@ -105,6 +117,7 @@
                                                     class="bg-success-100 dark:bg-success-600/25 text-success-600 dark:text-success-400 bg-hover-success-200 font-medium w-10 h-10 flex justify-center items-center rounded-full">
                                                     <iconify-icon icon="lucide:edit" class="menu-icon"></iconify-icon>
                                                 </button> --}}
+
                                                 {{-- <button type="button"
                                                     class="remove-item-btn bg-danger-100 dark:bg-danger-600/25 hover:bg-danger-200 text-danger-600 dark:text-danger-500 font-medium w-10 h-10 flex justify-center items-center rounded-full">
                                                     <iconify-icon icon="fluent:delete-24-regular"

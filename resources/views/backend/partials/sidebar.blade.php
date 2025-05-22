@@ -11,7 +11,7 @@
     </div>
     <div class="sidebar-menu-area">
         <ul class="sidebar-menu" id="sidebar-menu">
-            <li class="dropdown">
+            {{-- <li class="dropdown">
                 <a href="javascript:void(0)">
                     <iconify-icon icon="solar:home-smile-angle-outline" class="menu-icon"></iconify-icon>
                     <span>Dashboard</span>
@@ -52,9 +52,9 @@
                     <li>
                         <a href="{{ route('index9') }}"><i
                                 class="ri-circle-fill circle-icon text-purple-600 w-auto"></i> Analytics</a>
-                    </li> --}}
+                    </li>
                 </ul>
-            </li>
+            </li> --}}
             {{-- <li class="sidebar-menu-group-title">Application</li>
             <li>
                 <a href="{{ route('email') }}">
@@ -308,36 +308,41 @@
                     <span>Widgets</span>
                 </a>
             </li> --}}
-            <li class="dropdown">
-                <a href="javascript:void(0)">
-                    <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
-                    <span>Users</span>
-                </a>
-                <ul class="sidebar-submenu">
-                    <li>
-                        <a href="{{ route('usersList') }}"><i
-                                class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Users List</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('reportedUsersList') }}"><i
-                                class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Reported Users List</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('bannedUsersList') }}"><i
-                                class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Banned Users List</a>
-                    </li>
-                    {{-- <li>
+            @if (Auth::check() && Auth::user()->user_type === 'admin')
+                <li class="dropdown">
+                    <a href="javascript:void(0)">
+                        <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
+                        <span>Users</span>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        <li>
+                            <a href="{{ route('usersList') }}"><i
+                                    class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Users List</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('reportedUsersList') }}"><i
+                                    class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Reported Users
+                                List</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('bannedUsersList') }}"><i
+                                    class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Banned Users
+                                List</a>
+                        </li>
+                        {{-- <li>
                         <a href="{{ route('usersGrid') }}"><i
                                 class="ri-circle-fill circle-icon text-warning-600 w-auto"></i> Users Grid</a>
                     </li> --}}
-                    <li>
-                        <a href="{{ route('addUser') }}"><i
-                                class="ri-circle-fill circle-icon text-danger-600 w-auto"></i>
-                            Add User</a>
-                    </li>
+                        <li>
+                            <a href="{{ route('addUser') }}"><i
+                                    class="ri-circle-fill circle-icon text-danger-600 w-auto"></i>
+                                Add User</a>
+                        </li>
 
-                </ul>
-            </li>
+                    </ul>
+                </li>
+            @endif
+
 
             <li class="dropdown">
                 <a href="javascript:void(0)">
@@ -364,28 +369,30 @@
                         <a href="{{ route('viewDeal') }}"><i
                                 class="ri-circle-fill circle-icon text-danger-600 w-auto"></i> View Deal</a>
                     </li> --}}
-                    
+
                 </ul>
             </li>
 
             {{-- <li class="sidebar-menu-group-title">Application</li> --}}
+            @if (Auth::check() && Auth::user()->user_type === 'admin')
+                <li class="dropdown">
+                    <a href="javascript:void(0)">
+                        <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
+                        <span>Badge</span>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        <li>
+                            <a href="{{ route('addBadge') }}"><i
+                                    class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Add Badge</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('getBadges') }}"><i
+                                    class="ri-circle-fill circle-icon text-warning-600 w-auto"></i> Badge List</a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
 
-            <li class="dropdown">
-                <a href="javascript:void(0)">
-                    <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
-                    <span>Badge</span>
-                </a>
-                <ul class="sidebar-submenu">
-                    <li>
-                        <a href="{{ route('addBadge') }}"><i
-                                class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Add Badge</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('getBadges') }}"><i
-                                class="ri-circle-fill circle-icon text-warning-600 w-auto"></i> Badge List</a>
-                    </li>
-                </ul>
-            </li>
             {{--
             <li>
                 <a href="{{ route('gallery') }}">
@@ -417,22 +424,26 @@
                     <span>Terms & Conditions</span>
                 </a>
             </li> --}}
-            <li class="dropdown">
-                <a href="javascript:void(0)">
-                    <iconify-icon icon="icon-park-outline:setting-two" class="menu-icon"></iconify-icon>
-                    <span>Settings</span>
-                </a>
-                <ul class="sidebar-submenu">
-                    <li>
-                        <a href="{{ route('popularDeals') }}"><i
-                                class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Popular Deals</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('highlyVotedDeals') }}"><i
-                                class="ri-circle-fill circle-icon text-danger-600 w-auto"></i> Highly Voted Deals</a>
-                    </li>
-                </ul>
-            </li>
+            @if (Auth::check() && Auth::user()->user_type === 'admin')
+                <li class="dropdown">
+                    <a href="javascript:void(0)">
+                        <iconify-icon icon="icon-park-outline:setting-two" class="menu-icon"></iconify-icon>
+                        <span>Settings</span>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        <li>
+                            <a href="{{ route('popularDeals') }}"><i
+                                    class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Popular Deals</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('highlyVotedDeals') }}"><i
+                                    class="ri-circle-fill circle-icon text-danger-600 w-auto"></i> Highly Voted
+                                Deals</a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
+
         </ul>
     </div>
 </aside>

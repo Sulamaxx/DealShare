@@ -81,9 +81,35 @@ class UserPostController extends Controller
         $new_deals = Post::query()
             ->join('users', 'posts.post_by', '=', 'users.id')
             ->where('posts.status', 1)
-            ->select('posts.*', 'users.is_verified AS user_is_verified')
             ->orderBy('posts.created_at', 'desc')
             ->paginate(10);
+
+        $attachBadges = function ($deals) {
+            foreach ($deals as $deal) {
+
+                $author = $deal->user; // Access the user object from the joined data
+
+                if ($author) {
+                    // Calculate total upvotes/downvotes for THIS author across ALL their posts
+                    $authorTotalUpvotes = $author->posts()->sum('upvotes');
+                    $authorTotalDownvotes = $author->posts()->sum('downvotes');
+                    $authorNetVoteCount = $authorTotalUpvotes - $authorTotalDownvotes;
+
+                    // Find the highest qualifying badge for this author
+                    $authorBadge = Badge::where('vote-count', '<=', $authorNetVoteCount)
+                        ->orderBy('vote-count', 'desc')
+                        ->first();
+
+                    // Attach the badge object to the deal for easy access in the view
+                    $deal->author_badge = $authorBadge;
+                } else {
+                    $deal->author_badge = null; // No badge if author not found
+                }
+            }
+            return $deals;
+        };
+
+        $new_deals = $attachBadges($new_deals);
 
         return view('new_deals', compact('new_deals'));
     }
@@ -119,10 +145,36 @@ class UserPostController extends Controller
         $popular_deals = Post::query()
             ->join('users', 'posts.post_by', '=', 'users.id')
             ->where('posts.status', 1)
-            ->select('posts.*', 'users.is_verified AS user_is_verified')
             ->select('posts.*', $popularityFormula)
             ->orderByDesc('popularity_score')
             ->paginate(10);
+
+        $attachBadges = function ($deals) {
+            foreach ($deals as $deal) {
+
+                $author = $deal->user; // Access the user object from the joined data
+
+                if ($author) {
+                    // Calculate total upvotes/downvotes for THIS author across ALL their posts
+                    $authorTotalUpvotes = $author->posts()->sum('upvotes');
+                    $authorTotalDownvotes = $author->posts()->sum('downvotes');
+                    $authorNetVoteCount = $authorTotalUpvotes - $authorTotalDownvotes;
+
+                    // Find the highest qualifying badge for this author
+                    $authorBadge = Badge::where('vote-count', '<=', $authorNetVoteCount)
+                        ->orderBy('vote-count', 'desc')
+                        ->first();
+
+                    // Attach the badge object to the deal for easy access in the view
+                    $deal->author_badge = $authorBadge;
+                } else {
+                    $deal->author_badge = null; // No badge if author not found
+                }
+            }
+            return $deals;
+        };
+
+        $popular_deals = $attachBadges($popular_deals);
 
         return view('popular_deals', compact('popular_deals'));
     }
@@ -145,6 +197,34 @@ class UserPostController extends Controller
             ->select('posts.*', 'users.is_verified AS user_is_verified')
             ->orderBy('posts.upvotes', 'desc')
             ->paginate(10);
+
+        $attachBadges = function ($deals) {
+            foreach ($deals as $deal) {
+
+                $author = $deal->user; // Access the user object from the joined data
+
+                if ($author) {
+                    // Calculate total upvotes/downvotes for THIS author across ALL their posts
+                    $authorTotalUpvotes = $author->posts()->sum('upvotes');
+                    $authorTotalDownvotes = $author->posts()->sum('downvotes');
+                    $authorNetVoteCount = $authorTotalUpvotes - $authorTotalDownvotes;
+
+                    // Find the highest qualifying badge for this author
+                    $authorBadge = Badge::where('vote-count', '<=', $authorNetVoteCount)
+                        ->orderBy('vote-count', 'desc')
+                        ->first();
+
+                    // Attach the badge object to the deal for easy access in the view
+                    $deal->author_badge = $authorBadge;
+                } else {
+                    $deal->author_badge = null; // No badge if author not found
+                }
+            }
+            return $deals;
+        };
+
+        $highly_voted_deals = $attachBadges($highly_voted_deals);
+
         return view('highly_voted_deals', compact('highly_voted_deals'));
     }
 
@@ -441,6 +521,33 @@ class UserPostController extends Controller
         $query->orderBy('created_at', 'desc');
 
         $search_deals = $query->paginate(10)->withQueryString();
+
+        $attachBadges = function ($deals) {
+            foreach ($deals as $deal) {
+
+                $author = $deal->user; // Access the user object from the joined data
+
+                if ($author) {
+                    // Calculate total upvotes/downvotes for THIS author across ALL their posts
+                    $authorTotalUpvotes = $author->posts()->sum('upvotes');
+                    $authorTotalDownvotes = $author->posts()->sum('downvotes');
+                    $authorNetVoteCount = $authorTotalUpvotes - $authorTotalDownvotes;
+
+                    // Find the highest qualifying badge for this author
+                    $authorBadge = Badge::where('vote-count', '<=', $authorNetVoteCount)
+                        ->orderBy('vote-count', 'desc')
+                        ->first();
+
+                    // Attach the badge object to the deal for easy access in the view
+                    $deal->author_badge = $authorBadge;
+                } else {
+                    $deal->author_badge = null; // No badge if author not found
+                }
+            }
+            return $deals;
+        };
+
+        $search_deals = $attachBadges($search_deals);
 
         return view('search_deals', compact('search_deals'));
     }

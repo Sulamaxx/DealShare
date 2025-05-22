@@ -71,7 +71,7 @@
                                         <td>{{ Carbon\Carbon::parse($user->created_at)->format('Y-m-d') }}</td>
                                         <td>
                                             <div class="flex items-center">
-                                                <img src="{{ $user->profile_photo_path != null ? asset($user->profile_photo_path) : asset('assets/images/user.png') }}"
+                                                <img src="{{ $user->profile_photo_path != null ? asset('storage/'.$user->profile_photo_path) : asset('assets/images/user.png') }}"
                                                     alt=""
                                                     class="w-10 h-10 rounded-full shrink-0 me-2 overflow-hidden">
                                                 <div class="grow">

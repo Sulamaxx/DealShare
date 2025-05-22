@@ -1,6 +1,6 @@
 <div class="navbar-header border-b border-neutral-200 dark:border-neutral-600">
-    <div class="flex items-center justify-between">
-        <div class="col-auto">
+    <div class="flex items-center justify-end">
+        {{-- <div class="col-auto">
             <div class="flex flex-wrap items-center gap-[16px]">
                 <button type="button" class="sidebar-toggle">
                     <iconify-icon icon="heroicons:bars-3-solid" class="icon non-active"></iconify-icon>
@@ -12,10 +12,10 @@
                 {{-- <form class="navbar-search">
                     <input type="text" name="search" placeholder="Search">
                     <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
-                </form> --}}
+                </form>
 
             </div>
-        </div>
+        </div> --}}
         <div class="col-auto">
             <div class="flex flex-wrap items-center gap-3">
                 <button type="button" id="theme-toggle"

@@ -30,7 +30,8 @@
                     <div class="card border border-neutral-200 dark:border-neutral-600">
                         <div class="card-body">
                             <h6 class="text-base text-neutral-600 dark:text-neutral-200 mb-4">Badge Image</h6>
-                            <form action="{{ route('admin.updateBadge',$badge->id) }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('admin.updateBadge', $badge->id) }}" method="POST"
+                                enctype="multipart/form-data">
                                 @csrf
                                 <!-- Upload Image Start -->
                                 <div class="mb-6 mt-4">
@@ -45,7 +46,7 @@
                                         </div>
                                         <div class="avatar-preview">
                                             <div id="imagePreview"
-                                                style="background-image: url({{ $badge->icon ? asset( $badge->icon) : '' }});">
+                                                style="background-image: url({{ $badge->icon ? asset($badge->icon) : asset('assets/images/badge.png') }});">
                                             </div>
                                         </div>
                                     </div>
@@ -68,7 +69,8 @@
                                         class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
                                         Description</label>
                                     <input type="text" class="form-control rounded-lg" id="description"
-                                        name="description" placeholder="Enter description" value="{{ $badge->description ?? '' }}" required>
+                                        name="description" placeholder="Enter description"
+                                        value="{{ $badge->description ?? '' }}" required>
                                 </div>
 
                                 <!-- Vote Count Input -->

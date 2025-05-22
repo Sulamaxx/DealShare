@@ -89,6 +89,8 @@ Route::middleware([
     Route::post('/comments/{comment}/report', [ThreadController::class, 'report']);
     Route::post('/subscription', [SubscriptionController::class, 'index'])->name('subscription');
     Route::post('/subscription/destroy', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
+
+    Route::put('/user/settings', [UserController::class, 'updateSettings'])->name('user.updateSettings');
 });
 
 Route::get('/view-deal/{id}', [UserPostController::class, 'view_deal'])->name('view-deal');
@@ -145,6 +147,8 @@ Route::prefix('admin/users')
             Route::post('/users/{id}/ban-temp', 'temporaryBan')->name('user.ban.temp');
             Route::post('/users/{id}/ban', 'banUser')->name('user.ban');
             Route::patch('/user/{id}/activate',  'activate')->name('user.activate');
+            Route::get('/update-profile/{id}', 'show')->name('updateProfile');
+            Route::post('/update-profile/{id}', 'update')->name('admin.updateProfile');
         });
     });
 
@@ -160,6 +164,7 @@ Route::prefix('admin/deals')
             Route::get('/view-deals', 'viewDeal')->name('viewDeal');
             // Route::get('/deals',  'index')->name('deals.index');
             Route::patch('/deals/status/{id}', 'updateStatus')->name('deal.status');
+            Route::patch('/deals/reject/{id}', 'updateRejectStatus')->name('deal.reject');
             Route::get('/deals/{id}/view', 'show')->name('deal.profile');
             Route::get('/deals/{id}/edit', 'edit')->name('deal.edit');
             Route::delete('/deals/{id}', 'destroy')->name('deal.delete');
@@ -204,7 +209,7 @@ Route::prefix('user/settings')
     ->middleware([AdminMiddleware::class])
     ->group(function () {
         Route::controller(UserController::class)->group(function () {
-            Route::put('/', 'updateSettings')->name('user.updateSettings');
+            //Route::put('/', 'updateSettings')->name('user.updateSettings');
         });
     });
 

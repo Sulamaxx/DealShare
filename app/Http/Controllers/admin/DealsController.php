@@ -190,10 +190,24 @@ class DealsController extends Controller
     public function updateStatus($id)
     {
         $deal = Post::findOrFail($id);
-        $deal->status = !$deal->status;
+        if ($deal->status === 0 || $deal->status === 2) {
+            $deal->status = 1;
+        } else {
+            $deal->status = 0;
+        }
+
         $deal->save();
 
         return back()->with('success', 'Deal status updated successfully.');
+    }
+
+    public function updateRejectStatus($id)
+    {
+        $deal = Post::findOrFail($id);
+        $deal->status = 2;
+        $deal->save();
+
+        return back()->with('success', 'Deal rejected successfully.');
     }
 
     public function updateReportStatus($id)

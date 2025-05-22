@@ -44,7 +44,8 @@
                                             </label>
                                         </div>
                                         <div class="avatar-preview">
-                                            <div id="imagePreview"> </div>
+                                            <div id="imagePreview"
+                                                style="background-image: url({{ asset('assets/images/user.png') }})"> </div>
                                         </div>
                                     </div>
                                 </div>
@@ -73,7 +74,7 @@
                                 <div class="mb-5">
                                     <label for="password"
                                         class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
-                                        Password</label>
+                                        Password <span class="text-danger-600">*</span></label>
                                     <input type="password" class="form-control rounded-lg" id="password" name="password"
                                         placeholder="Enter password" required>
                                 </div>
@@ -87,7 +88,22 @@
                                     <input type="password" class="form-control rounded-lg" id="password_confirmation"
                                         name="password_confirmation" placeholder="Confirm your password" required>
                                 </div>
-
+                                <div class="mb-5">
+                                    <label for="user_type"
+                                        class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
+                                        User Type <span class="text-danger-600">*</span>
+                                    </label>
+                                    <select class="form-control rounded-lg form-select" id="user_type" name="user_type"
+                                        required>
+                                        <option value="user" {{ old('user_type') == 'user' ? 'selected' : '' }}>User
+                                        </option>
+                                        <option value="moderator" {{ old('user_type') == 'moderator' ? 'selected' : '' }}>
+                                            Moderator</option>
+                                    </select>
+                                    @error('user_type')
+                                        <div class="text-danger-600 text-sm mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
 
                                 {{-- <div class="mb-5">
                                     <label for="number"

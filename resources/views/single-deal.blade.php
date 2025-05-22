@@ -338,7 +338,7 @@
 
             <div class="tt-wrapper-inner">
                 <div class="pt-editor form-default">
-                    <h6 class="pt-title">Post Your Reply</h6>
+                    <h6 class="pt-title">Comment</h6>
                     <div class="form-group">
                         <textarea name="message" id="new_thread" class="form-control" rows="5" placeholder="Lets get started"></textarea>
                     </div>
@@ -573,30 +573,28 @@
 
         Swal.fire({
             title: 'Report this Deal?',
-            text: 'Please provide a brief reason:',
+            text: 'Please select a reason:',
             icon: 'warning',
-            input: 'textarea',
-            inputPlaceholder: 'Enter your reason here...',
-            inputAttributes: {
-                'aria-label': 'Enter your reason here'
+            input: 'select',
+            inputOptions: {
+                'Spam / Fake Deal': 'Spam / Fake Deal',
+                'Incorrect Information': 'Incorrect Information',
+                'Expired Deal': 'Expired Deal'
             },
+            inputPlaceholder: 'Select a reason',
             showCancelButton: true,
             confirmButtonColor: '#d33',
             cancelButtonColor: '#3085d6',
             confirmButtonText: 'Submit Report',
             showLoaderOnConfirm: true,
-
-
             preConfirm: (reason) => {
-
-                if (!reason && false) { // Change 'false' to true if reason is REQUIRED
-                    Swal.showValidationMessage('Please provide a reason.');
+                if (!reason) {
+                    Swal.showValidationMessage('Please select a reason.');
                     return false;
                 }
                 return reason;
             },
             allowOutsideClick: () => !Swal.isLoading()
-
         }).then((result) => {
             if (result.isConfirmed) {
                 const reason = result.value;
@@ -637,9 +635,6 @@
                             element.disabled = true;
                             element.textContent = 'Reported';
                         } else {
-                            // This block would be for custom 'success: false' responses from the server
-                            // like the 'Already reported' case (which we handle in .catch now)
-                            // or validation errors if not caught by preConfirm
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Failed!',
@@ -650,10 +645,7 @@
                         }
                     })
                     .catch(error => {
-                        // This block handles network errors OR errors thrown from the .then blocks
                         console.error('Error submitting report:', error);
-
-                        // Display the error message (either from thrown Error or a generic one)
                         Swal.fire({
                             icon: 'error',
                             title: 'Oops...',
@@ -661,7 +653,7 @@
                         });
                     });
             }
-        })
+        });
     }
 
     function reportComment(element) {
@@ -670,30 +662,28 @@
 
         Swal.fire({
             title: 'Report this Comment?',
-            text: 'Please provide a brief reason:',
+            text: 'Please select a reason:',
             icon: 'warning',
-            input: 'textarea',
-            inputPlaceholder: 'Enter your reason here...',
-            inputAttributes: {
-                'aria-label': 'Enter your reason here'
+            input: 'select',
+            inputOptions: {
+                '': 'Select a reason',
+                'Spam': 'Spam',
+                'Inappropriate language': 'Inappropriate language',
+                'Misinformation': 'Misinformation'
             },
             showCancelButton: true,
             confirmButtonColor: '#d33',
             cancelButtonColor: '#3085d6',
             confirmButtonText: 'Submit Report',
             showLoaderOnConfirm: true,
-
-
             preConfirm: (reason) => {
-
-                if (!reason && false) { // Change 'false' to true if reason is REQUIRED
-                    Swal.showValidationMessage('Please provide a reason.');
+                if (!reason) {
+                    Swal.showValidationMessage('Please select a reason.');
                     return false;
                 }
                 return reason;
             },
             allowOutsideClick: () => !Swal.isLoading()
-
         }).then((result) => {
             if (result.isConfirmed) {
                 const reason = result.value;

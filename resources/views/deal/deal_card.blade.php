@@ -27,13 +27,12 @@
                 </a>
             </h5>
 
-            <p class="deal-description-clamp"
-                style="font-size: 0.875em; color: #555; margin-bottom: 3px; flex-grow: 1; ">
+            <p class="deal-description-clamp" style="font-size: 0.875em; color: #555; margin-bottom: 3px; ">
                 {{ $deal->description }}
             </p>
 
 
-            <small class="text-muted mb-2 deal-info-line">
+            <small class="text-muted mb-2 deal-info-line mt-auto">
                 <i class="fas fa-info-circle me-1"></i>
                 <a href="{{ $deal->link }}" target="_blank" class="deal-link-clamp"
                     style="text-decoration: none; color: #555;">{{ $deal->link }}</a>
@@ -70,14 +69,14 @@
                         </span> --}}
                     </div>
                 </div>
-                @if ($deal->user_is_verified)
+                @if ($deal->author_badge)
                     {{-- Tags and Verified Member --}}
                     <div class="d-flex flex-wrap align-items-center gap-2" style="margin-top: 0.307rem">
                         <div class="verified-member d-flex align-items-center text-success">
-                            <i class="fas fa-star me-1"
-                                style="padding: 2px;background-color: #DC3545;color: white;"></i>
+                            <img class="me-1" style="width:20px;height:20px;"
+                                src="{{ $deal->author_badge->icon }}"></i>
                             {{-- Star icon placeholder --}}
-                            Verified Member
+                            {{ $deal->author_badge->name }}
                         </div>
                     </div>
                 @endif
@@ -118,16 +117,19 @@
 
     .deal-description-clamp {
         display: -webkit-box;
-        -webkit-line-clamp: 4;
+        -webkit-line-clamp: 2;
+        /* Limit to 2 lines */
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
+        /* Add ellipsis */
         white-space: normal;
-        /* Add line-height and height here too if you want description to always have space for 3 lines */
+        /* Allow text to wrap within the clamped lines */
         line-height: 1.2em;
-        /* Use a line height appropriate for the description's font-size (0.875em) */
-        height: 3.15em;
-        /* Set height to line-height * 3 */
+        /* Keep consistent line height */
+        width: 100%;
+        /* Ensure it takes full available width */
+        min-height: 0;
     }
 
     .deal-title-clamp,

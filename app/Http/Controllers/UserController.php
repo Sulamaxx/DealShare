@@ -117,5 +117,4 @@ class UserController extends Controller
             return response()->json(['error' => 'Could not fetch profile data'], 500);
         }
     }
-
 }
