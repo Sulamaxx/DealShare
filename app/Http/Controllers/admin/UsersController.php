@@ -5,11 +5,13 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Mail\WarningEmail;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class UsersController extends Controller
 {
@@ -30,12 +32,13 @@ class UsersController extends Controller
 
     public function store(Request $request)
     {
-        Log::info($request);
+
         // Validate the form data
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8|confirmed',
+            'user_type' => 'required|in:user,moderator',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // File validation
         ]);
 
@@ -52,6 +55,7 @@ class UsersController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'user_type' => $validated['user_type'],
             'profile_photo_path' => $imagePath, // Store image URL if available
         ]);
 
@@ -74,7 +78,7 @@ class UsersController extends Controller
             $query->where('status', $request->status);
         }
 
-        $users = $query->where('user_type', 'user')->orderBy('created_at', 'desc')->paginate(8);
+        $users = $query->where('user_type', 'user')->orWhere('user_type', 'moderator')->orderBy('created_at', 'desc')->paginate(8);
 
         return view('backend.users/usersList', compact('users'));
     }
@@ -177,5 +181,53 @@ class UsersController extends Controller
         $user->save();
 
         return redirect()->back()->with('success', 'User account activated.');
+    }
+
+    public function show($id)
+    {
+        $query = User::query();
+
+        $user = $query->findOrFail($id);
+        return view('backend.users.viewUser', compact('user'));
+    }
+
+    public function update(Request $request, $id) // Using Route Model Binding
+    {
+
+        $user = User::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'user_type' => 'required|in:user,moderator',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        try {
+            $data = $request->only(['name', 'email', 'user_type']);
+
+            // --- Handle Profile Photo Upload ---
+            if ($request->hasFile('image')) {
+                // Delete the old profile photo if it exists
+                if ($user->profile_photo_path && Storage::disk('public')->exists($user->profile_photo_path)) {
+                    Storage::disk('public')->delete($user->profile_photo_path);
+                }
+                $path = $request->file('image')->store('profile-photos', 'public');
+                $data['profile_photo_path'] = $path; // Add the new path to the data array
+            }
+
+            /* $data['is_private'] = $request->has('is_private');
+            $data['email_thread_reply'] = $request->has('email_thread_reply');
+            $data['email_thread_reply_like'] = $request->has('email_thread_reply_like');
+            $data['email_mention'] = $request->has('email_mention'); */
+
+            $user->update($data);
+
+            return redirect()->route('usersList')->with('success', 'Profile settings updated successfully!');
+        } catch (Exception $e) {
+            // --- Log the error and set an error flash message ---
+            Log::error("Error updating user settings for user {$user->id}: " . $e->getMessage());
+            return redirect()->route('usersList')->with('error', 'Failed to update profile settings. Please try again.');
+        }
     }
 }

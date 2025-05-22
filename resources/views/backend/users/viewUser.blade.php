@@ -1,7 +1,7 @@
 @extends('backend.layout.layout')
 @php
-    $title = 'Add User';
-    $subTitle = 'Add User';
+    $title = 'View User';
+    $subTitle = 'View User';
     $script = '<script>
         // ================== Image Upload Js Start ===========================
         function readURL(input) {
@@ -30,7 +30,8 @@
                     <div class="card border border-neutral-200 dark:border-neutral-600">
                         <div class="card-body">
                             <h6 class="text-base text-neutral-600 dark:text-neutral-200 mb-4">Profile Image</h6>
-                            <form action="{{ route('admin.users.store') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('admin.updateProfile', $user->id) }}" method="POST"
+                                enctype="multipart/form-data">
                                 @csrf
                                 <!-- Upload Image Start -->
                                 <div class="mb-6 mt-4">
@@ -45,20 +46,21 @@
                                         </div>
                                         <div class="avatar-preview">
                                             <div id="imagePreview"
-                                                style="background-image: url({{ asset('assets/images/user.png') }})"> </div>
+                                                style="background-image: url({{ $user->profile_photo_path ? asset('storage/' . $user->profile_photo_path) : asset('assets/images/user.png') }});">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- Upload Image End -->
 
 
-                                <!-- Full Name Input -->
+                                <!-- Name Input -->
                                 <div class="mb-5">
                                     <label for="name"
                                         class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
                                         Full Name <span class="text-danger-600">*</span></label>
                                     <input type="text" class="form-control rounded-lg" id="name" name="name"
-                                        placeholder="Enter Full Name" required>
+                                        placeholder="Enter Full Name" value="{{ $user->name ?? '' }}" required>
                                 </div>
 
                                 <!-- Email Input -->
@@ -66,28 +68,10 @@
                                     <label for="email"
                                         class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
                                         Email <span class="text-danger-600">*</span></label>
-                                    <input type="email" class="form-control rounded-lg" id="email" name="email"
-                                        placeholder="Enter email address" required>
+                                    <input type="text" class="form-control rounded-lg" id="email" name="email"
+                                        placeholder="Enter email address" value="{{ $user->email ?? '' }}" required>
                                 </div>
 
-                                <!-- Password Input -->
-                                <div class="mb-5">
-                                    <label for="password"
-                                        class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
-                                        Password <span class="text-danger-600">*</span></label>
-                                    <input type="password" class="form-control rounded-lg" id="password" name="password"
-                                        placeholder="Enter password" required>
-                                </div>
-
-                                <!-- Confirm Password Input -->
-                                <div class="mb-5">
-                                    <label for="password_confirmation"
-                                        class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
-                                        Confirm Password <span class="text-danger-600">*</span>
-                                    </label>
-                                    <input type="password" class="form-control rounded-lg" id="password_confirmation"
-                                        name="password_confirmation" placeholder="Confirm your password" required>
-                                </div>
                                 <div class="mb-5">
                                     <label for="user_type"
                                         class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
@@ -95,9 +79,11 @@
                                     </label>
                                     <select class="form-control rounded-lg form-select" id="user_type" name="user_type"
                                         required>
-                                        <option value="user" {{ old('user_type') == 'user' ? 'selected' : '' }}>User
+                                        <option value="user"
+                                            {{ old('user_type', $user->user_type ?? '') == 'user' ? 'selected' : '' }}>User
                                         </option>
-                                        <option value="moderator" {{ old('user_type') == 'moderator' ? 'selected' : '' }}>
+                                        <option value="moderator"
+                                            {{ old('user_type', $user->user_type ?? '') == 'moderator' ? 'selected' : '' }}>
                                             Moderator</option>
                                     </select>
                                     @error('user_type')
@@ -105,46 +91,10 @@
                                     @enderror
                                 </div>
 
-                                {{-- <div class="mb-5">
-                                    <label for="number"
-                                        class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">Phone</label>
-                                    <input type="email" class="form-control rounded-lg" id="number"
-                                        placeholder="Enter phone number">
-                                </div> --}}
-                                {{-- <div class="mb-5">
-                                    <label for="depart"
-                                        class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">Department
-                                        <span class="text-danger-600">*</span> </label>
-                                    <select class="form-control rounded-lg form-select" id="depart">
-                                        <option>Enter Event Title </option>
-                                        <option>Enter Event Title One </option>
-                                        <option>Enter Event Title Two</option>
-                                    </select>
-                                </div>
-                                <div class="mb-5">
-                                    <label for="desig"
-                                        class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">Designation
-                                        <span class="text-danger-600">*</span> </label>
-                                    <select class="form-control rounded-lg form-select" id="desig">
-                                        <option>Enter Designation Title </option>
-                                        <option>Enter Designation Title One </option>
-                                        <option>Enter Designation Title Two</option>
-                                    </select>
-                                </div>
-                                <div class="mb-5">
-                                    <label for="desc"
-                                        class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">Description</label>
-                                    <textarea name="#0" class="form-control rounded-lg" id="desc" placeholder="Write description..."></textarea>
-                                </div> --}}
-
                                 <div class="flex items-center justify-center gap-3">
-                                    {{-- <button type="button"
-                                        class="border border-danger-600 bg-hover-danger-200 text-danger-600 text-base px-14 py-[11px] rounded-lg">
-                                        Cancel
-                                    </button> --}}
                                     <button type="submit"
                                         class="btn btn-primary border border-primary-600 text-base px-14 py-3 rounded-lg">
-                                        Save
+                                        Update
                                     </button>
                                 </div>
                             </form>

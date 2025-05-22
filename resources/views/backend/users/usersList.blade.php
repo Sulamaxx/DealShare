@@ -86,7 +86,7 @@
                                         <td>{{ Carbon\Carbon::parse($user->created_at)->format('Y-m-d') }}</td>
                                         <td>
                                             <div class="flex items-center">
-                                                <img src="{{ $user->profile_photo_path != null ? asset($user->profile_photo_path) : asset('assets/images/user-list/user-list1.png') }}"
+                                                <img src="{{ $user->profile_photo_path != null ? asset('storage/'.$user->profile_photo_path) : asset('assets/images/user.png') }}"
                                                     alt=""
                                                     class="w-10 h-10 rounded-full shrink-0 me-2 overflow-hidden">
                                                 <div class="grow">
@@ -140,10 +140,17 @@
                                                             class="icon text-xl"></iconify-icon>
                                                     </button>
                                                 </form>
-                                                <button title="edit profile" type="button"
+                                                {{-- <button title="edit profile" type="button"
+                                                    class="bg-success-100 dark:bg-success-600/25 text-success-600 dark:text-success-400 bg-hover-success-200 font-medium w-10 h-10 flex justify-center items-center rounded-full">
+                                                    <iconify-icon icon="lucide:edit" class="menu-icon"></iconify-icon>
+                                                </button> --}}
+                                                <form method="GET" action="{{ route('updateProfile', $user->id) }}">
+                                                    @csrf
+                                                    <button title="edit profile" type="submit"
                                                     class="bg-success-100 dark:bg-success-600/25 text-success-600 dark:text-success-400 bg-hover-success-200 font-medium w-10 h-10 flex justify-center items-center rounded-full">
                                                     <iconify-icon icon="lucide:edit" class="menu-icon"></iconify-icon>
                                                 </button>
+                                                </form>
                                                 {{-- <button type="button"
                                                     class="remove-item-btn bg-danger-100 dark:bg-danger-600/25 hover:bg-danger-200 text-danger-600 dark:text-danger-500 font-medium w-10 h-10 flex justify-center items-center rounded-full">
                                                     <iconify-icon icon="fluent:delete-24-regular"

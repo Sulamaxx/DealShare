@@ -44,7 +44,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Created At</th>
-                                    <th>Name</th>
+                                    <th style="padding-left: 3rem;">Name</th>
                                     <th>Description</th>
                                     <th>Vote Count</th>
                                     <th class="text-center">Action</th>
@@ -55,7 +55,18 @@
                                     <tr>
                                         <td>{{ $badges->firstItem() + $index }}</td>
                                         <td>{{ $badge->created_at->format('d M Y') }}</td>
-                                        <td>{{ $badge->name }}</td>
+
+                                        <td>
+                                            <div class="flex items-center">
+                                                <img src="{{ $badge->icon != null ? asset($badge->icon) : asset('assets/images/badge.png') }}"
+                                                    alt=""
+                                                    class="w-10 h-10 rounded-full shrink-0 me-2 overflow-hidden">
+                                                <div class="grow">
+                                                    <span
+                                                        class="text-base mb-0 font-normal text-secondary-light">{{ $badge->name }}</span>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td>{{ $badge->description ?? '-' }}</td>
                                         <td>{{ $badge->vote_count }}</td>
 
@@ -65,9 +76,9 @@
                                                 <form method="GET" action="{{ route('updateBadge', $badge->id) }}">
                                                     @csrf
                                                     <button title="update badge" type="submit"
-                                                    class="bg-success-100 dark:bg-success-600/25 text-success-600 dark:text-success-400 bg-hover-success-200 font-medium w-10 h-10 flex justify-center items-center rounded-full">
-                                                    <iconify-icon icon="lucide:edit" class="menu-icon"></iconify-icon>
-                                                </button>
+                                                        class="bg-success-100 dark:bg-success-600/25 text-success-600 dark:text-success-400 bg-hover-success-200 font-medium w-10 h-10 flex justify-center items-center rounded-full">
+                                                        <iconify-icon icon="lucide:edit" class="menu-icon"></iconify-icon>
+                                                    </button>
                                                 </form>
 
                                                 {{-- <button type="button"
