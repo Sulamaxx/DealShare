@@ -146,7 +146,7 @@
 
         @media(max-width:426px) {
             .search-width {
-                min-width: 97.5vw !important;
+                min-width: 90vw !important;
             }
         }
     </style>
@@ -207,7 +207,7 @@
 
                         </div>
 
-                        <a href="#" class="fs-6 animated-link" {{-- Added a class for easier targeting in CSS --}}
+                        <a href="{{ route('popular-deals') }}" class="fs-6 animated-link" {{-- Added a class for easier targeting in CSS --}}
                             style="text-decoration: none; color: #555; font-weight: bold; display: inline-flex; align-items: center;">
                             View All
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"
@@ -253,7 +253,7 @@
 
                         </div>
 
-                        <a href="#" class="fs-6 animated-link" {{-- Added a class for easier targeting in CSS --}}
+                        <a href="{{ route('new-deals') }}" class="fs-6 animated-link" {{-- Added a class for easier targeting in CSS --}}
                             style="text-decoration: none; color: #555; font-weight: bold; display: inline-flex; align-items: center;">
                             View All
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"
@@ -298,7 +298,7 @@
 
                         </div>
 
-                        <a href="#" class="fs-6 animated-link"
+                        <a href="{{ route('highly-voted-deals') }}" class="fs-6 animated-link"
                             style="text-decoration: none; color: #555; font-weight: bold; display: inline-flex; align-items: center;">
                             View All
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"

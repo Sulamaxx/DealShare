@@ -160,7 +160,7 @@
 
         @media(max-width:426px) {
             .search-width {
-                min-width: 97.5vw !important;
+                min-width: 90vw !important;
             }
         }
     </style>

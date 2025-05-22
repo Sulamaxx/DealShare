@@ -15,6 +15,7 @@ class UserFrontController extends Controller
         $new_deals = Post::query()
             ->join('users', 'posts.post_by', '=', 'users.id')
             ->where('posts.status', 1)
+            ->select('posts.*', 'posts.created_at AS post_created_at')
             ->orderBy('posts.created_at', 'desc')
             ->limit(6)->get();
 
@@ -47,6 +48,7 @@ class UserFrontController extends Controller
         $popular_deals = Post::query()
             ->join('users', 'posts.post_by', '=', 'users.id')
             ->where('posts.status', 1)
+            ->select('posts.*', 'posts.created_at AS post_created_at')
             ->select('posts.*', $popularityFormula)
             ->orderByDesc('popularity_score')
             ->limit(6)->get();
@@ -55,6 +57,7 @@ class UserFrontController extends Controller
             ->join('users', 'posts.post_by', '=', 'users.id')
             ->where('posts.status', 1)
             ->where('posts.upvotes', '>=', $upvoteCount)
+            ->select('posts.*', 'posts.created_at AS post_created_at')
             ->orderBy('posts.upvotes', 'desc')
             ->limit(6)->get();
 
