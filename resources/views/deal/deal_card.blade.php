@@ -55,7 +55,7 @@
                     </div>
 
                     <span class="text-muted">
-                        {{ $deal->created_at->diffForHumans() }}
+                        {{ $deal->created_at->diffForHumans()}}
                         <i class="far fa-comment ms-2 me-1" style="font-weight: 600;"></i> {{ $deal->comment_count }}
                     </span>
                     <div class="d-flex flex-wrap gap-1">
