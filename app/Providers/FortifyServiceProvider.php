@@ -41,9 +41,17 @@ class FortifyServiceProvider extends ServiceProvider
             $user = User::where('email', $request->email)->first();
 
             if ($user && Hash::check($request->password, $user->password)) {
-                if ($user->status !== 1) {
+                if ($user->status == 0) {
                     throw ValidationException::withMessages([
                         Fortify::username() => 'Your account is not approved yet.',
+                    ]);
+                }else if ($user->status == 2) {
+                    throw ValidationException::withMessages([
+                        Fortify::username() => 'Your account is Temporary banned.',
+                    ]);
+                } else if ($user->status == 3) {
+                    throw ValidationException::withMessages([
+                        Fortify::username() => 'Your account is Permanently banned.',
                     ]);
                 }
 

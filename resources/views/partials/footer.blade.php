@@ -295,13 +295,13 @@
         </div>
         <div class="footer-right">
             <div class="footer-links">
-                <a href="{{ route('pages') }}">Stay Safe</a> |
-                <a href="{{ route('pages') }}">FAQ</a> |
-                <a href="{{ route('pages') }}">Anti-Scam</a> |
-                <a href="{{ route('pages') }}">Terms</a> |
-                <a href="{{ route('pages') }}">Privacy</a> |
-                <a href="{{ route('pages') }}">Blog</a> |
-                <a href="{{ route('pages') }}">Contact Us</a>
+                <a href="{{ route('pages') }}?tab=about">About</a> |
+                <a href="{{ route('pages') }}?tab=faq">FAQ</a> |
+                <a href="{{ route('pages') }}?tab=guidlines">Guidelines</a> |
+                <a href="{{ route('pages') }}?tab=term_and_services">Terms</a> |
+                <a href="{{ route('pages') }}?tab=privacy">Privacy</a> |
+                {{-- <a href="{{ route('pages') }}">Blog</a> | --}}
+                <a href="{{ route('pages') }}?tab=contact">Contact Us</a>
             </div>
             <div class="footer-social">
                 <a href="#"><i class="fab fa-facebook-f"></i></a>

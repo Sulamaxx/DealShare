@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class UserFrontController extends Controller
 {
@@ -37,13 +38,13 @@ class UserFrontController extends Controller
         $popularityFormula = DB::raw(
             // Calculate score: (upvotes * upvote weight) + (downvotes * downvote weight) + (comment count * comment weight)
             "(COALESCE(upvotes, 0) * {$upvoteWeight}) + " .
-                "(COALESCE(downvotes, 0) * {$downvoteWeight}) + " .
-                "(COALESCE(comment_count, 0) * {$commentWeight}) " .
-                "AS popularity_score"
+            "(COALESCE(downvotes, 0) * {$downvoteWeight}) + " .
+            "(COALESCE(comment_count, 0) * {$commentWeight}) " .
+            "AS popularity_score"
         );
 
         /* $popular_deals = Post::where('status', 1)->select('posts.*', $popularityFormula)->orderByDesc('popularity_score')->paginate(10);
-             */
+         */
 
         $popular_deals = Post::query()
             ->join('users', 'posts.post_by', '=', 'users.id')
@@ -95,6 +96,19 @@ class UserFrontController extends Controller
 
     public function pages()
     {
-        return view('pages');
+        $data = \DB::table('page_contents')
+            ->pluck('content', 'type')
+            ->toArray();
+
+        Log::info($data);
+
+        return view('pages', [
+            'aboutContent' => $data['about'],
+            'guidelinesContent' => $data['guidelines'],
+            'faqContent' => $data['faq'],
+            'termsContent' => $data['terms'],
+            'privacyContent' => $data['privacy'],
+            'contactContent' => $data['other'],
+        ]);
     }
 }

@@ -191,6 +191,8 @@ Route::prefix('admin/settings')
             Route::post('/popular-deals/update', 'update')->name('admin.popularDeals.update');
             Route::get('/highly-voted-deals', 'highlyVotedDeals')->name('highlyVotedDeals');
             Route::post('/highly-voted-deals/update', 'highlyVotedUpdate')->name('admin.highlyVotedDeals.update');
+            Route::get('/cms_setting', 'cmsSetting')->name('cmsSetting');
+            Route::post('/cms_setting', 'saveCMSSetting')->name('settings.save');
         });
     });
 
