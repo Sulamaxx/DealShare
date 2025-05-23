@@ -1,82 +1,48 @@
-@extends('layout.layout')
+@extends('backend.layout.layout')
 @php
-    $title='Company';
-    $subTitle = 'Settings - Company';
-
+    $title = 'CSM';
+    $subTitle = 'Settings - CSM';
 @endphp
 
 @section('content')
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <div class="card h-full rounded-lg border-0">
-        <div class="card-body p-10">
-            <form action="#">
-                <div class="grid md:grid-cols-2 gap-x-5">
-                    <div class="mb-5">
-                        <label for="name" class="text-sm font-semibold mb-2 block text-neutral-900 dark:text-white">Full Name <span class="text-danger-600">*</span></label>
-                        <input type="text" class="form-control rounded-lg" id="name" placeholder="Enter Full Name">
-                    </div>
-                    <div class="mb-5">
-                        <label for="email" class="text-sm font-semibold mb-2 block text-neutral-900 dark:text-white">Email <span class="text-danger-600">*</span></label>
-                        <input type="email" class="form-control rounded-lg" id="email" placeholder="Enter email address">
-                    </div>
-                    <div class="mb-5">
-                        <label for="number" class="text-sm font-semibold mb-2 block text-neutral-900 dark:text-white">Phone Number</label>
-                        <input type="email" class="form-control rounded-lg" id="number" placeholder="Enter phone number">
-                    </div>
-                    <div class="mb-5">
-                        <label for="Website" class="text-sm font-semibold mb-2 block text-neutral-900 dark:text-white"> Website</label>
-                        <input type="url" class="form-control rounded-lg" id="Website" placeholder="Website URL">
-                    </div>
-                    <div class="mb-5">
-                        <label for="country" class="text-sm font-semibold mb-2 block text-neutral-900 dark:text-white">Country <span class="text-danger-600">*</span> </label>
-                        <select class="form-control rounded-lg form-select" id="country">
-                            <option selected disabled>Select Country</option>
-                            <option>USA</option>
-                            <option>Bangladesh</option>
-                            <option>Pakistan</option>
-                            <option>India</option>
-                            <option>Canada</option>
-                        </select>
-                    </div>
-                    <div class="mb-5">
-                        <label for="city" class="text-sm font-semibold mb-2 block text-neutral-900 dark:text-white">City <span class="text-danger-600">*</span> </label>
-                        <select class="form-control rounded-lg form-select" id="city">
-                            <option selected disabled>Select City</option>
-                            <option>Washington</option>
-                            <option>Dhaka</option>
-                            <option>Lahor</option>
-                            <option>Panjab</option>
-                        </select>
-                    </div>
-                    <div class="mb-5">
-                        <label for="state" class="text-sm font-semibold mb-2 block text-neutral-900 dark:text-white">State <span class="text-danger-600">*</span> </label>
-                        <select class="form-control rounded-lg form-select" id="state">
-                            <option selected disabled>Select State</option>
-                            <option>Washington</option>
-                            <option>Dhaka</option>
-                            <option>Lahor</option>
-                            <option>Panjab</option>
-                        </select>
-                    </div>
-                    <div class="mb-5">
-                        <label for="zip" class="text-sm font-semibold mb-2 block text-neutral-900 dark:text-white"> Zip Code <span class="text-danger-600">*</span></label>
-                        <input type="text" class="form-control rounded-lg" id="zip" placeholder="Zip Code">
-                    </div>
-                    <div class="mb-5 col-span-2">
-                        <label for="address" class="text-sm font-semibold mb-2 block text-neutral-900 dark:text-white"> Address* <span class="text-danger-600">*</span></label>
-                        <input type="text" class="form-control rounded-lg" id="address" placeholder="Enter Your Address">
-                    </div>
-                    <div class="col-span-2 flex items-center justify-center gap-3 mt-6">
-                        <button type="reset" class="border border-danger-600 hover:bg-danger-200 text-danger-600 text-base px-10 py-[11px] rounded-lg">
-                            Reset
-                        </button>
-                        <button type="submit" class="btn btn-primary border border-primary-600 text-base px-6 py-3 !rounded-lg">
-                            Save Change
-                        </button>
-                    </div>
+    <!-- CKEditor 5 CDN -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+
+    <div class="container">
+        @foreach ([
+            'about' => 'About Page',
+            'guidelines' => 'Guidelines Page',
+            'faq' => 'FAQ Page',
+            'terms' => 'Terms of Service',
+            'privacy' => 'Privacy Policy',
+            'other' => 'Contact Us',
+        ] as $key => $label)
+            <form action="{{ route('settings.save') }}" method="POST" class="mb-5">
+                @csrf
+                <input type="hidden" name="type" value="{{ $key }}">
+                <div class="form-group mb-2">
+                    <label><strong>{{ $label }}</strong></label>
+                    <textarea id="editor-{{ $key }}" name="content" class="form-control">
+                        {!! old('content', $data[$key] ?? '') !!}
+                    </textarea>
                 </div>
+                <button type="submit" class="btn btn-primary">Save {{ $label }}</button>
             </form>
-        </div>
+        @endforeach
     </div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const editors = document.querySelectorAll('textarea[id^="editor-"]');
+            editors.forEach((textarea) => {
+                ClassicEditor
+                    .create(textarea)
+                    .catch(error => {
+                        console.error(error);
+                    });
+            });
+        });
+    </script>
 @endsection

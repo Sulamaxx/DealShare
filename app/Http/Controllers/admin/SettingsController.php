@@ -78,4 +78,29 @@ class SettingsController extends Controller
         // Redirect to the popular deals settings page with a success message
         return redirect()->route('highlyVotedDeals')->with('success', 'Highly Voted Deals settings updated successfully!');
     }
+
+    public function cmsSetting()
+    {
+        // Fetch all page content by type into a key-value array
+        $data = \DB::table('page_contents')
+            ->pluck('content', 'type')
+            ->toArray();
+
+        return view('backend.settings.company', compact('data'));
+    }
+    public function saveCMSSetting(Request $request)
+    {
+        $request->validate([
+            'type' => 'required|in:about,guidelines,faq,terms,privacy,other',
+            'content' => 'required|string',
+        ]);
+
+        // Save to DB
+        \DB::table('page_contents')->updateOrInsert(
+            ['type' => $request->type],
+            ['content' => $request->content, 'updated_at' => now()]
+        );
+
+        return redirect()->route('cmsSetting')->with('success', ucfirst($request->type) . ' content saved.');
+    }
 }

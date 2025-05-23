@@ -440,6 +440,10 @@
                                     class="ri-circle-fill circle-icon text-danger-600 w-auto"></i> Highly Voted
                                 Deals</a>
                         </li>
+                        <li>
+                            <a href="{{ route('cmsSetting') }}"><i
+                                    class="ri-circle-fill circle-icon text-danger-600 w-auto"></i> CMS Setting</a>
+                        </li>
                     </ul>
                 </li>
             @endif

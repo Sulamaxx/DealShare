@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('comments', function (Blueprint $table) {
-            $table->integer('status')->default('1');
+        Schema::create('page_contents', function (Blueprint $table) {
+            $table->id();
+            $table->string('type')->unique();
+            $table->longText('content');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('comments', function (Blueprint $table) {
-            $table->dropColumn('status');
-        });
+        Schema::dropIfExists('page_contents');
     }
 };
