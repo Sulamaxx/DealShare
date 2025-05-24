@@ -346,7 +346,7 @@
 
             <li class="dropdown">
                 <a href="javascript:void(0)">
-                    <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
+                    <iconify-icon icon="mdi:sale-outline" class="menu-icon"></iconify-icon>
                     <span>Deals</span>
                 </a>
                 <ul class="sidebar-submenu">
@@ -377,7 +377,7 @@
             @if (Auth::check() && Auth::user()->user_type === 'admin')
                 <li class="dropdown">
                     <a href="javascript:void(0)">
-                        <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
+                        <iconify-icon icon="mdi:medal-outline" class="menu-icon"></iconify-icon>
                         <span>Badge</span>
                     </a>
                     <ul class="sidebar-submenu">
@@ -396,7 +396,7 @@
             @if (Auth::check() && Auth::user()->user_type === 'admin')
                 <li class="dropdown">
                     <a href="javascript:void(0)">
-                        <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
+                        <iconify-icon icon="mdi:flag-outline" class="menu-icon"></iconify-icon>
                         <span>Banners</span>
                     </a>
                     <ul class="sidebar-submenu">

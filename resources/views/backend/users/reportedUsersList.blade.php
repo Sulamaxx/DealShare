@@ -24,10 +24,13 @@
                                 <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon> Search
                             </button>
 
-                            <a href="{{ route('reportedUsersList') }}"
+                            {{-- <a href="{{ route('reportedUsersList') }}"
                                 class="btn btn-secondary bg-neutral-300 dark:bg-neutral-600 text-black dark:text-white">
                                 <iconify-icon icon="material-symbols:restart-alt-rounded" class="icon"></iconify-icon>
                                 Reset
+                            </a> --}}
+                            <a href="{{ route('reportedUsersList') }}" class="btn btn-secondary btn-sm">
+                                <iconify-icon icon="ph:arrow-counter-clockwise" style="padding: 3px;"></iconify-icon> Reset
                             </a>
                         </form>
 

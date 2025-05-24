@@ -42,7 +42,7 @@
                         </form>
                     </div>
                     <a href="{{ route('create-deals') }}"
-                        class="btn btn-primary text-sm btn-sm px-3 py-3 rounded-lg flex items-center gap-2">
+                        class="btn btn-primary text-sm btn-sm px-3 rounded-lg flex items-start gap-2" style="align-items: start">
                         <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon>
                         Add New Deal
                     </a>
