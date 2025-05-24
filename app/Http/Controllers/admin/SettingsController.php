@@ -5,6 +5,8 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class SettingsController extends Controller
 {
@@ -35,6 +37,30 @@ class SettingsController extends Controller
             ->toArray();
 
         return view('backend.settings.highly_voted_deals', compact('settings'));
+    }
+
+    public function bottomBanner()
+    {
+
+        $banner = Setting::whereIn('key', [
+            'bottom_banner',
+        ])
+            ->pluck('value', 'key')
+            ->toArray();
+
+        return view('backend.banners.bottomBanner', compact('banner'));
+    }
+
+    public function topBanner()
+    {
+
+        $banner = Setting::whereIn('key', [
+            'top_banner',
+        ])
+            ->pluck('value', 'key')
+            ->toArray();
+
+        return view('backend.banners.topBanner', compact('banner'));
     }
 
     public function update(Request $request)
@@ -102,5 +128,101 @@ class SettingsController extends Controller
         );
 
         return redirect()->route('cmsSetting')->with('success', ucfirst($request->type) . ' content saved.');
+    }
+
+    public function updateBottomBanner(Request $request) // Using Route Model Binding
+    {
+
+        $validated = $request->validate([
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+        ]);
+
+        try {
+            // Find the 'bottom_banner' setting. If it doesn't exist, create it.
+            $bannerSetting = Setting::firstOrCreate(
+                ['key' => 'bottom_banner'],
+                ['value' => null] // Default value if it's newly created
+            );
+
+            // Handle image upload
+            if ($request->hasFile('image')) {
+                Log::info("New image uploaded for bottom banner.");
+
+                // Get the old image path from the setting's value
+                $oldImagePath = $bannerSetting->value;
+
+                // Check if an old image exists and delete it from public storage
+                if ($oldImagePath && Storage::disk('public')->exists($oldImagePath)) {
+                    Storage::disk('public')->delete($oldImagePath);
+                    Log::info("Old bottom banner image deleted: {$oldImagePath}");
+                }
+
+                // Store the new image in the 'images' folder under the 'public' disk
+                // The store method returns the path relative to the disk's root (e.g., 'images/new_filename.jpg').
+                $path = $request->file('image')->store('images', 'public');
+
+                // Update the setting's value with the new relative path
+                $bannerSetting->value = $path;
+                $bannerSetting->save();
+
+                Log::info("Bottom banner updated to: {$path}");
+            }
+            // If no new image is uploaded, and the banner setting exists, its value remains unchanged.
+            // If the banner setting was newly created and no image was uploaded, its value remains null.
+
+            return redirect()->route('bottomBanner')->with('success', 'Banner updated successfully!');
+        } catch (\Exception $e) {
+            // Catch any exceptions, log them, and return an error response
+            Log::error("Error updating bottom banner: " . $e->getMessage());
+            return redirect()->route('bottomBanner')->with('error', 'Failed to update banner. Please try again.');
+        }
+    }
+
+    public function updateTopBanner(Request $request) // Using Route Model Binding
+    {
+
+        $validated = $request->validate([
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+        ]);
+
+        try {
+            // Find the 'top_banner' setting. If it doesn't exist, create it.
+            $bannerSetting = Setting::firstOrCreate(
+                ['key' => 'top_banner'],
+                ['value' => null] // Default value if it's newly created
+            );
+
+            // Handle image upload
+            if ($request->hasFile('image')) {
+                Log::info("New image uploaded for top banner.");
+
+                // Get the old image path from the setting's value
+                $oldImagePath = $bannerSetting->value;
+
+                // Check if an old image exists and delete it from public storage
+                if ($oldImagePath && Storage::disk('public')->exists($oldImagePath)) {
+                    Storage::disk('public')->delete($oldImagePath);
+                    Log::info("Old top banner image deleted: {$oldImagePath}");
+                }
+
+                // Store the new image in the 'images' folder under the 'public' disk
+                // The store method returns the path relative to the disk's root (e.g., 'images/new_filename.jpg').
+                $path = $request->file('image')->store('images', 'public');
+
+                // Update the setting's value with the new relative path
+                $bannerSetting->value = $path;
+                $bannerSetting->save();
+
+                Log::info("Top banner updated to: {$path}");
+            }
+            // If no new image is uploaded, and the banner setting exists, its value remains unchanged.
+            // If the banner setting was newly created and no image was uploaded, its value remains null.
+
+            return redirect()->route('topBanner')->with('success', 'Banner updated successfully!');
+        } catch (\Exception $e) {
+            // Catch any exceptions, log them, and return an error response
+            Log::error("Error updating bottom banner: " . $e->getMessage());
+            return redirect()->route('topBanner')->with('error', 'Failed to update banner. Please try again.');
+        }
     }
 }

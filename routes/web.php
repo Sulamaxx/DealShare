@@ -193,6 +193,10 @@ Route::prefix('admin/settings')
             Route::post('/highly-voted-deals/update', 'highlyVotedUpdate')->name('admin.highlyVotedDeals.update');
             Route::get('/cms_setting', 'cmsSetting')->name('cmsSetting');
             Route::post('/cms_setting', 'saveCMSSetting')->name('settings.save');
+            Route::get('/bottom-banner', 'bottomBanner')->name('bottomBanner');
+            Route::post('/bottom-banner', 'updateBottomBanner')->name('admin.updateBottomBanner');
+            Route::get('/top-banner', 'topBanner')->name('topBanner');
+            Route::post('/top-banner', 'updateTopBanner')->name('admin.updateTopBanner');
         });
     });
 
