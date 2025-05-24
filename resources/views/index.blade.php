@@ -17,7 +17,6 @@
             position: relative;
             padding: 50px 20px;
             color: white;
-            background-image: url('images/banner.png');
             background-size: cover;
             background-position: center right;
             background-repeat: no-repeat;
@@ -38,6 +37,27 @@
             z-index: -1;
         }
 
+        .banner-bottom {
+            position: relative;
+            color: white;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 200px;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .banner-bottom::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Dark overlay */
+            z-index: -1;
+        }
 
         .banner .tag {
             background: yellow;
@@ -151,7 +171,8 @@
         }
     </style>
 
-    <div class="banner position-relative col-12">
+    <div class="banner position-relative col-12"
+        style="background-image: url({{ $banner['top_banner'] === 'images/banner.png' ? asset($banner['top_banner']) : asset('storage/' . $banner['top_banner']) }})">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-6">
@@ -330,8 +351,11 @@
 
         </div>
     </main>
-
-
-
+    @if ($banner['bottom_banner'])
+        <div class="banner-bottom position-relative col-12"
+            style="max-width:1200px;justify-content:center;margin-inline:auto;;
+            background-image: url({{ $banner['bottom_banner'] === 'images/banner.png' ? asset($banner['bottom_banner']) : asset('storage/' . $banner['bottom_banner']) }});">
+        </div>
+    @endif
 
 @endsection

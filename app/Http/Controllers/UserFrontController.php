@@ -38,9 +38,9 @@ class UserFrontController extends Controller
         $popularityFormula = DB::raw(
             // Calculate score: (upvotes * upvote weight) + (downvotes * downvote weight) + (comment count * comment weight)
             "(COALESCE(upvotes, 0) * {$upvoteWeight}) + " .
-            "(COALESCE(downvotes, 0) * {$downvoteWeight}) + " .
-            "(COALESCE(comment_count, 0) * {$commentWeight}) " .
-            "AS popularity_score"
+                "(COALESCE(downvotes, 0) * {$downvoteWeight}) + " .
+                "(COALESCE(comment_count, 0) * {$commentWeight}) " .
+                "AS popularity_score"
         );
 
         /* $popular_deals = Post::where('status', 1)->select('posts.*', $popularityFormula)->orderByDesc('popularity_score')->paginate(10);
@@ -91,7 +91,14 @@ class UserFrontController extends Controller
         $popular_deals = $attachBadges($popular_deals);
         $highly_voted_deals = $attachBadges($highly_voted_deals);
 
-        return view('index', compact('new_deals', 'popular_deals', 'highly_voted_deals'));
+        $banner = Setting::whereIn('key', [
+            'bottom_banner',
+            'top_banner',
+        ])
+            ->pluck('value', 'key')
+            ->toArray();
+
+        return view('index', compact('new_deals', 'popular_deals', 'highly_voted_deals','banner'));
     }
 
     public function pages()
