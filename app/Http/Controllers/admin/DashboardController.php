@@ -10,7 +10,7 @@ class DashboardController extends Controller
 
     public function index()
     {
-        return view('backend.dashboard/index');
+        return view('dealsList');
     }
 
     public function index2()
@@ -52,5 +52,4 @@ class DashboardController extends Controller
     {
         return view('backend.dashboard/index9');
     }
-
 }

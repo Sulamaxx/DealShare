@@ -124,10 +124,10 @@ Route::prefix('admin')->group(function () {
             Route::get('/logout', 'logout')->name('admin.logout');
         });
 });
-Route::controller(DashboardController::class)
+Route::controller(DealsController::class)
     ->middleware([AdminMiddleware::class])
     ->group(function () {
-        Route::get('/admin', 'index')->name('index');
+        Route::get('/admin', 'dealsList')->name('dealsList');
     });
 
 // Users
