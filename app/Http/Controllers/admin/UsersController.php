@@ -149,11 +149,28 @@ class UsersController extends Controller
     public function sendWarningEmail($id)
     {
         $user = User::findOrFail($id);
-        try {
+        /* try {
             Mail::to($user->email)->send(new WarningEmail($user));
             return back()->with('success', 'Warning email sent to user.');
         } catch (\Exception $e) {
             Log::error('Mail Send Failed: ' . $e->getMessage());
+            return back()->with('error', 'Failed to send warning email.');
+        } */
+        $subject = 'Your Order Confirmation';
+        $body = "
+# Hello there!
+
+Thank you for your recent order. Your order #**12345** has been confirmed.
+
+We'll notify you once it ships.
+
+Best regards,
+Our Team
+";
+
+        if (send_generic_email($user->email, $subject, $body)) {
+            return back()->with('success', 'Warning email sent to user.');
+        } else {
             return back()->with('error', 'Failed to send warning email.');
         }
     }
