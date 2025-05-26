@@ -156,16 +156,29 @@ class UsersController extends Controller
             Log::error('Mail Send Failed: ' . $e->getMessage());
             return back()->with('error', 'Failed to send warning email.');
         } */
-        $subject = 'Your Order Confirmation';
+        $subject = 'Important Warning: Your Reporting Activity on ' . config('app.name');
+
+        // Craft the body content for the warning email
         $body = "
-# Hello there!
+# Hello **{$user->name}**,
 
-Thank you for your recent order. Your order #**12345** has been confirmed.
+This is an important message from **" . config('app.name') . "** regarding your recent activity on our platform, specifically concerning the content you have reported.
 
-We'll notify you once it ships.
+We've noticed a pattern in your recent reports that may constitute misuse of our reporting system. This could include, but is not limited to:
+* Submitting **invalid or unfounded reports**.
+* **Excessive or repetitive reports** without clear violations.
+* Reporting content that does **not violate our community guidelines**.
 
-Best regards,
-Our Team
+The reporting feature is vital for maintaining a safe environment, and we rely on accurate and legitimate reports. Misuse of this system can hinder our ability to address genuine issues effectively.
+
+Please review our [Community Guidelines](" . url('/pages?tab=guidlines') . ") to understand what constitutes a reportable offense and how to use the feature appropriately.
+
+**Continued misuse of the reporting system may lead to consequences, including the removal of your reporting privileges or further actions on your account.**
+
+If you believe there has been a mistake or if you have any questions, please contact our support team at [support@buyme.lk].
+
+Thank you for your understanding and cooperation,<br>
+The Team at " . config('app.name') . "
 ";
 
         if (send_generic_email($user->email, $subject, $body)) {

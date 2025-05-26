@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PostCreated;
 use App\Events\PostVoted;
 use App\Models\Post;
 use App\Models\Report;
@@ -298,7 +299,7 @@ class UserPostController extends Controller
             $expiration_date = null; // Set to null if not provided
         }
 
-        Post::create([
+        $post = Post::create([
             'title' => $validated['title'],
             'description' => $validated['description'],
             'link' => $validated['link'] ?? null,
@@ -311,6 +312,8 @@ class UserPostController extends Controller
             'store' => $validated['store'],
             'post_by' => auth()->id(), // link to current logged-in user
         ]);
+
+        event(new PostCreated($post));
 
         return redirect()->route('create-deals')->with('success', 'Post created successfully!');
     }

@@ -34,6 +34,8 @@ return [
     |            "failover", "roundrobin"
     |
     */
+    'admin_notification_email' => env('ADMIN_NOTIFICATION_EMAIL', 'sys@buyme.lk'),
+    'posts_notification_threshold' => env('POSTS_NOTIFICATION_THRESHOLD', 20),
 
     'mailers' => [
 
@@ -109,8 +111,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'sys@buyme.lk'),
+        'name' => env('MAIL_FROM_NAME', 'BuyMe'),
     ],
 
 ];
