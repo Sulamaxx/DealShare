@@ -22,6 +22,8 @@ class UserController extends Controller
     {
         $user = Auth::user(); // Get the authenticated user instance
 
+        $originalEmail = $user->email;
+
         // --- Validate the incoming request data ---
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
