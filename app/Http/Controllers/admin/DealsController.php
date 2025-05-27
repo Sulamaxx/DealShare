@@ -9,6 +9,7 @@ use App\Models\Report;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -257,9 +258,53 @@ class DealsController extends Controller
 
     public function updateReportStatus($id)
     {
-        $report = Report::findOrFail($id);
+        $report = Report::with(['user', 'reportable'])->findOrFail($id);
         $report->status = 'reviewed';
         $report->save();
+
+        $appName = config('app.name');
+        $subject = 'Report Status Updated on ' . $appName;
+
+        $body = "# Hello **{$report->user->name}**,\n\n";
+        $body .= "This is an update regarding a report you submitted on **{$appName}**.\n\n";
+
+        $reportedItemTitle = '';
+        $reportedItemUrl = '';
+        $itemType = '';
+
+        // Determine the type of the reported item and get its details
+        if ($report->reportable_type === Post::class) {
+            $itemType = 'post';
+            $reportedItemTitle = $report->reportable->title ?? 'Untitled Post';
+            $reportedItemUrl = url('view-deal/' . $report->reportable->id . '?title=' . str_replace(' ', '-', $reportedItemTitle));
+        } elseif ($report->reportable_type === Comment::class) {
+            $itemType = 'comment';
+            $reportedItemTitle = substr($report->reportable->comment_text, 0, 50) . (strlen($report->reportable->comment_text) > 50 ? '...' : ''); // First 50 chars of comment
+            // For comments, you might want to link to the post the comment belongs to
+            if ($report->reportable->post) {
+                $reportedItemUrl = url('view-deal/' . $report->reportable->post->id . '?title=' . str_replace(' ', '-', $report->reportable->post->title));
+                $reportedItemTitle = "comment on \"" . ($report->reportable->post->title ?? 'Untitled Post') . "\"";
+            } else {
+                $reportedItemUrl = url('/'); // Fallback to homepage if parent post not found
+            }
+        } else {
+            // Fallback for unexpected reportable types
+            $itemType = 'item';
+            $reportedItemTitle = 'Unknown';
+            $reportedItemUrl = url('/'); // Link to homepage or a generic reports page
+        }
+
+        $body .= "The report concerning your **{$itemType}** (Report ID: {$report->id}) has been **reviewed**.\n\n";
+        if ($itemType !== 'item') {
+            $body .= "Reported content: \"{$reportedItemTitle}\"\n\n";
+        }
+        $body .= "Reason for report: `{$report->reason}`\n\n";
+        $body .= "Thank you for helping us maintain a safe and positive community.\n\n";
+        $body .= "If you have any further questions, please contact our support team at [info@buyme.lk].\n\n";
+        $body .= "The Team at {$appName}";
+        if ($report->user && $report->user->email) {
+            send_generic_email($report->user->email, $subject, $body, null, null);
+        }
 
         return back()->with('success', 'Report status updated successfully.');
     }
@@ -278,8 +323,39 @@ class DealsController extends Controller
 
     public function destroy($id)
     {
-        $deal = Post::findOrFail($id);
-        $deal->delete();
+        $deal = Post::with('user')->findOrFail($id);
+
+        $dealTitle = $deal->title; // Get title before deletion for email content
+        $dealId = $deal->id;
+        $dealCreator = $deal->user; // Get the user who created the deal
+
+        $deal->delete(); // Delete the deal
+
+        Log::info("Deal {$dealId} ('{$dealTitle}') deleted.");
+
+        // --- Send Email to the Post Creator ---
+        if ($dealCreator && $dealCreator->email) { // Ensure the post creator exists and has an email
+            $appName = config('app.name');
+            $subject = 'Your Deal Has Been Deleted on ' . $appName;
+
+            $dashboardUrl = url('/my-deals');
+
+            $body = "# Hello **{$dealCreator->name}**,\n\n";
+            $body .= "We are writing to inform you that your deal titled **\"{$dealTitle}\"** (ID: {$dealId}) has been deleted from **{$appName}**.\n\n";
+            $body .= "It is no longer available on our platform.\n\n";
+            $body .= "This deletion may have been due to moderation, expiration, or another reason. If you have questions, please contact our support team.\n\n";
+            $body .= "If you have any questions, feel free to reach out to us at [info@buyme.lk].\n\n";
+            $body .= "Thank you,\nThe Team at {$appName}";
+
+            // Pass the dashboard URL as the button link
+            if (send_generic_email($dealCreator->email, $subject, $body, null, null)) {
+                Log::info("Deletion notification email dispatched to post creator {$dealCreator->email} for deleted deal ID: {$dealId}");
+            } else {
+                Log::error("Failed to send deletion notification email to post creator {$dealCreator->email} for deleted deal ID: {$dealId}");
+            }
+        } else {
+            Log::warning("Deal {$dealId} deleted, but no creator or creator email found to send notification.");
+        }
 
         return back()->with('success', 'Deal deleted successfully.');
     }
@@ -343,10 +419,43 @@ class DealsController extends Controller
         ]);
 
         try {
-            // --- Update the comment text ---
-            $comment->comment_text = $request->input('comment_text');
-            $comment->save(); // Save the changes
+            $oldCommentText = $comment->comment_text;
 
+            $comment->comment_text = $request->input('comment_text');
+            $comment->save();
+
+            $comment->load('user', 'post');
+
+            $commentAuthor = $comment->user;
+            $updatedByUser = Auth::user(); // The currently authenticated user who performed the action
+
+            // Only send email if the comment author exists, has an email,
+            // AND the update was NOT made by the comment author themselves (to avoid self-notification).
+            if ($commentAuthor && $commentAuthor->email && $commentAuthor->id !== $updatedByUser->id) {
+                $appName = config('app.name');
+                $subject = 'Your Comment Was Updated on ' . ($comment->post->title ?? 'a Deal') . ' - ' . $appName;
+
+                $viewDealUrl = url('view-deal/' . ($comment->post->id ?? 'N/A') . '?title=' . str_replace(' ', '-', $comment->post->title ?? ''));
+
+                $body = "# Hello **{$commentAuthor->name}**,\n\n";
+                $body .= "Your comment on the deal **\"{$comment->post->title}\"** has been updated.\n\n";
+                $body .= "The comment was updated by: **Buyme Bargians Team**\n\n";
+                $body .= "### Original Comment:\n";
+                $body .= "> *\"{$oldCommentText}\"* \n\n";
+                $body .= "### Updated Comment:\n";
+                $body .= "> *\"{$request->input('comment_text')}\"* \n\n";
+                $body .= "You can view the updated comment and the full conversation here:\n\n";
+                $body .= "If you have any questions, feel free to reach out to us at [info@buyme.lk].\n\n";
+                $body .= "Thank you,\nThe Team at {$appName}";
+
+                if (send_generic_email($commentAuthor->email, $subject, $body, null, null)) {
+                    Log::info("Comment update notification email dispatched to comment author {$commentAuthor->email} for comment ID: {$comment->id}");
+                } else {
+                    Log::error("Failed to send comment update notification email to comment author {$commentAuthor->email} for comment ID: {$comment->id}");
+                }
+            } else {
+                Log::info("Comment ID {$comment->id} updated. No email sent to comment author (author not found, no email, or self-update).");
+            }
             // --- Return a success JSON response ---
             return response()->json(['success' => true, 'message' => 'Comment updated successfully.']);
         } catch (Exception $e) {
@@ -483,7 +592,7 @@ class DealsController extends Controller
         $body .= "View Your Deal\n";
         $body .= "</x-mail::button>\n\n";
 
-        $body .= "These changes have been made by the **Buyme Bargains Team**. If you have any questions, please contact our support team immediately at [info@buyme.lk].\n\n"; 
+        $body .= "These changes have been made by the **Buyme Bargains Team**. If you have any questions, please contact our support team immediately at [info@buyme.lk].\n\n";
         $body .= "Thank you,\nThe Team at {$appName}";
 
         if ($post->user && $post->user->email) {

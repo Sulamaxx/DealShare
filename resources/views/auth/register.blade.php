@@ -77,7 +77,7 @@
 
 @extends('layouts.app')
 
-@section('title', 'Forum')
+@section('title', 'Buyme Bargians')
 
 @section('content')
 
@@ -140,10 +140,10 @@
                     <a href="index.html" class="tt-block-title">
                         <img src="images/logo.png" alt="">
                         <div class="tt-title">
-                            Welcome to Deal Share
+                            Welcome to Buyme Bargians
                         </div>
                         <div class="tt-description">
-                            Join the forum to unlock true power of community.
+                            Join to unlock true power of community.
                         </div>
                     </a>
                     <x-validation-errors class="mb-4" />
@@ -204,7 +204,7 @@
                         </p>
                         <div class="tt-notes">
                             By signing up, signing in or continuing, I agree to
-                            Deal Share’s <a href="#" class="tt-underline">Terms of Use</a> and <a href="#"
+                            Buyme Bargians’s <a href="#" class="tt-underline">Terms of Use</a> and <a href="#"
                                 class="tt-underline">Privacy Policy.</a>
                         </div>
                     </form>

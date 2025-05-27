@@ -12,7 +12,7 @@
             </a>
         @else
             <a class="deal-image-area position-relative"
-                style="flex-basis: 30%; background-image: url('https://via.placeholder.com/300x150'); background-size: cover; background-position: center; background-repeat: no-repeat;min-width:30%"
+                style="flex-basis: 30%; background-image: url('{{ asset('images/deal.jpg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;min-width:30%"
                 alt="Placeholder Image">
 
             </a>
