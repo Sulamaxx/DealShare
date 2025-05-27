@@ -210,142 +210,148 @@
         <div class="container">
 
 
+            @if ($popular_deals)
+                <section class="popular-deals-section" style="margin-top: 20px;line-height: 17.5px;">
+                    <div class="container" style="padding-inline: 0px">
 
-            <section class="popular-deals-section" style="margin-top: 20px;line-height: 17.5px;">
-                <div class="container" style="padding-inline: 0px">
-
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <div>
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div>
 
 
-                            <h2 style="margin-bottom: 0; font-weight: bold; font-size: 1.5rem; display: inline-block;">
-                                Popular Deals
-                            </h2>
+                                <h2 style="margin-bottom: 0; font-weight: bold; font-size: 1.5rem; display: inline-block;">
+                                    Popular Deals
+                                </h2>
 
-                            <div style="width: 62.5px; height: 3px; background-color: #DC3545; display: inline-block;">
+                                <div style="width: 62.5px; height: 3px; background-color: #DC3545; display: inline-block;">
+                                </div>
+
+
                             </div>
+
+                            <a href="{{ route('popular-deals') }}" class="fs-6 animated-link" {{-- Added a class for easier targeting in CSS --}}
+                                style="text-decoration: none; color: #555; font-weight: bold; display: inline-flex; align-items: center;">
+                                View All
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"
+                                    viewBox="0 0 16 16" style="vertical-align: middle; margin-left: 0.125em;">
+                                    <path fill-rule="evenodd"
+                                        d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"
+                                    viewBox="0 0 16 16" style="vertical-align: middle;margin-left: -0.5em;">
+                                    <path fill-rule="evenodd"
+                                        d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                </svg>
+                            </a>
+                        </div>
+
+
+                        <div class="row">
+
+                            @foreach ($popular_deals as $deal)
+                                <!-- Repeat deal card -->
+                                @include('deal.deal_card', [$deal])
+                            @endforeach
 
 
                         </div>
-
-                        <a href="{{ route('popular-deals') }}" class="fs-6 animated-link" {{-- Added a class for easier targeting in CSS --}}
-                            style="text-decoration: none; color: #555; font-weight: bold; display: inline-flex; align-items: center;">
-                            View All
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"
-                                viewBox="0 0 16 16" style="vertical-align: middle; margin-left: 0.125em;">
-                                <path fill-rule="evenodd"
-                                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"
-                                viewBox="0 0 16 16" style="vertical-align: middle;margin-left: -0.5em;">
-                                <path fill-rule="evenodd"
-                                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
-                            </svg>
-                        </a>
                     </div>
+                </section>
+            @endif
+
+            @if ($new_deals)
+                <section class="popular-deals-section" style="margin-top: 20px;line-height: 17.5px;">
+                    <div class="container" style="padding-inline: 0px">
+
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div>
 
 
-                    <div class="row">
+                                <h2 style="margin-bottom: 0; font-weight: bold; font-size: 1.5rem; display: inline-block;">
+                                    New Deals
+                                </h2>
 
-                        @foreach ($popular_deals as $deal)
-                            <!-- Repeat deal card -->
-                            @include('deal.deal_card', [$deal])
-                        @endforeach
-
-
-                    </div>
-                </div>
-            </section>
-
-            <section class="popular-deals-section" style="margin-top: 20px;line-height: 17.5px;">
-                <div class="container" style="padding-inline: 0px">
-
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <div>
+                                <div style="width: 62.5px; height: 3px; background-color: #DC3545; display: inline-block;">
+                                </div>
 
 
-                            <h2 style="margin-bottom: 0; font-weight: bold; font-size: 1.5rem; display: inline-block;">
-                                New Deals
-                            </h2>
-
-                            <div style="width: 62.5px; height: 3px; background-color: #DC3545; display: inline-block;">
                             </div>
+
+                            <a href="{{ route('new-deals') }}" class="fs-6 animated-link" {{-- Added a class for easier targeting in CSS --}}
+                                style="text-decoration: none; color: #555; font-weight: bold; display: inline-flex; align-items: center;">
+                                View All
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"
+                                    viewBox="0 0 16 16" style="vertical-align: middle; margin-left: 0.125em;">
+                                    <path fill-rule="evenodd"
+                                        d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"
+                                    viewBox="0 0 16 16" style="vertical-align: middle;margin-left: -0.5em;">
+                                    <path fill-rule="evenodd"
+                                        d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                </svg>
+                            </a>
+                        </div>
+                        <div class="row">
+
+                            @foreach ($new_deals as $deal)
+                                <!-- Repeat deal card -->
+                                @include('deal.deal_card', [$deal])
+                            @endforeach
 
 
                         </div>
-
-                        <a href="{{ route('new-deals') }}" class="fs-6 animated-link" {{-- Added a class for easier targeting in CSS --}}
-                            style="text-decoration: none; color: #555; font-weight: bold; display: inline-flex; align-items: center;">
-                            View All
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"
-                                viewBox="0 0 16 16" style="vertical-align: middle; margin-left: 0.125em;">
-                                <path fill-rule="evenodd"
-                                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"
-                                viewBox="0 0 16 16" style="vertical-align: middle;margin-left: -0.5em;">
-                                <path fill-rule="evenodd"
-                                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
-                            </svg>
-                        </a>
                     </div>
-                    <div class="row">
+                </section>
+            @endif
 
-                        @foreach ($new_deals as $deal)
-                            <!-- Repeat deal card -->
-                            @include('deal.deal_card', [$deal])
-                        @endforeach
+            @if ($highly_voted_deals)
+                <section class="popular-deals-section" style="margin-top: 20px;line-height: 17.5px;">
+                    <div class="container" style="padding-inline: 0px">
 
-
-                    </div>
-                </div>
-            </section>
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div>
 
 
-            <section class="popular-deals-section" style="margin-top: 20px;line-height: 17.5px;">
-                <div class="container" style="padding-inline: 0px">
+                                <h2 style="margin-bottom: 0; font-weight: bold; font-size: 1.5rem; display: inline-block;">
+                                    Highly Voted Deals
+                                </h2>
 
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <div>
+                                <div style="width: 62.5px; height: 3px; background-color: #DC3545; display: inline-block;">
+                                </div>
 
 
-                            <h2 style="margin-bottom: 0; font-weight: bold; font-size: 1.5rem; display: inline-block;">
-                                Highly Voted Deals
-                            </h2>
-
-                            <div style="width: 62.5px; height: 3px; background-color: #DC3545; display: inline-block;">
                             </div>
 
-
+                            <a href="{{ route('highly-voted-deals') }}" class="fs-6 animated-link"
+                                style="text-decoration: none; color: #555; font-weight: bold; display: inline-flex; align-items: center;">
+                                View All
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"
+                                    viewBox="0 0 16 16" style="vertical-align: middle; margin-left: 0.125em;">
+                                    <path fill-rule="evenodd"
+                                        d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"
+                                    viewBox="0 0 16 16" style="vertical-align: middle;margin-left: -0.5em;">
+                                    <path fill-rule="evenodd"
+                                        d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                                </svg>
+                            </a>
                         </div>
 
-                        <a href="{{ route('highly-voted-deals') }}" class="fs-6 animated-link"
-                            style="text-decoration: none; color: #555; font-weight: bold; display: inline-flex; align-items: center;">
-                            View All
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"
-                                viewBox="0 0 16 16" style="vertical-align: middle; margin-left: 0.125em;">
-                                <path fill-rule="evenodd"
-                                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#28a745"
-                                viewBox="0 0 16 16" style="vertical-align: middle;margin-left: -0.5em;">
-                                <path fill-rule="evenodd"
-                                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
-                            </svg>
-                        </a>
+
+                        <div class="row">
+
+                            @foreach ($highly_voted_deals as $deal)
+                                <!-- Repeat deal card -->
+                                @include('deal.deal_card', [$deal])
+                            @endforeach
+
+                        </div>
                     </div>
+                </section>
+            @endif
 
 
-                    <div class="row">
-
-                        @foreach ($highly_voted_deals as $deal)
-                            <!-- Repeat deal card -->
-                            @include('deal.deal_card', [$deal])
-                        @endforeach
-
-                    </div>
-                </div>
-            </section>
 
 
 
