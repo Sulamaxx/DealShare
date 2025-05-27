@@ -7,6 +7,7 @@ use App\Mail\WarningEmail;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -22,6 +23,9 @@ class UsersController extends Controller
 
     public function addUser()
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
         return view('backend.users/addUser');
     }
 
@@ -32,6 +36,9 @@ class UsersController extends Controller
 
     public function store(Request $request)
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
 
         // Validate the form data
         $validated = $request->validate([
@@ -94,6 +101,10 @@ class UsersController extends Controller
 
     public function usersList(Request $request)
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
+
         $query = User::query();
 
         if ($request->search) {
@@ -113,6 +124,10 @@ class UsersController extends Controller
     }
     public function reportedUsersList(Request $request)
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
+
         $query = User::query();
 
         if ($request->search) {
@@ -132,6 +147,10 @@ class UsersController extends Controller
 
     public function bannedUsersList(Request $request)
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
+
         $query = User::query();
 
         if ($request->search) {
@@ -154,12 +173,20 @@ class UsersController extends Controller
 
     public function viewProfile($id)
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
+
         $user = User::findOrFail($id);
         return view('backend.users/viewProfile', compact('user'));
     }
 
     public function changeStatus($id)
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
+
         $user = User::findOrFail($id);
         $oldStatus = $user->status;
         $newStatus = $oldStatus == 1 ? 0 : 1;
@@ -214,6 +241,10 @@ The Team at " . config('app.name') . "
 
     public function destroy($id)
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
+
         $user = User::findOrFail($id);
 
         $userEmail = $user->email;
@@ -286,6 +317,10 @@ The Team at " . config('app.name') . "
 
     public function temporaryBan($id)
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
+
         $user = User::findOrFail($id);
         $user->status = 2;
         $user->save();
@@ -317,6 +352,10 @@ The Team at {$appName}
 
     public function banUser($id)
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
+
         $user = User::findOrFail($id);
         $user->status = 3;
         $user->save();
@@ -338,6 +377,10 @@ The Team at {$appName}
 
     public function activate($id)
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
+
         $user = User::findOrFail($id);
         $user->status = 1; // Set status to Active
         $user->save();
@@ -369,6 +412,10 @@ The Team at {$appName}
 
     public function show($id)
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
+
         $query = User::query();
 
         $user = $query->findOrFail($id);
@@ -377,6 +424,10 @@ The Team at {$appName}
 
     public function update(Request $request, $id) // Using Route Model Binding
     {
+
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
 
         $user = User::findOrFail($id);
 

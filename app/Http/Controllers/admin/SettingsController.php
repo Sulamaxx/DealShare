@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,6 +15,10 @@ class SettingsController extends Controller
 
     public function popularDeals()
     {
+
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
 
         $settings = Setting::whereIn('key', [
             'popular_deal_upvote_weight',
@@ -30,6 +35,10 @@ class SettingsController extends Controller
     public function highlyVotedDeals()
     {
 
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
+
         $settings = Setting::whereIn('key', [
             'highly_voted_deal_upvote_count',
         ])
@@ -41,6 +50,9 @@ class SettingsController extends Controller
 
     public function bottomBanner()
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
 
         $banner = Setting::whereIn('key', [
             'bottom_banner',
@@ -53,6 +65,9 @@ class SettingsController extends Controller
 
     public function topBanner()
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
 
         $banner = Setting::whereIn('key', [
             'top_banner',
@@ -65,6 +80,10 @@ class SettingsController extends Controller
 
     public function update(Request $request)
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
+
         // Validate the form data
         $validated = $request->validate([
             'popular_deal_upvote_weight' => 'nullable|numeric',
@@ -88,6 +107,10 @@ class SettingsController extends Controller
 
     public function highlyVotedUpdate(Request $request)
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
+
         // Validate the form data
         $validated = $request->validate([
             'highly_voted_deal_upvote_count' => 'nullable|numeric',
@@ -107,6 +130,10 @@ class SettingsController extends Controller
 
     public function cmsSetting()
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
+
         // Fetch all page content by type into a key-value array
         $data = \DB::table('page_contents')
             ->pluck('content', 'type')
@@ -116,6 +143,10 @@ class SettingsController extends Controller
     }
     public function saveCMSSetting(Request $request)
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
+
         $request->validate([
             'type' => 'required|in:about,guidelines,faq,terms,privacy,other',
             'content' => 'required|string',
@@ -132,6 +163,9 @@ class SettingsController extends Controller
 
     public function updateBottomBanner(Request $request) // Using Route Model Binding
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
 
         $validated = $request->validate([
             'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
@@ -180,6 +214,9 @@ class SettingsController extends Controller
 
     public function updateTopBanner(Request $request) // Using Route Model Binding
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
 
         $validated = $request->validate([
             'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',

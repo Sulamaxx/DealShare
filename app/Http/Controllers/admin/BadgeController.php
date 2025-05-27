@@ -5,10 +5,13 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Badge;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class BadgeController extends Controller
 {
@@ -19,8 +22,14 @@ class BadgeController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function addBadge()
+    public function addBadge(): View|RedirectResponse
     {
+        if (Auth::user()->user_type === 'moderator') {
+            // If the user is a moderator, redirect them
+            return redirect('/admin/login');
+        }
+
+        // Otherwise, show the add badge view
         return view('backend.badges.addBadge');
     }
 
@@ -32,6 +41,10 @@ class BadgeController extends Controller
      */
     public function store(Request $request)
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|unique:badges,name|max:255',
             'description' => 'nullable|string',
@@ -63,6 +76,9 @@ class BadgeController extends Controller
 
     public function update(Request $request, $id) // Using Route Model Binding
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
 
         $badge = Badge::findOrFail($id);
 
@@ -85,10 +101,10 @@ class BadgeController extends Controller
 
                 // Store the new image
                 $path = $request->file('image')->store('badges', 'public'); // Store in storage/app/public/badges
-                $data['icon'] = 'storage/'.$path; // Update the icon path in the data to be saved
+                $data['icon'] = 'storage/' . $path; // Update the icon path in the data to be saved
             }
 
-             $data['vote-count'] = $validated['vote-count']; // Map input to model attribute/column
+            $data['vote-count'] = $validated['vote-count']; // Map input to model attribute/column
 
             // --- Update the Badge model with validated data ---
             $badge->update($data);
@@ -96,18 +112,20 @@ class BadgeController extends Controller
             //Session::flash('success', 'Badge updated successfully!');
 
             return redirect()->route('getBadges')->with('success', 'Badge created successfully!');
-
         } catch (Exception $e) {
-             Log::error("Error updating badge {$badge->id}: " . $e->getMessage());
-             //Session::flash('error', 'Failed to update badge.');
-             return redirect()->route('getBadges')->with('error', 'Failed to update badge.');
-
+            Log::error("Error updating badge {$badge->id}: " . $e->getMessage());
+            //Session::flash('error', 'Failed to update badge.');
+            return redirect()->route('getBadges')->with('error', 'Failed to update badge.');
         }
     }
 
 
     public function badgesList(Request $request)
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
+
         $query = Badge::query();
 
         if ($request->filled('search')) {
@@ -121,6 +139,10 @@ class BadgeController extends Controller
 
     public function show($id)
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
+
         $query = Badge::query();
         $query->select('badges.*', 'vote-count as vote_count');
 
@@ -130,6 +152,10 @@ class BadgeController extends Controller
 
     public function destroy($id)
     {
+        if (Auth::user()->user_type === 'moderator') {
+            return redirect('/admin/login');
+        }
+
         $badge = Badge::findOrFail($id);
         $badge->delete();
 
