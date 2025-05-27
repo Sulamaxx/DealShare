@@ -258,52 +258,96 @@ class DealsController extends Controller
 
     public function updateReportStatus($id)
     {
-        $report = Report::with(['user', 'reportable'])->findOrFail($id);
+        $report = Report::with([
+            'user', // The user who submitted the report
+            'reportable',
+            'reportable.user', // The user who created the reported post/comment
+            'reportable.post.user' // If reportable is a comment, get its parent post's user
+        ])->findOrFail($id);
+
         $report->status = 'reviewed';
         $report->save();
 
         $appName = config('app.name');
-        $subject = 'Report Status Updated on ' . $appName;
-
-        $body = "# Hello **{$report->user->name}**,\n\n";
-        $body .= "This is an update regarding a report you submitted on **{$appName}**.\n\n";
 
         $reportedItemTitle = '';
         $reportedItemUrl = '';
         $itemType = '';
+        $reportedItemCreator = null; // Initialize reported item's creator
 
         // Determine the type of the reported item and get its details
         if ($report->reportable_type === Post::class) {
             $itemType = 'post';
             $reportedItemTitle = $report->reportable->title ?? 'Untitled Post';
             $reportedItemUrl = url('view-deal/' . $report->reportable->id . '?title=' . str_replace(' ', '-', $reportedItemTitle));
+            $reportedItemCreator = $report->reportable->user; // Post creator
         } elseif ($report->reportable_type === Comment::class) {
             $itemType = 'comment';
-            $reportedItemTitle = substr($report->reportable->comment_text, 0, 50) . (strlen($report->reportable->comment_text) > 50 ? '...' : ''); // First 50 chars of comment
-            // For comments, you might want to link to the post the comment belongs to
+            // Get the comment text snippet
+            $commentTextSnippet = substr($report->reportable->comment_text ?? 'N/A', 0, 50) . (strlen($report->reportable->comment_text ?? '') > 50 ? '...' : '');
+
+            // For comments, link to the post the comment belongs to
             if ($report->reportable->post) {
-                $reportedItemUrl = url('view-deal/' . $report->reportable->post->id . '?title=' . str_replace(' ', '-', $report->reportable->post->title));
-                $reportedItemTitle = "comment on \"" . ($report->reportable->post->title ?? 'Untitled Post') . "\"";
+                $reportedItemUrl = url('view-deal/' . $report->reportable->post->id . '?title=' . str_replace(' ', '-', $report->reportable->post->title ?? ''));
+                $reportedItemTitle = "comment on \"" . ($report->reportable->post->title ?? 'Untitled Post') . "\" (Text: \"{$commentTextSnippet}\")";
+                $reportedItemCreator = $report->reportable->user; // Comment creator
             } else {
                 $reportedItemUrl = url('/'); // Fallback to homepage if parent post not found
+                $reportedItemTitle = "comment (Text: \"{$commentTextSnippet}\")";
+                $reportedItemCreator = $report->reportable->user; // Still try to get comment creator
             }
         } else {
             // Fallback for unexpected reportable types
             $itemType = 'item';
             $reportedItemTitle = 'Unknown';
             $reportedItemUrl = url('/'); // Link to homepage or a generic reports page
+            $reportedItemCreator = null; // No creator identifiable
         }
 
-        $body .= "The report concerning your **{$itemType}** (Report ID: {$report->id}) has been **reviewed**.\n\n";
-        if ($itemType !== 'item') {
-            $body .= "Reported content: \"{$reportedItemTitle}\"\n\n";
-        }
-        $body .= "Reason for report: `{$report->reason}`\n\n";
-        $body .= "Thank you for helping us maintain a safe and positive community.\n\n";
-        $body .= "If you have any further questions, please contact our support team at [info@buyme.lk].\n\n";
-        $body .= "The Team at {$appName}";
+        // --- Email to the User who submitted the Report (Reporter) ---
         if ($report->user && $report->user->email) {
-            send_generic_email($report->user->email, $subject, $body, null, null);
+            $subjectToReporter = 'Update on Your Report - ' . $appName;
+            $bodyToReporter = "# Hello **{$report->user->name}**,\n\n";
+            $bodyToReporter .= "This is an update regarding a report you submitted on **{$appName}**.\n\n";
+            $bodyToReporter .= "Your report concerning a **{$itemType}** has been **reviewed** (Report ID: {$report->id}).\n\n";
+            if ($itemType !== 'item') {
+                $bodyToReporter .= "Reported content: \"{$reportedItemTitle}\"\n\n";
+                $bodyToReporter .= "Reason for report: `{$report->reason}`\n\n";
+                $bodyToReporter .= "You can view the item here: [View Item]({$reportedItemUrl})\n\n";
+            } else {
+                $bodyToReporter .= "Reason for report: `{$report->reason}`\n\n";
+            }
+            $bodyToReporter .= "Thank you for helping us maintain a safe and positive community. We appreciate your vigilance.\n\n";
+            $bodyToReporter .= "If you have any further questions, please contact our support team at [info@buyme.lk].\n\n";
+            $bodyToReporter .= "The Team at {$appName}";
+
+            if (send_generic_email($report->user->email, $subjectToReporter, $bodyToReporter, $reportedItemUrl, 'View Item')) {
+                Log::info("Report status update email dispatched to reporter {$report->user->email} for report ID: {$report->id}");
+            } else {
+                Log::error("Failed to send report status update email to reporter {$report->user->email} for report ID: {$report->id}");
+            }
+        }
+
+        // --- Email to the User who created the Reported Post/Comment (Creator) ---
+        // Only send if a creator is identified and they are not the same as the reporter
+        // This avoids sending redundant emails if a user reports their own content and it gets reviewed.
+        if ($reportedItemCreator && $reportedItemCreator->email && $reportedItemCreator->id !== $report->user->id) {
+            $subjectToCreator = 'Regarding Your Content - ' . $appName;
+            $bodyToCreator = "# Hello **{$reportedItemCreator->name}**,\n\n";
+            $bodyToCreator .= "This email is to inform you about a recent review concerning your **{$itemType}** on **{$appName}**.\n\n";
+            $bodyToCreator .= "Your **{$itemType}** (content: \"{$reportedItemTitle}\") has been reviewed due to a user report (Report ID: {$report->id}).\n\n";
+            $bodyToCreator .= "The report stated the reason: `{$report->reason}`\n\n";
+            $bodyToCreator .= "While this particular report has been **reviewed**, we encourage you to ensure your content always complies with our community guidelines to maintain a positive environment. You can view your content here: [View Item]({$reportedItemUrl})\n\n";
+            $bodyToCreator .= "If you have any questions or would like to discuss this further, please contact our support team at [info@buyme.lk].\n\n";
+            $bodyToCreator .= "The Team at {$appName}";
+
+            if (send_generic_email($reportedItemCreator->email, $subjectToCreator, $bodyToCreator, $reportedItemUrl, 'View Your Content')) {
+                Log::info("Report review notification email dispatched to reported item creator {$reportedItemCreator->email} for report ID: {$report->id}");
+            } else {
+                Log::error("Failed to send report review notification email to reported item creator {$reportedItemCreator->email} for report ID: {$report->id}");
+            }
+        } else {
+            Log::info("Report ID {$report->id} reviewed. No email sent to reported item creator (not found, no email, or creator is reporter).");
         }
 
         return back()->with('success', 'Report status updated successfully.');
@@ -362,8 +406,89 @@ class DealsController extends Controller
 
     public function destroyReport($id)
     {
-        $report = Report::findOrFail($id);
-        $report->delete();
+        $report = Report::with(['user', 'reportable', 'reportable.user', 'reportable.post.user'])->findOrFail($id);
+
+        $reporter = $report->user; // The user who submitted the report
+        $reportedItemCreator = null; // Initialize reported item's creator
+        $reportId = $report->id;
+        $reportReason = $report->reason;
+
+        // Determine the type of the reported item and get its details for the email
+        $reportedItemTitle = '';
+        $itemType = '';
+        if ($report->reportable_type === Post::class) {
+            $itemType = 'post';
+            $reportedItemTitle = $report->reportable->title ?? 'Untitled Post';
+            $reportedItemCreator = $report->reportable->user; // Post creator
+        } elseif ($report->reportable_type === Comment::class) {
+            $itemType = 'comment';
+            // Get the comment text snippet
+            $commentTextSnippet = substr($report->reportable->comment_text ?? 'N/A', 0, 50) . (strlen($report->reportable->comment_text ?? '') > 50 ? '...' : '');
+            $reportedItemTitle = "comment (Text: \"{$commentTextSnippet}\")";
+            // For comments, link to the post the comment belongs to
+            if ($report->reportable->post) {
+                $reportedItemCreator = $report->reportable->user; // Comment creator
+            } else {
+                $reportedItemCreator = $report->reportable->user; // Still try to get comment creator
+            }
+        } else {
+            $itemType = 'item';
+            $reportedItemTitle = 'Unknown Content';
+            $reportedItemCreator = null; // No creator identifiable
+        }
+
+        $report->delete(); // Delete the report
+
+        Log::info("Report {$reportId} deleted.");
+
+        // --- Send Email to the User who submitted the Report (Reporter) ---
+        if ($reporter && $reporter->email) {
+            $appName = config('app.name');
+            $subjectToReporter = 'Report Deleted - ' . $appName;
+
+            $bodyToReporter = "# Hello **{$reporter->name}**,\n\n";
+            $bodyToReporter .= "This email is to confirm that the report you submitted on **{$appName}** has been deleted.\n\n";
+            $bodyToReporter .= "Report Details:\n";
+            $bodyToReporter .= "- **Report ID:** {$reportId}\n";
+            $bodyToReporter .= "- **Item Type:** {$itemType}\n";
+            $bodyToReporter .= "- **Reported Content:** \"{$reportedItemTitle}\"\n";
+            $bodyToReporter .= "- **Your Reason:** `{$reportReason}`\n\n";
+            $bodyToReporter .= "This deletion may have occurred because the reported content is no longer available, the report was deemed invalid, or due to a system cleanup.\n\n";
+            $bodyToReporter .= "If you have any questions, please contact our support team at [info@buyme.lk].\n\n";
+            $bodyToReporter .= "Thank you,\nThe Team at {$appName}";
+
+            if (send_generic_email($reporter->email, $subjectToReporter, $bodyToReporter, null, null)) {
+                Log::info("Report deletion notification email dispatched to reporter {$reporter->email} for report ID: {$reportId}");
+            } else {
+                Log::error("Failed to send report deletion notification email to reporter {$reporter->email} for report ID: {$reportId}");
+            }
+        } else {
+            Log::warning("Report {$reportId} deleted, but no reporter or reporter email found to send notification.");
+        }
+
+        // --- Send Email to the User who created the Reported Post/Comment (Creator) ---
+        // Only send if a creator is identified and they are not the same as the reporter
+        if ($reportedItemCreator && $reportedItemCreator->email && $reportedItemCreator->id !== $reporter->id) {
+            $subjectToCreator = 'Notification: Report Deleted - ' . $appName;
+            $bodyToCreator = "# Hello **{$reportedItemCreator->name}**,\n\n";
+            $bodyToCreator .= "This email is to inform you that a report concerning your **{$itemType}** has been deleted.\n\n";
+            $bodyToCreator .= "Report Details:\n";
+            $bodyToCreator .= "- **Report ID:** {$reportId}\n";
+            $bodyToCreator .= "- **Reported Content:** \"{$reportedItemTitle}\"\n";
+            $bodyToCreator .= "- **Reason for report:** `{$reportReason}`\n\n";
+            $bodyToCreator .= "This deletion may indicate that the report was deemed invalid, the reported content has been modified or removed, or due to a system cleanup.\n\n";
+            $bodyToCreator .= "We encourage you to review our community guidelines to ensure your content aligns with our policies.\n\n";
+            $bodyToCreator .= "If you have any questions, please contact our support team at [info@buyme.lk].\n\n";
+            $bodyToCreator .= "Thank you,\nThe Team at {$appName}";
+
+            if (send_generic_email($reportedItemCreator->email, $subjectToCreator, $bodyToCreator, null, null)) {
+                Log::info("Report deletion notification email dispatched to reported item creator {$reportedItemCreator->email} for report ID: {$reportId}");
+            } else {
+                Log::error("Failed to send report deletion notification email to reported item creator {$reportedItemCreator->email} for report ID: {$reportId}");
+            }
+        } else {
+            Log::info("Report ID {$reportId} deleted. No email sent to reported item creator (not found, no email, or creator is reporter).");
+        }
 
         return back()->with('success', 'Report deleted successfully.');
     }
@@ -373,15 +498,36 @@ class DealsController extends Controller
 
         try {
 
-            $deal = Post::findOrFail($deal);
-            $deal->status = 0;
+            $deal = Post::with('user')->findOrFail($deal);
+            $deal->status = 0; // Deactivate the deal
             $deal->save();
 
+            // Find and update the report status
             $report = Report::findOrFail($report);
             $report->status = 'resolved';
             $report->save();
 
+            $appName = config('app.name');
 
+            // --- Send Email to Deal Creator Only ---
+            if ($deal->user && $deal->user->email) {
+                $subjectToCreator = 'Your Deal Has Been Deactivated - ' . $appName;
+                $bodyToCreator = "# Hello **{$deal->user->name}**,\n\n";
+                $bodyToCreator .= "We are writing to inform you that your deal titled **\"{$deal->title}\"** (ID: {$deal->id}) has been deactivated on **{$appName}**.\n\n";
+                $bodyToCreator .= "This action was taken following a user report (Report ID: {$report->id}).\n\n";
+                $bodyToCreator .= "The reported reason was: `{$report->reason}`\n\n";
+                $bodyToCreator .= "We encourage you to review our community guidelines to ensure your deals comply with our policies for future posts.\n\n";
+                $bodyToCreator .= "If you have any questions, please contact our support team at [info@buyme.lk].\n\n";
+                $bodyToCreator .= "Thank you,\nThe Team at {$appName}";
+
+                if (send_generic_email($deal->user->email, $subjectToCreator, $bodyToCreator, null, null)) {
+                    Log::info("Deal deactivation notification email dispatched to deal creator {$deal->user->email} for deal ID: {$deal->id}");
+                } else {
+                    Log::error("Failed to send deal deactivation notification email to deal creator {$deal->user->email} for deal ID: {$deal->id}");
+                }
+            } else {
+                Log::warning("Deal deactivated, but no creator or creator email found for deal ID: {$deal->id}. No notification sent.");
+            }
             return back()->with('success', 'Deal deactivated successfully.');
         } catch (Exception $ex) {
             Log::error("Failed to deactivate deal ID {$deal} or update report ID {$report}. Error: " . $ex->getMessage());
@@ -395,13 +541,38 @@ class DealsController extends Controller
 
         try {
 
-            $comment = Comment::findOrFail($comment);
-            $comment->status = 0;
+            $comment = Comment::with('user')->findOrFail($comment);
+            $comment->status = 0; // Deactivate the comment
             $comment->save();
 
-            $report = Report::findOrFail($report);
+            // Find and update the report status
+            $report = Report::findOrFail($report); 
             $report->status = 'resolved';
             $report->save();
+
+            $appName = config('app.name');
+
+            // --- Send Email to Comment Creator Only ---
+            if ($comment->user && $comment->user->email) {
+                $subjectToCreator = 'Your Comment Has Been Deactivated - ' . $appName;
+                $commentTextSnippet = substr($comment->comment_text ?? 'N/A', 0, 50) . (strlen($comment->comment_text ?? '') > 50 ? '...' : '');
+
+                $bodyToCreator = "# Hello **{$comment->user->name}**,\n\n";
+                $bodyToCreator .= "We are writing to inform you that your comment **\"{$commentTextSnippet}\"** (ID: {$comment->id}) has been deactivated on **{$appName}**.\n\n";
+                $bodyToCreator .= "This action was taken following a user report (Report ID: {$report->id}).\n\n";
+                $bodyToCreator .= "The reported reason was: `{$report->reason}`\n\n";
+                $bodyToCreator .= "We encourage you to review our community guidelines to ensure your comments comply with our policies for future interactions.\n\n";
+                $bodyToCreator .= "If you have any questions, please contact our support team at [info@buyme.lk].\n\n";
+                $bodyToCreator .= "Thank you,\nThe Team at {$appName}";
+
+                if (send_generic_email($comment->user->email, $subjectToCreator, $bodyToCreator, null, null)) {
+                    Log::info("Comment deactivation notification email dispatched to comment creator {$comment->user->email} for comment ID: {$comment->id}");
+                } else {
+                    Log::error("Failed to send comment deactivation notification email to comment creator {$comment->user->email} for comment ID: {$comment->id}");
+                }
+            } else {
+                Log::warning("Comment deactivated, but no creator or creator email found for comment ID: {$comment->id}. No notification sent.");
+            }
 
             return back()->with('success', 'Comment deactivated successfully.');
         } catch (Exception $ex) {
