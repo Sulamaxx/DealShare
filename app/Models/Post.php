@@ -32,6 +32,7 @@ class Post extends Model
     protected $casts = [
         'verified_member' => 'boolean',
         'posted_at' => 'datetime',
+        'expiration_date' => 'datetime',
     ];
 
     public function user()

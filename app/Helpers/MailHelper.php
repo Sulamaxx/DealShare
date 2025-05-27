@@ -13,11 +13,11 @@ if (!function_exists('send_generic_email')) {
      * @param string $bodyContent The HTML or Markdown content for the email body.
      * @return bool True if the email was dispatched, false otherwise.
      */
-    function send_generic_email(string $toEmail, string $subject, string $bodyContent): bool
+    function send_generic_email(string $toEmail, string $subject, string $bodyContent, ?string $buttonUrl = null, ?string $buttonText = null): bool
     {
         try {
             // Dispatch the Mailable to the queue for sending
-            Mail::to($toEmail)->send(new GenericMail($subject, $bodyContent));
+            Mail::to($toEmail)->queue(new GenericMail($subject, $bodyContent, $buttonUrl, $buttonText));
             Log::info("Generic email dispatched to {$toEmail} with subject: {$subject}");
             return true;
         } catch (\Exception $e) {

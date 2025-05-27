@@ -191,6 +191,7 @@ class DealsController extends Controller
     public function updateStatus($id)
     {
         $deal = Post::findOrFail($id);
+        $originalStatus = $deal->status;
         if ($deal->status === 0 || $deal->status === 2) {
             $deal->status = 1;
         } else {
@@ -198,6 +199,27 @@ class DealsController extends Controller
         }
 
         $deal->save();
+
+        $appName = config('app.name');
+        $newStatus = $deal->status;
+        $subject = 'Deal Status Updated on ' . $appName;
+
+        $dealUrl = '/view-deal/' . $deal->id . '?title=' . str_replace(' ', '-', $deal->title);
+
+        $body = "# Hello,\\n\\n";
+        $body .= "The status of a deal has been updated.\\n\\n";
+        $body .= "Deal ID: {$deal->id}\\n\\n"; // Include the deal ID in the email
+        if ($originalStatus != $newStatus) {
+            $body .= "The status changed from " . ($originalStatus == 0 ? 'Inactive' : ($originalStatus == 1 ? 'Active' : 'Pending')) . " to " . ($newStatus == 0 ? 'Inactive' : ($newStatus == 1 ? 'Active' : 'Pending')) . ".\\n\\n";
+        } else {
+            $body .= "The status remains " . ($newStatus == 0 ? 'Inactive' : ($newStatus == 1 ? 'Active' : 'Pending')) . ".\\n\\n";
+        }
+        $body .= "You can view the deal here: " . url($dealUrl) . "\\n\\n";
+        $body .= "Thank you,\\nThe Team at {$appName}";
+
+        if ($deal->user && $deal->user->email) {
+            send_generic_email($deal->user->email, $subject, $body, null, null);
+        }
 
         return back()->with('success', 'Deal status updated successfully.');
     }
@@ -207,6 +229,28 @@ class DealsController extends Controller
         $deal = Post::findOrFail($id);
         $deal->status = 2;
         $deal->save();
+
+        $appName = config('app.name');
+        $subject = 'Important: Your Deal Submission was Rejected on ' . $appName;
+
+        $body = "# Hello **{$deal->user->name}**,\n\n"; // Personalize with author's name
+        $body .= "We regret to inform you that your deal submission titled **\"{$deal->title}\"** (ID: {$deal->id}) has been **rejected** on **{$appName}**.\n\n";
+        $body .= "This means your deal will not be published on our platform. This could be due to various reasons, including (but not limited to):\n\n";
+        $body .= "* Violation of our community guidelines.\n";
+        $body .= "* Incomplete or inaccurate information.\n";
+        $body .= "* Not meeting our quality standards.\n";
+        $body .= "* Duplication of an existing deal.\n\n";
+        $body .= "Please review our [Community Guidelines](" . url('/pages?tab=guidelines') . ") for more information. You may consider revising your deal if applicable and submitting it again, or submitting new deals that adhere to our guidelines.\n\n";
+        $body .= "If you have any questions or believe this was a mistake, please contact our support team at [info@buyme.lk].\n\n";
+        $body .= "Thank you for your understanding,\nThe Team at {$appName}";
+
+        // No button typically needed for a rejected deal notification
+        $buttonUrl = null;
+        $buttonText = null;
+
+        if ($deal->user && $deal->user->email) {
+            send_generic_email($deal->user->email, $subject, $body, $buttonUrl, $buttonText);
+        }
 
         return back()->with('success', 'Deal rejected successfully.');
     }
@@ -314,6 +358,17 @@ class DealsController extends Controller
 
     public function update(Request $request, $id) // Using Route Model Binding
     {
+        $post = Post::with('user')->findOrFail($id);
+
+        $originalTitle = $post->title;
+        $originalDescription = $post->description;
+        $originalLink = $post->link;
+        $originalDiscountText = $post->discount_text;
+        $originalPriceSaving = $post->price_saving;
+        $originalCategory = $post->category;
+        $originalExpirationDate = $post->expiration_date;
+        $originalStore = $post->store;
+        $originalImage = $post->image;
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -326,7 +381,7 @@ class DealsController extends Controller
             'store' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
-        $post = Post::find($id);
+        //$post = Post::find($id);
         $imagePath = null;
         // Delete old image if new one is uploaded
         if ($request->hasFile('image')) {
@@ -368,6 +423,72 @@ class DealsController extends Controller
         $post->image = $imagePath;
         $post->posted_at = now();
         $post->save();
+
+        $appName = config('app.name');
+        $subject = 'Your Deal Has Been Updated on ' . $appName;
+
+        $body = "# Hello **{$post->user->name}**,\n\n";
+        $body .= "This is a notification to confirm that your deal titled **\"{$post->title}\"** (ID: {$post->id}) has been updated successfully on **{$appName}**.\n\n";
+        $body .= "Here are some of the details that may have changed:\n\n";
+
+        $changesMade = false;
+        if ($post->title !== $originalTitle) {
+            $body .= "* **Title:** From `{$originalTitle}` to `{$post->title}`\n";
+            $changesMade = true;
+        }
+        if ($post->description !== $originalDescription) {
+            $body .= "* **Description:** Updated\n";
+            $changesMade = true;
+        }
+        if ($post->link !== $originalLink) {
+            $body .= "* **Link:** Updated\n";
+            $changesMade = true;
+        }
+        if ($post->discount_text !== $originalDiscountText) {
+            $body .= "* **Discount Text:** From `" . ($originalDiscountText ?? 'N/A') . "` to `" . ($post->discount_text ?? 'N/A') . "`\n";
+            $changesMade = true;
+        }
+        if ($post->price_saving !== $originalPriceSaving) {
+            $body .= "* **Price Saving:** From `" . ($originalPriceSaving ?? 'N/A') . "` to `" . ($post->price_saving ?? 'N/A') . "`\n";
+            $changesMade = true;
+        }
+        if ($post->category !== $originalCategory) {
+            $body .= "* **Category:** From `{$originalCategory}` to `{$post->category}`\n";
+            $changesMade = true;
+        }
+        if (($post->expiration_date ? $post->expiration_date->format('Y-m-d') : null) !== ($originalExpirationDate ? $originalExpirationDate->format('Y-m-d') : null)) {
+            $body .= "* **Expiration Date:** From `" . ($originalExpirationDate ? $originalExpirationDate->format('Y-m-d') : 'N/A') . "` to `" . ($post->expiration_date ? $post->expiration_date->format('Y-m-d') : 'N/A') . "`\n";
+            $changesMade = true;
+        }
+        if ($post->store !== $originalStore) {
+            $body .= "* **Store:** From `" . ($originalStore ?? 'N/A') . "` to `" . ($post->store ?? 'N/A') . "`\n";
+            $changesMade = true;
+        }
+        if ($post->image !== $originalImage) {
+            $body .= "* **Image:** Updated\n";
+            $changesMade = true;
+        }
+
+        if (!$changesMade) {
+            $body .= "No specific content changes detected that would warrant listing.\n";
+        }
+
+        // Construct the dynamic deal URL for the button
+        $dealUrl = '/view-deal/' . $post->id . '?title=' . str_replace(' ', '-', $post->title);
+
+        // Using the full URL for the button
+        $buttonFullUrl = url($dealUrl);
+
+        $body .= "\n<x-mail::button :url=\"" . $buttonFullUrl . "\">\n";
+        $body .= "View Your Deal\n";
+        $body .= "</x-mail::button>\n\n";
+
+        $body .= "These changes have been made by the **Buyme Bargains Team**. If you have any questions, please contact our support team immediately at [info@buyme.lk].\n\n"; 
+        $body .= "Thank you,\nThe Team at {$appName}";
+
+        if ($post->user && $post->user->email) {
+            send_generic_email($post->user->email, $subject, $body, null, null);
+        }
 
         return redirect()->route('dealsList')->with('success', 'Post updated successfully!');
     }
