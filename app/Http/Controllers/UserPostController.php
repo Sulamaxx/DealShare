@@ -614,7 +614,7 @@ class UserPostController extends Controller
         $postId = $request->input('post_id');
 
         if ($voteType && $postId) {
-            $post = Post::find($postId);
+            $post = Post::with('user')->find($postId);
 
             if ($post) {
                 $existingVote = Vote::where('user_id', $user->id)
@@ -642,6 +642,8 @@ class UserPostController extends Controller
                         "upvotes" => $post->upvotes,
                         "downvotes" => $post->downvotes,
                     ];
+
+                    $this->sendVoteNotificationEmail($post, $user, $voteType, 'new');
                 } else {
                     if ($existingVote->vote_type !== $voteType) {
 
@@ -663,6 +665,8 @@ class UserPostController extends Controller
                             "upvotes" => $post->upvotes,
                             "downvotes" => $post->downvotes,
                         ];
+
+                        $this->sendVoteNotificationEmail($post, $user, $voteType, 'changed');
                     } else {
                         $response = [
                             "error" => false,
@@ -685,6 +689,45 @@ class UserPostController extends Controller
                 "message" => "Missing vote type or post ID.",
             ];
             return response()->json($response);
+        }
+    }
+
+    private function sendVoteNotificationEmail(Post $post, $voter, string $voteType, string $actionType): void
+    {
+        $postCreator = $post->user; // Get the post creator (eager loaded)
+
+        // Don't send email if the voter is the post creator themselves,
+        // or if the creator doesn't have an email.
+        if (!$postCreator || !$postCreator->email || $postCreator->id === $voter->id) {
+            Log::info("Skipping vote notification email for post ID: {$post->id}. Creator not found, no email, or creator is voter.");
+            return;
+        }
+
+        $appName = config('app.name');
+        $itemUrl = url('view-deal/' . $post->id . '?title=' . str_replace(' ', '-', $post->title ?? ''));
+
+        $subject = 'Your Deal Received a ' . ucfirst($voteType) . 'vote on ' . $appName;
+        $voterName = $voter->name; // Name of the user who voted
+
+        $body = "# Hello **{$postCreator->name}**,\n\n";
+
+        if ($actionType === 'new') {
+            $body .= "Great news! Your deal, **\"{$post->title}\"**, has received a new **{$voteType}vote** from **{$voterName}**.\n\n";
+        } else { // actionType is 'changed'
+            $body .= "An update on your deal, **\"{$post->title}\"**: it has received a **{$voteType}vote** from **{$voterName}**, changing their previous vote.\n\n";
+        }
+
+        $body .= "This indicates active engagement with your content on **{$appName}**.\n\n";
+        $body .= "Current Upvotes: {$post->upvotes}\n";
+        $body .= "Current Downvotes: {$post->downvotes}\n\n";
+        $body .= "View your deal: [{$post->title}]({$itemUrl})\n\n";
+        $body .= "Keep up the great work!\n\n";
+        $body .= "Thank you,\nThe Team at {$appName}";
+
+        if (send_generic_email($postCreator->email, $subject, $body, null, null)) {
+            Log::info("Vote notification email dispatched to post creator {$postCreator->email} for post ID: {$post->id}");
+        } else {
+            Log::error("Failed to send vote notification email to post creator {$postCreator->email} for post ID: {$post->id}");
         }
     }
 
