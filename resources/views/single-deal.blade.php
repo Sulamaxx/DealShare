@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Forum')
+@section('title', 'Buyme Bargians')
 
 @section('content')
     <meta name="user-authenticated" content="{{ Auth::check() ? 'true' : 'false' }}">
@@ -178,7 +178,7 @@
                                         </div>
 
                                         {{-- Last Seen --}}
-                                        {{-- <div class="form-group"> {{-- Reusing a class 
+                                        {{-- <div class="form-group"> {{-- Reusing a class
                                             <label class="inline-block font-bold text-neutral-600  text-sm mb-1">Last
                                                 Seen</label>
                                             {{-- This element will display the last seen date

@@ -569,6 +569,8 @@ class UserPostController extends Controller
 
         $user = Auth::user();
 
+        $post->load('user');
+
         $existingReport = Report::where('user_id', $user->id)
             ->whereMorphedTo('reportable', $post)
             ->first();
@@ -599,7 +601,31 @@ class UserPostController extends Controller
             // Optional: Log the report
             Log::info("Post {$post->id} reported by user {$user->id}. Reason: {$report->reason}");
 
-            // 4. Return a success JSON response
+            $appName = config('app.name');
+            $viewDealUrl = url('view-deal/' . $post->id . '?title=' . str_replace(' ', '-', $post->title));
+            $reasonText = $report->reason ?? 'No reason provided';
+
+
+            // --- Send Email to the User Who Created the Post ---
+            $subjectPostCreator = 'Your Deal Has Been Reported on ' . $appName;
+            $bodyPostCreator = "# Hello **" . ($post->user->name ?? 'User') . "**,\n\n";
+            $bodyPostCreator .= "We are writing to inform you that your deal titled **\"{$post->title}\"** (ID: {$post->id}) has been reported by a user on **{$appName}**.\n\n";
+            $bodyPostCreator .= "The reason provided for the report is: `{$reasonText}`\n\n";
+            $bodyPostCreator .= "Please be aware that our moderation team will review this report and take appropriate action if necessary.\n\n";
+            $bodyPostCreator .= "If you have any questions, please contact our support team at [info@buyme.lk].\n\n";
+            $bodyPostCreator .= "Thank you,\nThe Team at {$appName}";
+
+            if ($post->user && $post->user->email) {
+                if (send_generic_email($post->user->email, $subjectPostCreator, $bodyPostCreator, null, null)) {
+                    Log::info("Report notification email dispatched to post creator {$post->user->email} for report ID: {$report->id}");
+                } else {
+                    Log::error("Failed to send report notification email to post creator {$post->user->email} for report ID: {$report->id}");
+                }
+            } else {
+                Log::warning("Post {$post->id} reported, but no author email found to send notification.");
+            }
+
+            // Return a success JSON response
             return response()->json([
                 'success' => true,
                 'message' => 'Deal reported successfully! Thank you for your feedback.',

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Forum')
+@section('title', 'Buyme Bargians')
 
 @section('content')
     <style>
@@ -178,7 +178,7 @@
                 <div class="col-md-6">
 
                     <h3 class="fw-bold" style="color: white; font-size: 1.5em; margin-bottom: 5px;">Welcome to</h3>
-                    <h1 class="fw-bold display-5" style="color: white; font-size: 2.5em; margin-bottom: 10px;">Bargains Forum
+                    <h1 class="fw-bold display-5" style="color: white; font-size: 2.5em; margin-bottom: 10px;">Buyme Bargians
                     </h1>
                     <p class="lead" style="color: white; font-size: 1.2em; margin-bottom: 20px;">Share deals, discover
                         hidden gems, and connect with savvy shoppers!</p>
