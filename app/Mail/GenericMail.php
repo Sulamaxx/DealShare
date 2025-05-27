@@ -15,14 +15,18 @@ class GenericMail extends Mailable implements ShouldQueue
 
     public $subjectLine;
     public $bodyContent;
+    public $buttonUrl;   // New property for dynamic URL
+    public $buttonText;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(string $subjectLine, string $bodyContent)
+    public function __construct(string $subjectLine, string $bodyContent, ?string $buttonUrl = null, ?string $buttonText = null)
     {
         $this->subjectLine = $subjectLine;
         $this->bodyContent = $bodyContent;
+        $this->buttonUrl = $buttonUrl;     // Assign to new property
+        $this->buttonText = $buttonText;
     }
 
     /**
@@ -44,6 +48,8 @@ class GenericMail extends Mailable implements ShouldQueue
             markdown: 'emails.generic',
             with: [
                 'bodyContent' => $this->bodyContent, // Pass the dynamic body content to the view
+                'buttonUrl' => $this->buttonUrl,   // Pass to view
+                'buttonText' => $this->buttonText,
             ],
         );
     }

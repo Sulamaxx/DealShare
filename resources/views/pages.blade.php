@@ -13,7 +13,7 @@
                             <a class="nav-link" data-toggle="tab" href="#about" role="tab"><span>About</span></a>
                         </li>
                         <li class="nav-item ">
-                            <a class="nav-link " data-toggle="tab" href="#guidlines"
+                            <a class="nav-link " data-toggle="tab" href="#guidelines"
                                 role="tab"><span>Guidelines</span></a>
                         </li>
                         <li class="nav-item">
@@ -37,7 +37,7 @@
                         {!! $aboutContent ?? '' !!}
                     </div>
 
-                    <div class="tab-pane " id="guidlines" role="tabpanel">
+                    <div class="tab-pane " id="guidelines" role="tabpanel">
                         {!! $guidelinesContent ?? '' !!}
                     </div>
 

@@ -56,6 +56,48 @@ class UserController extends Controller
 
             $user->update($data);
 
+            $appName = config('app.name');
+            $subject = 'Your Profile Settings Have Been Updated on ' . $appName;
+
+            $body = "# Hello **{$user->name}**,\n\n";
+            $body .= "This is a confirmation that your profile settings on **{$appName}** have been successfully updated.\n\n";
+
+            $changesMade = false;
+            // Check for email change
+            if ($user->email !== $originalEmail) {
+                $body .= "* **Email Address:** Changed from `{$originalEmail}` to `{$user->email}`\n";
+                $body .= "If you did not initiate this change, please contact us immediately.\n\n";
+                $changesMade = true;
+            }
+
+            // Check for name change
+            if ($user->name !== $request->input('name')) { // Compare with validated request data, as $user->name is already updated
+                $body .= "* **Name:** Updated to `{$user->name}`\n";
+                $changesMade = true;
+            }
+
+            // Check for profile photo change
+            if ($request->hasFile('image')) {
+                $body .= "* **Profile Photo:** Updated\n";
+                $changesMade = true;
+            }
+
+            if (isset($data['is_private']) && $data['is_private'] !== $user->getOriginal('is_private')) {
+                $body .= "* **Profile Privacy:** Changed to " . ($data['is_private'] ? 'Private' : 'Public') . "\n";
+                $changesMade = true;
+            }
+
+            if (!$changesMade) {
+                $body .= "No significant content changes were detected that would warrant listing.\n";
+            }
+
+            $body .= "\nIf you have any questions or did not make these changes, please contact our support team immediately at [info@buyme.lk].\n\n";
+            //$body .= "Thank you,\nThe Team at {$appName}";
+
+            if ($user->email) {
+                send_generic_email($user->email, $subject, $body, url('/my-deals'), 'View Your Profile Settings');
+            }
+
             return redirect()->route('my-deals')->with('success', 'Profile settings updated successfully!');
         } catch (Exception $e) {
             // --- Log the error and set an error flash message ---

@@ -59,6 +59,35 @@ class UsersController extends Controller
             'profile_photo_path' => $imagePath, // Store image URL if available
         ]);
 
+        $appName = config('app.name');
+        $subject = 'Welcome to ' . $appName . '! Your Account Has Been Created.';
+
+        $body = "# Hello **{$user->name}**,\n\n";
+        $body .= "Welcome to **{$appName}**! Your account has been successfully created.\n\n";
+        $body .= "Here are your account details:\n";
+        $body .= "* **Username:** {$user->name}\n";
+        $body .= "* **Email:** {$user->email}\n";
+
+        $body .= "\n";
+        $body .= "You can now log in to your account and start exploring.\n\n";
+
+        // Assuming you have a login route
+        $loginUrl = url('/login'); // Adjust this to your actual login route
+
+        $body .= "\n<x-mail::button :url=\"" . $loginUrl . "\">\n";
+        $body .= "Log In to Your Account\n";
+        $body .= "</x-mail::button>\n\n";
+
+        // Suggesting password reset for security
+        $body .= "If this account was created for you, we recommend resetting your password immediately by clicking 'Forgot Your Password?' on the login page.\n\n";
+
+        $body .= "We're excited to have you on board!\n\n";
+        $body .= "Thank you,\nThe Team at {$appName}";
+
+        if ($user->email) {
+            send_generic_email($user->email, $subject, $body, null, null);
+        }
+
         // Redirect to the users list page with a success message
         return redirect()->route('usersList')->with('success', 'User created successfully');
     }
@@ -132,16 +161,83 @@ class UsersController extends Controller
     public function changeStatus($id)
     {
         $user = User::findOrFail($id);
-        $user->status = $user->status == 1 ? 0 : 1;
+        $oldStatus = $user->status;
+        $newStatus = $oldStatus == 1 ? 0 : 1;
+        $user->status = $newStatus;
         $user->save();
 
+        $subject = '';
+        $body = '';
+        $buttonUrl = null;
+        $buttonText = null;
+
+        if ($newStatus == 1) { // User is now active (status 1)
+            $subject = 'Your Account Has Been Activated on ' . config('app.name');
+            $body = "
+# Hello **{$user->name}**,
+
+Good news! Your account on **" . config('app.name') . "** has been **activated**.
+
+You can now log in and access all features of our platform.
+
+<x-mail::button :url=\"url('/login')\">
+Login to Your Account
+</x-mail::button>
+
+Thanks,<br>
+The Team at " . config('app.name') . "
+";
+            /* $buttonUrl = url('/login');
+            $buttonText = 'Login to Your Account'; */
+        } else { // User is now deactivated (status 0)
+            $subject = 'Important: Your Account Status on ' . config('app.name');
+            $body = "
+# Hello **{$user->name}**,
+
+This is an important notification regarding your account on **" . config('app.name') . "**." . "
+Your account has been **deactivated**.
+
+This might be due to a policy violation, inactivity, or an administrative decision. If you believe this is a mistake or have any questions, please contact our support team.
+
+Contact our support team at [info@buyme.lk].
+
+Thanks,<br>
+The Team at " . config('app.name') . "
+";
+            // No button for deactivation, as they might not be able to log in
+            // $buttonUrl = null;
+            // $buttonText = null;
+        }
+        send_generic_email($user->email, $subject, $body, null, null);
         return redirect()->back()->with('success', 'User status updated successfully!');
     }
 
     public function destroy($id)
     {
         $user = User::findOrFail($id);
+
+        $userEmail = $user->email;
+        $userName = $user->name;
+        $appName = config('app.name');
+
         $user->delete();
+
+        $subject = 'Important: Your Account Has Been Deleted from ' . $appName;
+
+        $body = "
+# Hello **{$userName}**,
+
+This is an important notification to inform you that your account on **{$appName}** has been **deleted**.
+
+This action was taken due to a violation of our terms of service, at your request, or for other administrative reasons. If you believe this is a mistake or have any questions regarding this action, please contact our support team immediately.
+
+Contact our support team at [info@buyme.lk].
+
+Thank you for your understanding.<br>
+The Team at {$appName}
+";
+
+        send_generic_email($userEmail, $subject, $body, null, null);
 
         return redirect()->back()->with('success', 'User deleted successfully!');
     }
@@ -171,17 +267,17 @@ We've noticed a pattern in your recent reports that may constitute misuse of our
 
 The reporting feature is vital for maintaining a safe environment, and we rely on accurate and legitimate reports. Misuse of this system can hinder our ability to address genuine issues effectively.
 
-Please review our [Community Guidelines](" . url('/pages?tab=guidlines') . ") to understand what constitutes a reportable offense and how to use the feature appropriately.
+Please review our [Community Guidelines](" . url('/pages?tab=guidelines') . ") to understand what constitutes a reportable offense and how to use the feature appropriately.
 
 **Continued misuse of the reporting system may lead to consequences, including the removal of your reporting privileges or further actions on your account.**
 
-If you believe there has been a mistake or if you have any questions, please contact our support team at [support@buyme.lk].
+If you believe there has been a mistake or if you have any questions, please contact our support team at [info@buyme.lk].
 
 Thank you for your understanding and cooperation,<br>
 The Team at " . config('app.name') . "
 ";
 
-        if (send_generic_email($user->email, $subject, $body)) {
+        if (send_generic_email($user->email, $subject, $body, config('app.url'), "Visit Our Website")) {
             return back()->with('success', 'Warning email sent to user.');
         } else {
             return back()->with('error', 'Failed to send warning email.');
@@ -193,6 +289,29 @@ The Team at " . config('app.name') . "
         $user = User::findOrFail($id);
         $user->status = 2;
         $user->save();
+
+        $appName = config('app.name');
+        $subject = 'Important: Temporary Account Suspension on ' . $appName;
+
+        $body = "
+# Hello **{$user->name}**,
+
+This is an important notification regarding your account on **{$appName}**.
+
+Your account has been **temporarily suspended**. This means you will not be able to access certain features or the entire platform for a period of time.
+
+This action was taken due to a violation of our community guidelines or terms of service. Please review our [Community Guidelines](" . url('/pages?tab=guidelines') . ") to understand what constitutes a violation.
+
+We encourage you to review your recent activities and ensure compliance with our policies. Your account will be reviewed again after the temporary ban period.
+
+If you believe this is a mistake or have any questions, please contact our support team at [info@buyme.lk].
+
+Thank you for your understanding and cooperation,<br>
+The Team at {$appName}
+";
+
+        send_generic_email($user->email, $subject, $body, null, null);
+
         return back()->with('success', 'User temporarily banned.');
     }
 
@@ -201,6 +320,19 @@ The Team at " . config('app.name') . "
         $user = User::findOrFail($id);
         $user->status = 3;
         $user->save();
+
+        $appName = config('app.name');
+        $subject = 'Important: Permanent Account Ban on ' . $appName;
+
+        $body = "# Hello **{$user->name}**,\\n\\n";
+        $body .= "This is an important notification regarding your account on **{$appName}**. \\n\\n";
+        $body .= "Your account has been **permanently banned**. This means you will no longer be able to access any features or the platform.\\n\\n";
+        $body .= "This action was taken due to severe violations of our community guidelines or terms of service. We have determined that your activities on our platform are not compatible with our community standards.\\n\\n";
+        $body .= "If you believe this is a mistake or have questions, you may contact our support team at [info@buyme.lk]. However, please note that permanent bans are typically irreversible.\\n\\n";
+        $body .= "Thank you for your understanding.\\nThe Team at {$appName}";
+
+        send_generic_email($user->email, $subject, $body, null, null);
+
         return back()->with('success', 'User permanently banned.');
     }
 
@@ -209,6 +341,28 @@ The Team at " . config('app.name') . "
         $user = User::findOrFail($id);
         $user->status = 1; // Set status to Active
         $user->save();
+
+        $appName = config('app.name');
+        $subject = 'Your Account Has Been Activated on ' . $appName;
+
+        $body = "
+# Hello **{$user->name}**,
+
+Good news! Your account on **{$appName}** has been **activated**.
+
+You can now log in and access all features of our platform. We're excited to have you back!
+
+<x-mail::button :url=\"url('/login')\">
+Login to Your Account
+</x-mail::button>
+
+If you have any questions, feel free to contact our support team at [info@buyme.lk].
+
+Thanks,<br>
+The Team at {$appName}
+";
+
+        send_generic_email($user->email, $subject, $body);
 
         return redirect()->back()->with('success', 'User account activated.');
     }
@@ -225,6 +379,11 @@ The Team at " . config('app.name') . "
     {
 
         $user = User::findOrFail($id);
+
+        $originalName = $user->name;
+        $originalEmail = $user->email;
+        $originalUserType = $user->user_type;
+        $originalProfilePhotoPath = $user->profile_photo_path;
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -252,6 +411,38 @@ The Team at " . config('app.name') . "
             $data['email_mention'] = $request->has('email_mention'); */
 
             $user->update($data);
+
+            $appName = config('app.name');
+            $subject = 'Profile Updated Successfully on ' . $appName;
+
+            $body = "# Hello **{$user->name}**,\n\n";
+            $body .= "This is a notification to inform you that your profile on **{$appName}** has been updated successfully.\n\n";
+            $body .= "The following information was changed:\n\n";
+
+            // List only the fields that actually changed
+            if ($user->name !== $originalName) {
+                $body .= "* **Name:** From `{$originalName}` to `{$user->name}`\n";
+            }
+            if ($user->email !== $originalEmail) {
+                $body .= "* **Email:** From `{$originalEmail}` to `{$user->email}`\n";
+            }
+            if ($user->user_type !== $originalUserType) {
+                $body .= "* **User Type:** From `{$originalUserType}` to `{$user->user_type}`\n";
+            }
+            // Check if profile photo path actually changed (means a new image was uploaded or existing was removed)
+            if ($user->profile_photo_path !== $originalProfilePhotoPath) {
+                $body .= "* **Profile Photo:** Updated\n";
+            }
+
+            // Add a message if no specific changes were detected (might happen if only non-tracked fields changed)
+            if (empty(trim(str_replace(['# Hello **', '**', 'This is a notification to inform you that your profile on **', '** has been updated successfully.', 'The following information was changed:', 'Thank you,The Team at '], '', $body)))) {
+                $body .= "Some details of your profile have been updated.\n";
+            }
+
+            $body .= "\nThese changes have been made by the **Buyme Bargains Team**. If you have any questions, please contact our support team immediately at [info@buyme.lk].\n\n";
+            $body .= "Thank you,\nThe Team at {$appName}";
+
+            send_generic_email($user->email, $subject, $body, null, null);
 
             return redirect()->route('usersList')->with('success', 'Profile settings updated successfully!');
         } catch (Exception $e) {

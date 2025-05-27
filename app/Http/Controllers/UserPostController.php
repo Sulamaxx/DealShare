@@ -315,11 +315,41 @@ class UserPostController extends Controller
 
         event(new PostCreated($post));
 
+        $appName = config('app.name');
+        $subject = 'Your New Deal Has Been Created on ' . $appName;
+
+        // Access the user's name via the relationship
+        $user = auth()->user(); // Get the currently logged-in user
+        $userName = $user ? $user->name : 'User'; // Default to "User" if no user is logged in.
+
+        $body = "# Hello **{$userName}**,\n\n"; // Personalize with author's name
+        $body .= "Congratulations! Your new deal titled **\"{$post->title}\"** (ID: {$post->id}) has been successfully created on **{$appName}**.\n\n";
+        $body .= "You can view your deal here: " . url('view-deal/' . $post->id . '?title=' . str_replace(' ', '-', $post->title)) . "\n\n";
+        $body .= "Thank you for contributing to our community!\n\n";
+        $body .= "The Team at {$appName}";
+
+        $dealUrl = '/view-deal/' . $post->id . '?title=' . str_replace(' ', '-', $post->title);
+        $buttonFullUrl = url($dealUrl);
+        if (auth()->user() && auth()->user()->email) {
+            send_generic_email(auth()->user()->email, $subject, $body, null, null);
+        }
         return redirect()->route('create-deals')->with('success', 'Post created successfully!');
     }
 
     public function update(Request $request)
     {
+        $post = Post::with('user')->findOrFail($request->id);
+
+        $originalTitle = $post->title;
+        $originalDescription = $post->description;
+        $originalLink = $post->link;
+        $originalDiscountText = $post->discount_text;
+        $originalPriceSaving = $post->price_saving;
+        $originalCategory = $post->category;
+        $originalExpirationDate = $post->expiration_date;
+        $originalStore = $post->store;
+        $originalImage = $post->image;
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required',
@@ -331,7 +361,7 @@ class UserPostController extends Controller
             'store' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
-        $post = Post::find($request->id);
+        //$post = Post::find($request->id);
         $imagePath = null;
         // Delete old image if new one is uploaded
         if ($request->hasFile('image')) {
@@ -373,6 +403,72 @@ class UserPostController extends Controller
         $post->image = $imagePath;
         $post->posted_at = now();
         $post->save();
+
+        $appName = config('app.name');
+        $subject = 'Your Deal Has Been Updated on ' . $appName;
+
+        $body = "# Hello **{$post->user->name}**,\n\n";
+        $body .= "This is a notification to confirm that your deal titled **\"{$post->title}\"** (ID: {$post->id}) has been updated successfully on **{$appName}**.\n\n";
+        $body .= "Here are some of the details that may have changed:\n\n";
+
+        $changesMade = false;
+        if ($post->title !== $originalTitle) {
+            $body .= "* **Title:** From `{$originalTitle}` to `{$post->title}`\n";
+            $changesMade = true;
+        }
+        if ($post->description !== $originalDescription) {
+            $body .= "* **Description:** Updated\n";
+            $changesMade = true;
+        }
+        if ($post->link !== $originalLink) {
+            $body .= "* **Link:** Updated\n";
+            $changesMade = true;
+        }
+        if ($post->discount_text !== $originalDiscountText) {
+            $body .= "* **Discount Text:** From `" . ($originalDiscountText ?? 'N/A') . "` to `" . ($post->discount_text ?? 'N/A') . "`\n";
+            $changesMade = true;
+        }
+        if ($post->price_saving !== $originalPriceSaving) {
+            $body .= "* **Price Saving:** From `" . ($originalPriceSaving ?? 'N/A') . "` to `" . ($post->price_saving ?? 'N/A') . "`\n";
+            $changesMade = true;
+        }
+        if ($post->category !== $originalCategory) {
+            $body .= "* **Category:** From `{$originalCategory}` to `{$post->category}`\n";
+            $changesMade = true;
+        }
+        if (($post->expiration_date ? $post->expiration_date->format('Y-m-d') : null) !== ($originalExpirationDate ? $originalExpirationDate->format('Y-m-d') : null)) {
+            $body .= "* **Expiration Date:** From `" . ($originalExpirationDate ? $originalExpirationDate->format('Y-m-d') : 'N/A') . "` to `" . ($post->expiration_date ? $post->expiration_date->format('Y-m-d') : 'N/A') . "`\n";
+            $changesMade = true;
+        }
+        if ($post->store !== $originalStore) {
+            $body .= "* **Store:** From `" . ($originalStore ?? 'N/A') . "` to `" . ($post->store ?? 'N/A') . "`\n";
+            $changesMade = true;
+        }
+        if ($post->image !== $originalImage) {
+            $body .= "* **Image:** Updated\n";
+            $changesMade = true;
+        }
+
+        if (!$changesMade) {
+            $body .= "No specific content changes detected that would warrant listing.\n";
+        }
+
+        // Construct the dynamic deal URL for the button
+        $dealUrl = '/view-deal/' . $post->id . '?title=' . str_replace(' ', '-', $post->title);
+
+        // Using the full URL for the button
+        $buttonFullUrl = url($dealUrl);
+
+        $body .= "\n<x-mail::button :url=\"" . $buttonFullUrl . "\">\n"; // Use url() helper for full URL
+        $body .= "View Your Deal\n";
+        $body .= "</x-mail::button>\n\n";
+
+        $body .= "If you did not make these changes, please contact our support team immediately at [info@buyme.lk].\n\n";
+        $body .= "Thank you,\nThe Team at {$appName}";
+
+        if ($post->user && $post->user->email) {
+            send_generic_email($post->user->email, $subject, $body, null, null);
+        }
 
         return redirect()->route('my-deals')->with('success', 'Post updated successfully!');
     }

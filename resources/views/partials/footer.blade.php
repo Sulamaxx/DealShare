@@ -297,7 +297,7 @@
             <div class="footer-links">
                 <a href="{{ route('pages') }}?tab=about">About</a> |
                 <a href="{{ route('pages') }}?tab=faq">FAQ</a> |
-                <a href="{{ route('pages') }}?tab=guidlines">Guidelines</a> |
+                <a href="{{ route('pages') }}?tab=guidelines">Guidelines</a> |
                 <a href="{{ route('pages') }}?tab=term_and_services">Terms</a> |
                 <a href="{{ route('pages') }}?tab=privacy">Privacy</a> |
                 {{-- <a href="{{ route('pages') }}">Blog</a> | --}}
