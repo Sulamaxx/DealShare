@@ -33,6 +33,33 @@ class UserPostController extends Controller
             ->orderBy('vote-count', 'desc') // Order by vote_count descending
             ->first();
 
+        if ($badge && (!$user->badge_id || $user->badge_id !== $badge->id)) {
+            $oldBadgeName = $user->badge ? $user->badge->name : 'No Badge';
+            $newBadgeName = $badge->name;
+
+            // Update the user's badge
+            $user->badge_id = $badge->id;
+            $user->save();
+
+            // --- Send Email to the User About Badge Change ---
+            $appName = config('app.name');
+            $subject = 'Your Badge Has Changed on ' . $appName;
+
+            $body = "# Hello **{$user->name}**,\n\n";
+            $body .= "Congratulations! Your badge has been updated on **{$appName}**.\n\n";
+            $body .= "Your previous badge was: **{$oldBadgeName}**\n\n";
+            $body .= "Your new badge is: **{$newBadgeName}**\n\n";
+            $body .= "This change reflects your increased activity and positive contributions to our community.\n\n";
+            $body .= "Keep up the great work!\n\n";
+            $body .= "Thank you,\nThe Team at {$appName}";
+
+            if (send_generic_email($user->email, $subject, $body, null, null)) { // No specific URL needed here
+                Log::info("Badge change notification email dispatched to user {$user->email}");
+            } else {
+                Log::error("Failed to send badge change notification email to user {$user->email}");
+            }
+        }
+
         $posts = Post::where('post_by', Auth::user()->id)->paginate(10);
         return view('my_deals', compact('posts', 'badge'));
     }
@@ -75,6 +102,33 @@ class UserPostController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
+        if ($badge && (!$user->badge_id || $user->badge_id !== $badge->id)) {
+            $oldBadgeName = $user->badge ? $user->badge->name : 'No Badge';
+            $newBadgeName = $badge->name;
+
+            // Update the user's badge
+            $user->badge_id = $badge->id;
+            $user->save();
+
+            // --- Send Email to the User About Badge Change ---
+            $appName = config('app.name');
+            $subject = 'Your Badge Has Changed on ' . $appName;
+
+            $body = "# Hello **{$user->name}**,\n\n";
+            $body .= "Congratulations! Your badge has been updated on **{$appName}**.\n\n";
+            $body .= "Your previous badge was: **{$oldBadgeName}**\n\n";
+            $body .= "Your new badge is: **{$newBadgeName}**\n\n";
+            $body .= "This change reflects your increased activity and positive contributions to our community.\n\n";
+            $body .= "Keep up the great work!\n\n";
+            $body .= "Thank you,\nThe Team at {$appName}";
+
+            if (send_generic_email($user->email, $subject, $body, null, null)) { // No specific URL needed here
+                Log::info("Badge change notification email dispatched to user {$user->email}");
+            } else {
+                Log::error("Failed to send badge change notification email to user {$user->email}");
+            }
+        }
+
         return view('activities', compact('commentedPosts', 'subscribedPosts', 'votedPosts', 'badge'));
     }
 
@@ -104,6 +158,33 @@ class UserPostController extends Controller
 
                     // Attach the badge object to the deal for easy access in the view
                     $deal->author_badge = $authorBadge;
+
+                    if ($authorBadge && (!$author->badge_id || $author->badge_id !== $authorBadge->id)) {
+                        $oldBadgeName = $author->badge ? $author->badge->name : 'No Badge';
+                        $newBadgeName = $authorBadge->name;
+
+                        // Update the user's badge
+                        $author->badge_id = $authorBadge->id;
+                        $author->save();
+
+                        // --- Send Email to the User About Badge Change ---
+                        $appName = config('app.name');
+                        $subject = 'Your Badge Has Changed on ' . $appName;
+
+                        $body = "# Hello **{$author->name}**,\n\n";
+                        $body .= "Congratulations! Your badge has been updated on **{$appName}**.\n\n";
+                        $body .= "Your previous badge was: **{$oldBadgeName}**\n\n";
+                        $body .= "Your new badge is: **{$newBadgeName}**\n\n";
+                        $body .= "This change reflects your increased activity and positive contributions to our community.\n\n";
+                        $body .= "Keep up the great work!\n\n";
+                        $body .= "Thank you,\nThe Team at {$appName}";
+
+                        if (send_generic_email($author->email, $subject, $body, null, null)) { // No specific URL needed here
+                            Log::info("Badge change notification email dispatched to user {$author->email}");
+                        } else {
+                            Log::error("Failed to send badge change notification email to user {$author->email}");
+                        }
+                    }
                 } else {
                     $deal->author_badge = null; // No badge if author not found
                 }
@@ -169,6 +250,33 @@ class UserPostController extends Controller
 
                     // Attach the badge object to the deal for easy access in the view
                     $deal->author_badge = $authorBadge;
+
+                    if ($authorBadge && (!$author->badge_id || $author->badge_id !== $authorBadge->id)) {
+                        $oldBadgeName = $author->badge ? $author->badge->name : 'No Badge';
+                        $newBadgeName = $authorBadge->name;
+
+                        // Update the user's badge
+                        $author->badge_id = $authorBadge->id;
+                        $author->save();
+
+                        // --- Send Email to the User About Badge Change ---
+                        $appName = config('app.name');
+                        $subject = 'Your Badge Has Changed on ' . $appName;
+
+                        $body = "# Hello **{$author->name}**,\n\n";
+                        $body .= "Congratulations! Your badge has been updated on **{$appName}**.\n\n";
+                        $body .= "Your previous badge was: **{$oldBadgeName}**\n\n";
+                        $body .= "Your new badge is: **{$newBadgeName}**\n\n";
+                        $body .= "This change reflects your increased activity and positive contributions to our community.\n\n";
+                        $body .= "Keep up the great work!\n\n";
+                        $body .= "Thank you,\nThe Team at {$appName}";
+
+                        if (send_generic_email($author->email, $subject, $body, null, null)) { // No specific URL needed here
+                            Log::info("Badge change notification email dispatched to user {$author->email}");
+                        } else {
+                            Log::error("Failed to send badge change notification email to user {$author->email}");
+                        }
+                    }
                 } else {
                     $deal->author_badge = null; // No badge if author not found
                 }
@@ -218,6 +326,33 @@ class UserPostController extends Controller
 
                     // Attach the badge object to the deal for easy access in the view
                     $deal->author_badge = $authorBadge;
+
+                    if ($authorBadge && (!$author->badge_id || $author->badge_id !== $authorBadge->id)) {
+                        $oldBadgeName = $author->badge ? $author->badge->name : 'No Badge';
+                        $newBadgeName = $authorBadge->name;
+
+                        // Update the user's badge
+                        $author->badge_id = $authorBadge->id;
+                        $author->save();
+
+                        // --- Send Email to the User About Badge Change ---
+                        $appName = config('app.name');
+                        $subject = 'Your Badge Has Changed on ' . $appName;
+
+                        $body = "# Hello **{$author->name}**,\n\n";
+                        $body .= "Congratulations! Your badge has been updated on **{$appName}**.\n\n";
+                        $body .= "Your previous badge was: **{$oldBadgeName}**\n\n";
+                        $body .= "Your new badge is: **{$newBadgeName}**\n\n";
+                        $body .= "This change reflects your increased activity and positive contributions to our community.\n\n";
+                        $body .= "Keep up the great work!\n\n";
+                        $body .= "Thank you,\nThe Team at {$appName}";
+
+                        if (send_generic_email($author->email, $subject, $body, null, null)) { // No specific URL needed here
+                            Log::info("Badge change notification email dispatched to user {$author->email}");
+                        } else {
+                            Log::error("Failed to send badge change notification email to user {$author->email}");
+                        }
+                    }
                 } else {
                     $deal->author_badge = null; // No badge if author not found
                 }
@@ -685,6 +820,33 @@ class UserPostController extends Controller
 
                     // Attach the badge object to the deal for easy access in the view
                     $deal->author_badge = $authorBadge;
+
+                    if ($authorBadge && (!$author->badge_id || $author->badge_id !== $authorBadge->id)) {
+                        $oldBadgeName = $author->badge ? $author->badge->name : 'No Badge';
+                        $newBadgeName = $authorBadge->name;
+
+                        // Update the user's badge
+                        $author->badge_id = $authorBadge->id;
+                        $author->save();
+
+                        // --- Send Email to the User About Badge Change ---
+                        $appName = config('app.name');
+                        $subject = 'Your Badge Has Changed on ' . $appName;
+
+                        $body = "# Hello **{$author->name}**,\n\n";
+                        $body .= "Congratulations! Your badge has been updated on **{$appName}**.\n\n";
+                        $body .= "Your previous badge was: **{$oldBadgeName}**\n\n";
+                        $body .= "Your new badge is: **{$newBadgeName}**\n\n";
+                        $body .= "This change reflects your increased activity and positive contributions to our community.\n\n";
+                        $body .= "Keep up the great work!\n\n";
+                        $body .= "Thank you,\nThe Team at {$appName}";
+
+                        if (send_generic_email($author->email, $subject, $body, null, null)) { // No specific URL needed here
+                            Log::info("Badge change notification email dispatched to user {$author->email}");
+                        } else {
+                            Log::error("Failed to send badge change notification email to user {$author->email}");
+                        }
+                    }
                 } else {
                     $deal->author_badge = null; // No badge if author not found
                 }

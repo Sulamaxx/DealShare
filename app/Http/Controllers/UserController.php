@@ -128,6 +128,33 @@ class UserController extends Controller
                 ->orderBy('vote-count', 'desc')
                 ->first();
 
+            if ($$highestQualifyingBadge && (!$user->badge_id || $user->badge_id !== $$highestQualifyingBadge->id)) {
+                $oldBadgeName = $user->badge ? $user->badge->name : 'No Badge';
+                $newBadgeName = $highestQualifyingBadge->name;
+
+                // Update the user's badge
+                $user->badge_id = $highestQualifyingBadge->id;
+                $user->save();
+
+                // --- Send Email to the User About Badge Change ---
+                $appName = config('app.name');
+                $subject = 'Your Badge Has Changed on ' . $appName;
+
+                $body = "# Hello **{$user->name}**,\n\n";
+                $body .= "Congratulations! Your badge has been updated on **{$appName}**.\n\n";
+                $body .= "Your previous badge was: **{$oldBadgeName}**\n\n";
+                $body .= "Your new badge is: **{$newBadgeName}**\n\n";
+                $body .= "This change reflects your increased activity and positive contributions to our community.\n\n";
+                $body .= "Keep up the great work!\n\n";
+                $body .= "Thank you,\nThe Team at {$appName}";
+
+                if (send_generic_email($user->email, $subject, $body, null, null)) { // No specific URL needed here
+                    Log::info("Badge change notification email dispatched to user {$user->email}");
+                } else {
+                    Log::error("Failed to send badge change notification email to user {$user->email}");
+                }
+            }
+
             $responseData = [
                 'id' => $user->id,
                 'name' => $user->name,
