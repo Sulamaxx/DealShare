@@ -30,6 +30,26 @@ Route::get('/run-migrations', function () {
     return 'Migrations have been successfully run!';
 });
 
+Route::get('/runBottomBannerSettingSeeder', function () {
+    Artisan::call('db:seed', [
+        '--class' => 'BottomBannerSettingSeeder',
+        '--force' => true // Required for production environment
+    ]);
+
+    return response()->json(['message' => 'SettingSeeder executed successfully']);
+});
+
+
+Route::get('/runTopBannerSettingSeeder', function () {
+    Artisan::call('db:seed', [
+        '--class' => 'TopBannerSettingSeeder',
+        '--force' => true // Required for production environment
+    ]);
+
+    return response()->json(['message' => 'SettingSeeder executed successfully']);
+});
+
+
 Route::get('/run-setting-seeder', function () {
     Artisan::call('db:seed', [
         '--class' => 'SettingSeeder',
@@ -37,6 +57,15 @@ Route::get('/run-setting-seeder', function () {
     ]);
 
     return response()->json(['message' => 'SettingSeeder executed successfully']);
+});
+
+Route::get('/run-HighlyVotedDealSettingSeeder-seeder', function () {
+    Artisan::call('db:seed', [
+        '--class' => 'HighlyVotedDealSettingSeeder',
+        '--force' => true // Required for production environment
+    ]);
+
+    return response()->json(['message' => 'HighlyVotedDealSettingSeeder executed successfully']);
 });
 
 Route::get('/run-seeders', function () {
