@@ -39,7 +39,7 @@ class SubscriptionController extends Controller
                 $appName = config('app.name');
                 $subject = 'New Subscription to Your Deal on ' . $appName;
 
-                $viewDealUrl = url('view-deal/' . $post->id . '?title=' . str_replace(' ', '-', $post->title));
+                $viewDealUrl = url('/deals/' . $post->id . '?title=' . str_replace(' ', '-', $post->title));
 
                 $body = "# Hello **{$post->user->name}**,\n\n";
                 $body .= "We're letting you know that **{$user->name}** has just subscribed to your deal: **\"{$post->title}\"** on **{$appName}**.\n\n";
@@ -89,7 +89,7 @@ class SubscriptionController extends Controller
                     $appName = config('app.name');
                     $subject = 'A User Unsubscribed from Your Deal on ' . $appName;
 
-                    $viewDealUrl = url('view-deal/' . $postId . '?title=' . str_replace(' ', '-', $postTitle));
+                    $viewDealUrl = url('/deals/' . $postId . '?title=' . str_replace(' ', '-', $postTitle));
 
                     $body = "# Hello **{$postCreator->name}**,\n\n";
                     $body .= "We're letting you know that **{$user->name}** has unsubscribed from your deal: **\"{$postTitle}\"** on **{$appName}**.\n\n";

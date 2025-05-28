@@ -33,7 +33,7 @@ class ThreadController extends Controller
                 $appName = config('app.name');
                 $subject = 'New Comment on Your Deal on ' . $appName;
 
-                $viewDealUrl = url('view-deal/' . $post->id . '?title=' . str_replace(' ', '-', $post->title));
+                $viewDealUrl = url('/deals/' . $post->id . '?title=' . str_replace(' ', '-', $post->title));
 
                 $body = "# Hello **{$postAuthor->name}**,\n\n";
                 $body .= "Great news! **{$commenterName}** has just left a new comment on your deal: **\"{$post->title}\"** on **{$appName}**.\n\n";
@@ -97,7 +97,7 @@ class ThreadController extends Controller
             $subject = 'New Reply to Your Comment on ' . $appName;
 
             // URL to the post where the comment/reply is located
-            $viewDealUrl = url('view-deal/' . $comment->post_id . '?title=' . str_replace(' ', '-', $comment->post->title));
+            $viewDealUrl = url('deals/' . $comment->post_id . '?title=' . str_replace(' ', '-', $comment->post->title));
 
             $body = "# Hello **{$parentComment->user->name}**,\n\n";
             $body .= "Someone has replied to your comment on the deal: **\"{$comment->post->title}\"** on **{$appName}**.\n\n";

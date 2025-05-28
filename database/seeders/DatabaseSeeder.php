@@ -23,5 +23,12 @@ class DatabaseSeeder extends Seeder
             'status' => 1,
             'user_type' => 'admin'
         ]);
+
+        $this->call([
+            SettingSeeder::class,
+            TopBannerSettingSeeder::class,
+            BottomBannerSettingSeeder::class,
+            HighlyVotedDealSettingSeeder::class,
+        ]);
     }
 }

@@ -134,7 +134,7 @@
                             {{-- Display commented post item --}}
                             <div class="tt-item">
                                 <div class="tt-col-description">
-                                    <h6 class="tt-title"><a href="{{ route('view-deal', ['id' => $post->id, 'title' => Str::slug($post->title)]) }}">
+                                    <h6 class="tt-title"><a href="{{ route('view-deal-title', ['post' => $post->slug]) }}">
                                             {{ $post->title }}
                                         </a></h6>
                                     <div class="tt-col-message">
@@ -204,7 +204,7 @@
                             {{-- Display voted post item --}}
                             <div class="tt-item">
                                 <div class="tt-col-description">
-                                    <h6 class="tt-title"><a href="{{ route('view-deal', ['id' => $post->id, 'title' => Str::slug($post->title)]) }}">
+                                    <h6 class="tt-title"><a href="{{ route('view-deal-title', ['post' => $post->slug]) }}">
                                             {{ $post->title }}
                                         </a></h6>
                                     <div class="tt-col-message">
@@ -275,7 +275,7 @@
                             {{-- Display subscribed post item --}}
                             <div class="tt-item">
                                 <div class="tt-col-description">
-                                    <h6 class="tt-title"><a href="{{ route('view-deal', ['id' => $post->id, 'title' => Str::slug($post->title)]) }}">
+                                    <h6 class="tt-title"><a href="{{ route('view-deal-title', ['post' => $post->slug]) }}">
                                             {{ $post->title }}
                                         </a></h6>
                                     <div class="tt-col-message">
