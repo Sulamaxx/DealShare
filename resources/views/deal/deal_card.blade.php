@@ -4,17 +4,15 @@
         style="display: flex; flex-direction: row; border:none;border-radius:0%; overflow: hidden;min-height:175.1px;">
 
         @if ($deal->image)
-            <a href="{{ route('view-deal', ['id' => $deal->id, 'title' => Str::slug($deal->title)]) }}"
+            <a href="{{ route('view-deal-title', ['post' => $deal->slug]) }}"
                 class="deal-image-area position-relative mobile-image"
                 style="flex-basis: 30%; background-image: url('{{ asset($deal->image) }}'); background-size: cover; background-position: center; background-repeat: no-repeat;min-width:30%"
                 alt="{{ $deal->title }}">
-
             </a>
         @else
             <a class="deal-image-area position-relative"
                 style="flex-basis: 30%; background-image: url('{{ asset('images/deal.jpg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;min-width:30%"
                 alt="Placeholder Image">
-
             </a>
         @endif
 
@@ -23,7 +21,7 @@
 
 
             <h5 class="deal-title-clamp" style="font-size: 1.125em; margin-bottom: 3px;font-weight:bolder">
-                <a href="{{ route('view-deal', ['id' => $deal->id, 'title' => Str::slug($deal->title)]) }}"
+                <a href="{{ route('view-deal-title', ['post' => $deal->slug]) }}"
                     style="text-decoration: none; color: inherit;">
                     {{ $deal->title }}
                 </a>

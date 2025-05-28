@@ -395,6 +395,26 @@ class UserPostController extends Controller
         return view('single-deal', compact('post', "vote_type"));
     }
 
+    public function view_deal_title(Post $post) // Laravel automatically injects the Post model
+    {
+        // $post is already loaded by its slug, no need for findOrFail()
+
+        $user = Auth::user();
+        $vote_type = "";
+
+        if ($user) {
+            $vote = Vote::where("post_id", $post->id) // Use $post->id for vote lookup
+                ->where("user_id", $user->id)
+                ->first();
+
+            if ($vote) {
+                $vote_type = $vote->vote_type;
+            }
+        }
+
+        return view('single-deal', compact('post', "vote_type"));
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -459,11 +479,11 @@ class UserPostController extends Controller
 
         $body = "# Hello **{$userName}**,\n\n"; // Personalize with author's name
         $body .= "Congratulations! Your new deal titled **\"{$post->title}\"** (ID: {$post->id}) has been successfully created on **{$appName}**.\n\n";
-        $body .= "You can view your deal here: " . url('view-deal/' . $post->id . '?title=' . str_replace(' ', '-', $post->title)) . "\n\n";
+        $body .= "You can view your deal here: " . url('/deals/' . $post->id . '?title=' . str_replace(' ', '-', $post->title)) . "\n\n";
         $body .= "Thank you for contributing to our community!\n\n";
         $body .= "The Team at {$appName}";
 
-        $dealUrl = '/view-deal/' . $post->id . '?title=' . str_replace(' ', '-', $post->title);
+        $dealUrl = '/deals/' . $post->id . '?title=' . str_replace(' ', '-', $post->title);
         $buttonFullUrl = url($dealUrl);
         if (auth()->user() && auth()->user()->email) {
             send_generic_email(auth()->user()->email, $subject, $body, null, null);
@@ -589,7 +609,7 @@ class UserPostController extends Controller
         }
 
         // Construct the dynamic deal URL for the button
-        $dealUrl = '/view-deal/' . $post->id . '?title=' . str_replace(' ', '-', $post->title);
+        $dealUrl = '/deals/' . $post->id . '?title=' . str_replace(' ', '-', $post->title);
 
         // Using the full URL for the button
         $buttonFullUrl = url($dealUrl);
@@ -704,7 +724,7 @@ class UserPostController extends Controller
         }
 
         $appName = config('app.name');
-        $itemUrl = url('view-deal/' . $post->id . '?title=' . str_replace(' ', '-', $post->title ?? ''));
+        $itemUrl = url('deals/' . $post->id . '?title=' . str_replace(' ', '-', $post->title ?? ''));
 
         $subject = 'Your Deal Received a ' . ucfirst($voteType) . 'vote on ' . $appName;
         $voterName = $voter->name; // Name of the user who voted
@@ -780,7 +800,7 @@ class UserPostController extends Controller
             Log::info("Post {$post->id} reported by user {$user->id}. Reason: {$report->reason}");
 
             $appName = config('app.name');
-            $viewDealUrl = url('view-deal/' . $post->id . '?title=' . str_replace(' ', '-', $post->title));
+            $viewDealUrl = url('deals/' . $post->id . '?title=' . str_replace(' ', '-', $post->title));
             $reasonText = $report->reason ?? 'No reason provided';
 
 

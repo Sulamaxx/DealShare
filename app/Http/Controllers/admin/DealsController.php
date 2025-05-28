@@ -205,7 +205,7 @@ class DealsController extends Controller
         $newStatus = $deal->status;
         $subject = 'Deal Status Updated on ' . $appName;
 
-        $dealUrl = '/view-deal/' . $deal->id . '?title=' . str_replace(' ', '-', $deal->title);
+        $dealUrl = '/deals/' . $deal->id . '?title=' . str_replace(' ', '-', $deal->title);
 
         $body = "# Hello,\\n\\n";
         $body .= "The status of a deal has been updated.\\n\\n";
@@ -279,7 +279,7 @@ class DealsController extends Controller
         if ($report->reportable_type === Post::class) {
             $itemType = 'post';
             $reportedItemTitle = $report->reportable->title ?? 'Untitled Post';
-            $reportedItemUrl = url('view-deal/' . $report->reportable->id . '?title=' . str_replace(' ', '-', $reportedItemTitle));
+            $reportedItemUrl = url('/deals/' . $report->reportable->id . '?title=' . str_replace(' ', '-', $reportedItemTitle));
             $reportedItemCreator = $report->reportable->user; // Post creator
         } elseif ($report->reportable_type === Comment::class) {
             $itemType = 'comment';
@@ -288,7 +288,7 @@ class DealsController extends Controller
 
             // For comments, link to the post the comment belongs to
             if ($report->reportable->post) {
-                $reportedItemUrl = url('view-deal/' . $report->reportable->post->id . '?title=' . str_replace(' ', '-', $report->reportable->post->title ?? ''));
+                $reportedItemUrl = url('/deals/' . $report->reportable->post->id . '?title=' . str_replace(' ', '-', $report->reportable->post->title ?? ''));
                 $reportedItemTitle = "comment on \"" . ($report->reportable->post->title ?? 'Untitled Post') . "\" (Text: \"{$commentTextSnippet}\")";
                 $reportedItemCreator = $report->reportable->user; // Comment creator
             } else {
@@ -546,7 +546,7 @@ class DealsController extends Controller
             $comment->save();
 
             // Find and update the report status
-            $report = Report::findOrFail($report); 
+            $report = Report::findOrFail($report);
             $report->status = 'resolved';
             $report->save();
 
@@ -606,7 +606,7 @@ class DealsController extends Controller
                 $appName = config('app.name');
                 $subject = 'Your Comment Was Updated on ' . ($comment->post->title ?? 'a Deal') . ' - ' . $appName;
 
-                $viewDealUrl = url('view-deal/' . ($comment->post->id ?? 'N/A') . '?title=' . str_replace(' ', '-', $comment->post->title ?? ''));
+                $viewDealUrl = url('/deals/' . ($comment->post->id ?? 'N/A') . '?title=' . str_replace(' ', '-', $comment->post->title ?? ''));
 
                 $body = "# Hello **{$commentAuthor->name}**,\n\n";
                 $body .= "Your comment on the deal **\"{$comment->post->title}\"** has been updated.\n\n";
@@ -754,7 +754,7 @@ class DealsController extends Controller
         }
 
         // Construct the dynamic deal URL for the button
-        $dealUrl = '/view-deal/' . $post->id . '?title=' . str_replace(' ', '-', $post->title);
+        $dealUrl = '/deals/' . $post->id . '?title=' . str_replace(' ', '-', $post->title);
 
         // Using the full URL for the button
         $buttonFullUrl = url($dealUrl);

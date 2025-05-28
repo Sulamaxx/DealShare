@@ -93,8 +93,9 @@ Route::middleware([
     Route::put('/user/settings', [UserController::class, 'updateSettings'])->name('user.updateSettings');
 });
 
-Route::get('/view-deal/{id}/{title}', [UserPostController::class, 'view_deal'])->name('view-deal');
-Route::get('/view-deal/{id}', [UserPostController::class, 'view_deal'])->name('view-deal');
+Route::get('/deals/{post}', [UserPostController::class, 'view_deal_title'])->name('view-deal-title');
+Route::get('/deals/{id}/{title}', [UserPostController::class, 'view_deal'])->name('view-deal');
+Route::get('/deals/{id}', [UserPostController::class, 'view_deal'])->name('view-deal');
 
 Route::get('/approval-pending', function () {
     return view('auth.approval-pending');
