@@ -16,6 +16,13 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->withPersonalTeam()->create();
 
+        $this->call([
+            SettingSeeder::class,
+            TopBannerSettingSeeder::class,
+            BottomBannerSettingSeeder::class,
+            HighlyVotedDealSettingSeeder::class,
+        ]);
+
         User::factory()->withPersonalTeam()->create([
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
