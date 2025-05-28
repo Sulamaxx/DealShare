@@ -210,7 +210,7 @@
         <div class="container">
 
 
-            @if ($popular_deals)
+            @if ($popular_deals->isNotEmpty())
                 <section class="popular-deals-section" style="margin-top: 20px;line-height: 17.5px;">
                     <div class="container" style="padding-inline: 0px">
 
@@ -258,7 +258,7 @@
                 </section>
             @endif
 
-            @if ($new_deals)
+            @if ($new_deals->isNotEmpty())
                 <section class="popular-deals-section" style="margin-top: 20px;line-height: 17.5px;">
                     <div class="container" style="padding-inline: 0px">
 
@@ -304,7 +304,7 @@
                 </section>
             @endif
 
-            @if ($highly_voted_deals)
+            @if ($highly_voted_deals->isNotEmpty())
                 <section class="popular-deals-section" style="margin-top: 20px;line-height: 17.5px;">
                     <div class="container" style="padding-inline: 0px">
 
