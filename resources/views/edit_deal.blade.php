@@ -80,14 +80,13 @@
                     <div class="form-group">
                         <label for="inputCategory">Category</label>
                         <select name="category" class="form-control" id="inputCategory" required>
-                            <option value="">Select a Category</option>
+                            {{-- <option value="">Select a Category</option> --}}
+                            <option value="Deals & Coupons" {{ $post->category == 'Deals & Coupons' ? 'selected' : '' }}>
+                                Deals & Coupons</option>
                             <option value="Shopping Advice" {{ $post->category == 'Shopping Advice' ? 'selected' : '' }}>
                                 Shopping Advice</option>
                             <option value="Product Reviews" {{ $post->category == 'Product Reviews' ? 'selected' : '' }}>
                                 Product Reviews</option>
-                            <option value="Consumer Rights" {{ $post->category == 'Consumer Rights' ? 'selected' : '' }}>
-                                Consumer Rights</option>
-                            <!-- add more if you want -->
                         </select>
                     </div>
 

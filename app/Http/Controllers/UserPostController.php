@@ -555,7 +555,7 @@ class UserPostController extends Controller
         $post->discount_text = $validated['discount_text'] ?? null;
         $post->price_saving = $validated['price_saving'] ?? null;
         $post->category = $validated['category'];
-        $post->image = $imagePath;
+        $post->image = $imagePath == null && $originalImage != null ? $originalImage : $imagePath;
         $post->posted_at = now();
         $post->save();
 
@@ -614,15 +614,10 @@ class UserPostController extends Controller
         // Using the full URL for the button
         $buttonFullUrl = url($dealUrl);
 
-        $body .= "\n<x-mail::button :url=\"" . $buttonFullUrl . "\">\n"; // Use url() helper for full URL
-        $body .= "View Your Deal\n";
-        $body .= "</x-mail::button>\n\n";
-
         $body .= "If you did not make these changes, please contact our support team immediately at [info@buyme.lk].\n\n";
-        $body .= "Thank you,\nThe Team at {$appName}";
 
         if ($post->user && $post->user->email) {
-            send_generic_email($post->user->email, $subject, $body, null, null);
+            send_generic_email($post->user->email, $subject, $body, $buttonFullUrl, "View Your Deal");
         }
 
         return redirect()->route('my-deals')->with('success', 'Post updated successfully!');
@@ -919,6 +914,12 @@ class UserPostController extends Controller
 
         $search_deals = $attachBadges($search_deals);
 
-        return view('search_deals', compact('search_deals'));
+        $banner = Setting::whereIn('key', [
+            'top_banner',
+        ])
+            ->pluck('value', 'key')
+            ->toArray();
+
+        return view('search_deals', compact('search_deals', 'banner'));
     }
 }

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'My Activities')
+@section('title', 'Buyme Bargains')
 
 @section('content')
 
@@ -8,26 +8,31 @@
         <div class="container">
             <div class="tt-tab-wrapper">
                 <div class="tt-wrapper-inner">
-                    <ul class="nav nav-tabs pt-tabs-default" role="tablist">
+                    <ul class="nav nav-tabs pt-tabs-default tabs-mobile" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#about" role="tab"><span>About</span></a>
+                            <a class="nav-link nav-link-after nav-link-mobile" data-toggle="tab" href="#about"
+                                role="tab"><span class="span-mobile">About</span></a>
                         </li>
                         <li class="nav-item ">
-                            <a class="nav-link " data-toggle="tab" href="#guidelines"
-                                role="tab"><span>Guidelines</span></a>
+                            <a class="nav-link nav-link-after nav-link-mobile" data-toggle="tab" href="#guidelines"
+                                role="tab"><span class="span-mobile">Guidelines</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#faq" role="tab"><span>FAQ</span></a>
+                            <a class="nav-link nav-link-after nav-link-mobile" data-toggle="tab" href="#faq"
+                                role="tab"><span class="span-mobile">FAQ</span></a>
                         </li>
-                        <li class="nav-item tt-hide-xs">
-                            <a class="nav-link" data-toggle="tab" href="#term_and_services" role="tab"><span>Terms of
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-after nav-link-mobile" data-toggle="tab" href="#term_and_services"
+                                role="tab"><span class="span-mobile">Terms of
                                     Service</span></a>
                         </li>
-                        <li class="nav-item tt-hide-md">
-                            <a class="nav-link" data-toggle="tab" href="#privacy" role="tab"><span>Privacy</span></a>
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-after nav-link-mobile" data-toggle="tab" href="#privacy"
+                                role="tab"><span class="span-mobile">Privacy</span></a>
                         </li>
-                        <li class="nav-item tt-hide-md">
-                            <a class="nav-link" data-toggle="tab" href="#contact" role="tab"><span>Contact
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-after nav-link-mobile" data-toggle="tab" href="#contact"
+                                role="tab"><span class="span-mobile">Contact
                                     Us</span></a>
                         </li>
                     </ul>
@@ -62,6 +67,10 @@
     </main>
 
     <style>
+        .nav-link-after::after {
+            background: none;
+        }
+
         @media(max-width:426px) {
             .nav-item-custom {
                 width: 100%;
@@ -72,6 +81,17 @@
                 width: 100%;
             }
 
+            .nav-link-mobile {
+                font-size: small;
+            }
+
+            .span-mobile {
+                padding-block: 0px !important;
+            }
+
+            .tabs-mobile {
+                justify-content: space-around !important;
+            }
 
         }
 

@@ -24,7 +24,7 @@ use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/run-migrations', function () {
+/* Route::get('/run-migrations', function () {
     // Run the migrations
     Artisan::call('migrate');
     return 'Migrations have been successfully run!';
@@ -84,7 +84,7 @@ Route::get('/run-storage-link', function () {
     }
 
     return 'Storage link already exists!';
-});
+}); */
 
 Route::get('/', [UserFrontController::class, 'index'])->name('home');
 Route::get('/new-deals', [UserPostController::class, 'newDeals'])->name('new-deals');
@@ -204,7 +204,7 @@ Route::prefix('admin/deals')
             Route::put('/comments/{comment}', 'updateText')->name('comments.updateText');
 
             Route::patch('/reports/status/{id}', 'updateReportStatus')->name('report.status');
-            Route::patch('/comment/reports/status/{id}', 'updateCommentReportStatus')->name('commentReport.status');
+            Route::patch('/comment/reports/status/{id}', 'updateReportStatus')->name('commentReport.status');
             Route::delete('/reports/{id}', 'destroyReport')->name('report.delete');
             Route::delete('/deactivate/{report}/{deal}', 'deactivateDeal')->name('report.deactivate');
             Route::delete('/deactivate-comment/{report}/{comment}', 'deactivateComment')->name('commentReport.deactivate');

@@ -73,11 +73,10 @@
                     <div class="form-group">
                         <label for="inputCategory">Category</label>
                         <select name="category" class="form-control" id="inputCategory" required>
-                            <option value="">Select a Category</option>
+                            {{-- <option value="">Select a Category</option> --}}
+                            <option value="Deals & Coupons">Deals & Coupons</option>
                             <option value="Shopping Advice">Shopping Advice</option>
                             <option value="Product Reviews">Product Reviews</option>
-                            <option value="Consumer Rights">Consumer Rights</option>
-                            <!-- add more if you want -->
                         </select>
                     </div>
 

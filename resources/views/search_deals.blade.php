@@ -17,7 +17,6 @@
             position: relative;
             padding: 50px 20px;
             color: white;
-            background-image: url('images/banner.png');
             background-size: cover;
             background-position: center right;
             background-repeat: no-repeat;
@@ -166,7 +165,7 @@
     </style>
 
     <div class="banner position-relative col-12"
-        style="background-color: #fe4c01; color: white; padding: 40px 0;/* background-image: url('https://i.ibb.co/DMWPR9v/deal-phone.png'); */ background-size: cover; background-position: center right; background-repeat: no-repeat; min-height: 300px;">
+        style="background-color: #fe4c01; color: white; padding: 40px 0; background-size: cover; background-position: center right; background-repeat: no-repeat; min-height: 300px;background-image: url({{ $banner['top_banner'] === 'images/banner.png' ? asset($banner['top_banner']) : asset('storage/' . $banner['top_banner']) }})">
 
         <div class="container">
             <div class="row align-items-center">
@@ -186,15 +185,15 @@
 
                         <select name="category" class="form-select w-auto" style="border-radius: 20px; margin-top: auto;">
 
-                            <option value="">All Categories</option>
+
+                            <option value="Deals & Coupons"
+                                {{ request('category') == 'Deals & Coupons' ? 'selected' : '' }}>Deals & Coupons
+                            </option>
                             <option value="Shopping Advice"
                                 {{ request('category') == 'Shopping Advice' ? 'selected' : '' }}>
                                 Shopping Advice</option>
                             <option value="Product Reviews"
                                 {{ request('category') == 'Product Reviews' ? 'selected' : '' }}>Product Reviews
-                            </option>
-                            <option value="Consumer Rights"
-                                {{ request('category') == 'Consumer Rights' ? 'selected' : '' }}>Consumer Rights
                             </option>
 
                         </select>

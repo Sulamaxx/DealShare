@@ -1,5 +1,10 @@
 @extends('backend.layout.layout')
 
+@php
+    $title = 'View Deal';
+    $subTitle = 'View Deal';
+@endphp
+
 @section('title', $post->title)
 
 @section('content')
@@ -14,8 +19,9 @@
             <div class="card-body">
                 {{-- Post Image --}}
                 @if ($post->image)
-                    <img src="{{ asset('storage/deals/' . $post->image) }}" class="img-fluid rounded mb-3"
-                        alt="{{ $post->title }}">
+                    <img src="{{ asset($post->image) }}" class="img-fluid rounded mb-3" alt="{{ $post->title }}">
+                @else
+                    <img src="{{ asset('images/deal.jpg') }}" class="img-fluid rounded mb-3" alt="Placeholder Image">
                 @endif
 
                 {{-- Post Description --}}

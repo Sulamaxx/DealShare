@@ -4,7 +4,6 @@
 
 @section('content')
     <style>
-
         /* Deals */
         .deal-card {
             border: 1px solid #ddd;
@@ -91,19 +90,40 @@
                 <div class="container" style="padding-inline: 0px">
 
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        <div>
 
 
-                            <h2 style="margin-bottom: 0; font-weight: bold; font-size: 1.5rem; display: inline-block;">
-                                New Deals
-                            </h2>
+                        @if ($new_deals->isNotEmpty())
+                            <div>
 
-                            <div style="width: 62.5px; height: 3px; background-color: #DC3545; display: inline-block;">
+
+                                <h2 style="margin-bottom: 0; font-weight: bold; font-size: 1.5rem; display: inline-block;">
+                                    New Deals
+                                </h2>
+
+                                <div style="width: 62.5px; height: 3px; background-color: #DC3545; display: inline-block;">
+                                </div>
+
+
                             </div>
+                        @else
+                            <div class="col-12" style="justify-content: center">
+                                <div class="alert alert-info text-center my-4" role="alert"
+                                    style="justify-content: center">
+                                    <img src="{{ asset('images/not_found.svg') }}" alt="No results found"
+                                        class="empty-state-image col-12" {{-- Added class --}}
+                                        style="max-width: 200px; margin-top: 20px;margin-inline: auto">
+                                    {{-- Keep other inline styles if needed --}}
 
+                                    <h4 class="alert-heading">No New Deals Found!</h4>
 
-                        </div>
+                                </div>
+                            </div>
+                        @endif
+
                     </div>
+
+
+
                     <div class="row">
 
                         @foreach ($new_deals as $deal)

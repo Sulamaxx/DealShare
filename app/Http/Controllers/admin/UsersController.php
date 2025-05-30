@@ -51,8 +51,8 @@ class UsersController extends Controller
 
         // Handle image upload if any
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('users', 'public');
-            $imagePath = Storage::url($path);
+            $path = $request->file('image')->store('profile-photos', 'public');
+            $imagePath = $path;
         } else {
             $imagePath = null;
         }
@@ -81,18 +81,15 @@ class UsersController extends Controller
         // Assuming you have a login route
         $loginUrl = url('/login'); // Adjust this to your actual login route
 
-        $body .= "\n<x-mail::button :url=\"" . $loginUrl . "\">\n";
-        $body .= "Log In to Your Account\n";
-        $body .= "</x-mail::button>\n\n";
 
         // Suggesting password reset for security
         $body .= "If this account was created for you, we recommend resetting your password immediately by clicking 'Forgot Your Password?' on the login page.\n\n";
 
         $body .= "We're excited to have you on board!\n\n";
-        $body .= "Thank you,\nThe Team at {$appName}";
+
 
         if ($user->email) {
-            send_generic_email($user->email, $subject, $body, null, null);
+            send_generic_email($user->email, $subject, $body, $loginUrl, "Log In to Your Account");
         }
 
         // Redirect to the users list page with a success message
@@ -207,9 +204,6 @@ Good news! Your account on **" . config('app.name') . "** has been **activated**
 
 You can now log in and access all features of our platform.
 
-<x-mail::button :url=\"url('/login')\">
-Login to Your Account
-</x-mail::button>
 
 Thanks,<br>
 The Team at " . config('app.name') . "
@@ -395,9 +389,6 @@ Good news! Your account on **{$appName}** has been **activated**.
 
 You can now log in and access all features of our platform. We're excited to have you back!
 
-<x-mail::button :url=\"url('/login')\">
-Login to Your Account
-</x-mail::button>
 
 If you have any questions, feel free to contact our support team at [info@buyme.lk].
 

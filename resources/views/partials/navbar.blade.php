@@ -1,160 +1,3 @@
-{{-- <style>
-    .tt-desktop-menu nav ul li a {
-        position: relative;
-        text-decoration: none;
-        padding-bottom: 5px;
-    }
-
-    .tt-desktop-menu nav ul li a::after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: 32px;
-        transform: translateX(-16px);
-        width: 0;
-        height: 2px;
-        background-color: #fe9001;
-        transition: width 0.3s ease-in-out;
-    }
-
-    .tt-desktop-menu nav ul li a:hover::after,
-    .tt-desktop-menu nav ul li a.active::after {
-        width: 50%;
-    }
-
-    @media (min-width:1024px) {
-        .tt-desktop-menu nav ul li a::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 16px;
-            transform: translateX(-8px);
-            width: 0;
-            height: 2px;
-            background-color: #fe9001;
-            transition: width 0.3s ease-in-out;
-        }
-    }
-
-    @media (min-width:1440px) {
-        .tt-desktop-menu nav ul li a::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 32px;
-            transform: translateX(-16px);
-            width: 0;
-            height: 2px;
-            background-color: #fe9001;
-            transition: width 0.3s ease-in-out;
-        }
-    }
-</style>
-
-<nav class="panel-menu d-none" id="mobile-menu" style="background-color: #fe9001">
-    <ul>
-        <li><a href="#">Popular Deals</a></li>
-        <li><a href="#">New Deals</a></li>
-        <li><a href="#">Highly Voted Deals</a></li>
-        @if (Auth::user())
-            <li><a href="{{ route('my-deals') }}">My Deals</a></li>
-        @endif
-
-        @if (Auth::guest())
-            <li><a href="{{ route('login') }}">Log In</a></li>
-            <li><a href="{{ route('register') }}">Sign Up</a></li>
-        @else
-            <li><span>{{ Auth::user()->name }}</span></li>
-            <li><a href="{{ route('logout') }}"
-                    onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();">Logout</a>
-            </li>
-            <form id="logout-form-mobile" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
-        @endif
-        <li><a href="{{ route('create-deals') }}">Post Your Deal</a></li>
-    </ul>
-    <div class="mm-navbtn-names">
-        <div class="mm-closebtn">
-            Close
-            <div class="tt-icon">
-                <svg>
-                    <use xlink:href="#icon-cancel"></use>
-                </svg>
-            </div>
-        </div>
-        <div class="mm-backbtn">Back</div>
-    </div>
-</nav>
-
-<header id="tt-header" style="background-color:#222222; padding: 10px 0;">
-    <div class="container" style="padding-inline: 15px;">
-        <div class="row tt-row no-gutters align-items-center justify-content-between">
-            <div class="col-auto">
-                <div class="tt-logo">
-                    <a href="/"><img src="images/logo.png" alt=""></a>
-                </div>
-            </div>
-            <div class="col-auto flex-grow-1 d-flex justify-content-center d-none d-lg-flex">
-                <div class="tt-desktop-menu">
-                    <nav>
-                        <ul class="d-flex mb-0">
-                            <li class="nav-item "><a class="nav-link text-white" href="#">Popular
-                                    Deals</a></li>
-                            <li class="nav-item "><a class="nav-link text-white" href="#">New Deals</a></li>
-                            <li class="nav-item "><a class="nav-link text-white" href="#">Highly Voted
-                                    Deals</a></li>
-                            @if (Auth::user())
-                                <li><a href="{{ route('my-deals') }}">My Deals</a></li>
-                            @endif
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-            <div class="col-auto d-flex align-items-center">
-
-                <div class="tt-account-links d-none d-lg-flex align-items-center mr-3">
-                    @if (Auth::guest())
-                        <a href="{{ route('login') }}" class="text-white"
-                            style="text-decoration: none; margin-right: 5px;font-weight: bold">Log In</a>
-                        <span class="text-white" style="margin-right: 5px;">|</span>
-                        <a href="{{ route('register') }}" class="text-white"
-                            style="text-decoration: none;font-weight: bold">Sign Up</a>
-                    @else
-                        <div>
-                            <span class="text-white fw-bold" style="margin-right: 5px;font-weight: bold">
-                                {{ Auth::user()->name }}
-                            </span>
-                            <span class="text-white" style="margin-right: 5px;">|</span>
-                            <a href="{{ route('logout') }}" class="text-white"
-                                style="text-decoration: none;font-weight: bold"
-                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                Logout
-                            </a>
-
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                style="display: none;">
-                                @csrf
-                            </form>
-                        </div>
-                    @endif
-                </div>
-
-                <a href="{{ route('create-deals') }}" class="btn btn-sm"
-                    style="background-color: #fe9001; color: #222222; border: none;border-radius:30px;font-size: 0.8rem;font-weight: bold">Post
-                    Your
-                    Deal</a>
-
-                <a class="toggle-mobile-menu d-lg-none ml-3" href="#">
-                    <svg class="tt-icon">
-                        <use xlink:href="#icon-menu_icon"></use>
-                    </svg>
-                </a>
-            </div>
-        </div>
-    </div>
-</header> --}}
-
 <style>
     .nav-link {
         position: relative;
@@ -177,6 +20,20 @@
     .nav-link.active::after {
         width: 50%;
     }
+
+    @media(max-width:426px) {
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            left: 10%;
+            bottom: 0;
+            transform: translateX(-12%);
+            width: 0;
+            height: 2px;
+            background: #fe9001;
+            transition: width 0.3s ease;
+        }
+    }
 </style>
 
 <header class="bg-dark py-4">
@@ -190,14 +47,18 @@
             <!-- Desktop Menu -->
             <nav class="d-none d-lg-block">
                 <ul class="nav">
-                    <li class="nav-item"><a class="nav-link text-white" href="{{ route('popular-deals') }}">Popular Deals</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="{{ route('new-deals') }}">New Deals</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="{{ route('highly-voted-deals') }}">Highly Voted Deals</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{{ route('popular-deals') }}">Popular
+                            Deals</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{{ route('new-deals') }}">New Deals</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{{ route('highly-voted-deals') }}">Highly
+                            Voted Deals</a></li>
                     @auth
                         <li class="nav-item"><a class="nav-link text-white" href="{{ route('my-deals') }}">My Deals</a></li>
                     @endauth
                     @auth
-                        <li class="nav-item"><a class="nav-link text-white" href="{{ route('my-activities') }}">My Activities</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="{{ route('my-activities') }}">My
+                                Activities</a></li>
                     @endauth
                 </ul>
             </nav>
@@ -222,44 +83,65 @@
 
             <!-- Mobile Menu Toggle -->
             <button class="d-lg-none btn text-white" id="mobileMenuToggle">
-                <svg width="24" height="24">
-                    <use xlink:href="#icon-menu_icon"></use>
+                {{-- Menu Icon (initially visible) --}}
+                <svg class="menu-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+                {{-- Close Icon (initially hidden) --}}
+                <svg class="close-icon d-none" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
             </button>
         </div>
     </div>
-
-    <!-- Mobile Menu -->
-    <div class="bg-warning d-lg-none d-none" id="mobileMenu">
-        <ul class="nav flex-column p-3">
-            <li class="nav-item"><a class="nav-link text-dark" href="#">Popular Deals</a></li>
-            <li class="nav-item"><a class="nav-link text-dark" href="#">New Deals</a></li>
-            <li class="nav-item"><a class="nav-link text-dark" href="#">Highly Voted Deals</a></li>
-            @auth
-                <li class="nav-item"><a class="nav-link text-dark" href="{{ route('my-deals') }}">My Deals</a></li>
-            @endauth
-            @auth
-                <li class="nav-item"><a class="nav-link text-dark" href="{{ route('my-activities') }}">My Activities</a></li>
-            @endauth
-            @guest
-                <li class="nav-item"><a class="nav-link text-dark" href="{{ route('login') }}">Log In</a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="{{ route('register') }}">Sign Up</a></li>
-            @else
-                <li class="nav-item text-dark">{{ Auth::user()->name }}</li>
-                <li class="nav-item"><a class="nav-link text-dark" href="{{ route('logout') }}"
-                        onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();">Logout</a>
-                </li>
-                <form id="logout-form-mobile" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
-            @endguest
-            <li class="nav-item"><a class="nav-link text-dark fw-bold" href="{{ route('create-deals') }}">Post Your
-                    Deal</a></li>
-        </ul>
-    </div>
 </header>
+
+<!-- Mobile Menu -->
+<div class="d-lg-none d-none" id="mobileMenu" style="background-color: #e1e1e1;" >
+    <ul class="nav flex-column p-3">
+        <li class="nav-item"><a class="nav-link text-dark" href="{{ route('popular-deals') }}">Popular Deals</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="{{ route('new-deals') }}">New Deals</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="{{ route('highly-voted-deals') }}">Highly Voted
+                Deals</a></li>
+        @auth
+            <li class="nav-item"><a class="nav-link text-dark" href="{{ route('my-deals') }}">My Deals</a></li>
+        @endauth
+        @auth
+            <li class="nav-item"><a class="nav-link text-dark" href="{{ route('my-activities') }}">My Activities</a>
+            </li>
+        @endauth
+        @guest
+            <li class="nav-item"><a class="nav-link text-dark" href="{{ route('login') }}">Log In</a></li>
+            <li class="nav-item"><a class="nav-link text-dark" href="{{ route('register') }}">Sign Up</a></li>
+        @else
+            <li class="nav-item text-dark" style="padding-left: 1rem;">{{ Auth::user()->name }}</li>
+            <li class="nav-item"><a class="nav-link text-dark" href="{{ route('logout') }}"
+                    onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();">Logout</a>
+            </li>
+            <form id="logout-form-mobile" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
+        @endguest
+        <li class="nav-item"><a class="nav-link btn btn-warning btn-sm ms-3 fw-bold text-dark mt-3"
+                style="border-radius: 30px; background-color: #fe9001;" href="{{ route('create-deals') }}">Post Your
+                Deal</a></li>
+    </ul>
+</div>
 
 <script>
     document.getElementById('mobileMenuToggle').addEventListener('click', function() {
         const mobileMenu = document.getElementById('mobileMenu');
+        const menuIcon = this.querySelector('.menu-icon');
+        const closeIcon = this.querySelector('.close-icon');
+
+        // Toggle the visibility of the mobile menu
         mobileMenu.classList.toggle('d-none');
+
+        // Toggle the visibility of the icons
+        menuIcon.classList.toggle('d-none');
+        closeIcon.classList.toggle('d-none');
     });
 </script>

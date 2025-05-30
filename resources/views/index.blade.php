@@ -190,10 +190,9 @@
 
                         <select name="category" class="form-select w-auto" style="border-radius: 20px; margin-top: auto;">
 
-                            <option value="">All Categories</option>
+                            <option value="Deals & Coupons">Deals & Coupons</option>
                             <option value="Shopping Advice">Shopping Advice</option>
                             <option value="Product Reviews">Product Reviews</option>
-                            <option value="Consumer Rights">Consumer Rights</option>
 
                         </select>
 
@@ -205,10 +204,8 @@
         </div>
     </div>
 
-
     <main id="tt-pageContent" class="p-0">
         <div class="container">
-
 
             @if ($popular_deals->isNotEmpty())
                 <section class="popular-deals-section" style="margin-top: 20px;line-height: 17.5px;">

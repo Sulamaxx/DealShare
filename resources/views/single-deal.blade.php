@@ -59,16 +59,22 @@
                 align-items: center;
             }
         }
+
+        @media (max-width:426px) {
+            .page-content-mobile {
+                padding-top: 0px !important;
+            }
+        }
     </style>
     <input type="text" id="post_id" value="{{ $post->id }}" hidden />
-    <main id="tt-pageContent">
+    <main id="tt-pageContent" class="page-content-mobile">
         <div class="container">
             <div class="tt-single-topic-list">
                 <div class="tt-item">
                     <div class="tt-single-topic">
                         <div class="tt-item-header">
                             <div class="tt-item-info info-top">
-                                <div class="tt-avatar-icon">
+                                <div class="tt-avatar-icon" style="flex-shrink: 0;">
                                     @php
                                         $profilePhotoUrl =
                                             $post->user && $post->user->profile_photo_path
@@ -209,24 +215,28 @@
                                     </div> {{-- End tt-popup-settings-content --}}
 
                                 </div>
-                                <div class="d-flex align-items-center">
+                                <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center">
+                                    {{-- Created date remains in its own container --}}
                                     <a href="javascript:void(0)" class="tt-info-time d-flex justify-content-end mr-3">
                                         <i class="tt-icon d-flex align-items-center justify-content-center"><svg>
                                                 <use xlink:href="#icon-time"></use>
                                             </svg></i>
                                         <span class="d-block">{{ $post->created_at }}</span>
                                     </a>
-                                    @if ($post->helpful_by_user != 0)
-                                        <button class="badge bg-success d-flex align-items-center mr-3">
-                                            Helpful
-                                        </button>
-                                    @endif
-                                    @auth
-                                        <button class="badge bg-danger d-flex align-items-center"
-                                            data-post-id="{{ $post->id }}" onclick="reportPost(this)">
-                                            Report Deal
-                                        </button>
-                                    @endauth
+                                    {{-- New div for buttons, with margin-top for spacing on small screens only --}}
+                                    <div class="d-flex align-items-center mt-2 mt-sm-0">
+                                        @if ($post->helpful_by_user != 0)
+                                            <button class="badge bg-success d-flex align-items-center mr-3">
+                                                Helpful
+                                            </button>
+                                        @endif
+                                        @auth
+                                            <button class="badge bg-danger d-flex align-items-center"
+                                                data-post-id="{{ $post->slug }}" onclick="reportPost(this)">
+                                                Report Deal
+                                            </button>
+                                        @endauth
+                                    </div>
                                 </div>
 
                             </div>
@@ -340,7 +350,7 @@
                 <div class="pt-editor form-default">
                     <h6 class="pt-title">Comment</h6>
                     <div class="form-group">
-                        <textarea name="message" id="new_thread" class="form-control" rows="5" placeholder="Lets get started"></textarea>
+                        <textarea name="message" id="new_thread" class="form-control" rows="5"></textarea>
                     </div>
                     <div class="pt-row">
                         <div class="col-auto">
@@ -591,6 +601,7 @@
 
     function reportPost(element) {
         const postId = element.dataset.postId;
+        console.log(postId);
         const url = `/posts/${postId}/report`;
 
         Swal.fire({
@@ -959,7 +970,7 @@
             const hasReplies = replies.length > 0;
             const toggleId = `toggle-replies-${comment.id}`;
 
-            let photoPath = 'assets/images/user.png';
+            let photoPath = 'https://bargains.buyme.lk/assets/images/user.png';
             if (comment.user?.profile_photo_path) {
                 photoPath = `${APP_STORAGE_URL}/${comment.user.profile_photo_path}`;
             }
