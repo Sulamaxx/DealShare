@@ -339,10 +339,6 @@
                 </div>
 
                 <div id="comments-container" data-post-id="{{ $post->id }}"></div>
-                <script>
-                    loadComments({{ $post->id }});
-                </script>
-
 
             </div>
 
@@ -379,6 +375,13 @@
 <!-- Pusher & Echo CDN scripts -->
 <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.3/dist/echo.iife.js"></script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        loadComments({{ $post->id }});
+    });
+</script>
 
 <script>
     function loginMessage(x) {
@@ -913,7 +916,13 @@
 
 <script>
     function loadComments(postId) {
-        fetch(`/comments/${postId}`)
+        fetch(`/comments/${postId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
             .then(res => res.json())
             .then(data => {
                 console.log(data);
