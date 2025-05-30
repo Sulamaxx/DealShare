@@ -27,7 +27,8 @@
                             Log into your account to unlock true power of community.
                         </div>
                     </a>
-                    <form class="form-default" method="POST" action="{{ route('login') }}">
+                    <form class="form-default" method="POST"
+                        action="{{ route('login', ['redirect' => url()->current()]) }}">
                         @csrf
 
                         <x-validation-errors class="mb-4" />
