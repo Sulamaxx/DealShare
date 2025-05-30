@@ -166,7 +166,7 @@
 
 <style>
     .footer {
-        background-color: #e5e5e5;
+        background-color: #b2b2b2;
         padding: 20px 0;
         font-family: 'Poppins', sans-serif;
     }
@@ -290,7 +290,9 @@
 <footer class="footer" style="margin-top: 20px">
     <div class="footer-container">
         <div class="footer-left">
-            <h2><span class="logo-bold">Buy</span><span class="logo-orange">Me</span></h2>
+            <a href="/" class="navbar-brand">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" height="42" width="84">
+            </a>
             <p class="footer-copy">© 2025 Buyme.lk. All Rights Reserved.</p>
         </div>
         <div class="footer-right">

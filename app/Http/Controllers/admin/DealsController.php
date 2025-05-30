@@ -259,10 +259,13 @@ class DealsController extends Controller
     public function updateReportStatus($id)
     {
         $report = Report::with([
-            'user', // The user who submitted the report
-            'reportable',
-            'reportable.user', // The user who created the reported post/comment
-            'reportable.post.user' // If reportable is a comment, get its parent post's user
+            'user', // The user who submitted the report (reporter)
+            'reportable' => function ($morphTo) {
+                $morphTo->morphWith([
+                    Post::class => ['user'], // If reportable is a Post, eager load its 'user'
+                    Comment::class => ['user', 'post.user'], // If reportable is a Comment, eager load its 'user' AND its 'post.user'
+                ]);
+            }
         ])->findOrFail($id);
 
         $report->status = 'reviewed';
@@ -700,7 +703,7 @@ class DealsController extends Controller
         $post->discount_text = $validated['discount_text'] ?? null;
         $post->price_saving = $validated['price_saving'] ?? null;
         $post->category = $validated['category'];
-        $post->image = $imagePath;
+        $post->image = $imagePath == null && $originalImage != null ? $originalImage : $imagePath;
         $post->posted_at = now();
         $post->save();
 
@@ -759,15 +762,12 @@ class DealsController extends Controller
         // Using the full URL for the button
         $buttonFullUrl = url($dealUrl);
 
-        $body .= "\n<x-mail::button :url=\"" . $buttonFullUrl . "\">\n";
-        $body .= "View Your Deal\n";
-        $body .= "</x-mail::button>\n\n";
 
         $body .= "These changes have been made by the **Buyme Bargains Team**. If you have any questions, please contact our support team immediately at [info@buyme.lk].\n\n";
-        $body .= "Thank you,\nThe Team at {$appName}";
+
 
         if ($post->user && $post->user->email) {
-            send_generic_email($post->user->email, $subject, $body, null, null);
+            send_generic_email($post->user->email, $subject, $body, $buttonFullUrl, "View Your Deal");
         }
 
         return redirect()->route('dealsList')->with('success', 'Post updated successfully!');

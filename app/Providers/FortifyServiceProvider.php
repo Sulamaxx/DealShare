@@ -45,7 +45,7 @@ class FortifyServiceProvider extends ServiceProvider
                     throw ValidationException::withMessages([
                         Fortify::username() => 'Your account is not approved yet.',
                     ]);
-                }else if ($user->status == 2) {
+                } else if ($user->status == 2) {
                     throw ValidationException::withMessages([
                         Fortify::username() => 'Your account is Temporary banned.',
                     ]);

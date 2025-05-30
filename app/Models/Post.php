@@ -49,4 +49,20 @@ class Post extends Model
     {
         return 'slug';
     }
+
+    public function resolveRouteBinding($value, $field = null)
+    {
+        // If a specific field is explicitly requested (e.g., {post:id}), use that field.
+        if ($field) {
+            return $this->where($field, $value)->firstOrFail();
+        }
+
+        // Otherwise, try to resolve by ID first if the value is numeric
+        if (is_numeric($value)) {
+            return $this->where('id', $value)->firstOrFail();
+        }
+
+        // If not numeric, try to resolve by slug
+        return $this->where('slug', $value)->firstOrFail();
+    }
 }

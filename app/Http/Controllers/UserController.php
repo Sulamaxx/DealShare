@@ -128,7 +128,7 @@ class UserController extends Controller
                 ->orderBy('vote-count', 'desc')
                 ->first();
 
-            if ($$highestQualifyingBadge && (!$user->badge_id || $user->badge_id !== $$highestQualifyingBadge->id)) {
+            if ($highestQualifyingBadge && (!$user->badge_id || $user->badge_id !== $highestQualifyingBadge->id)) {
                 $oldBadgeName = $user->badge ? $user->badge->name : 'No Badge';
                 $newBadgeName = $highestQualifyingBadge->name;
 

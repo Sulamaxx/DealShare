@@ -147,10 +147,9 @@
                                         Category <span class="text-danger-600">*</span></label>
                                     <select class="form-control rounded-lg form-select" id="category" name="category"
                                         required>
-                                        <option value="">Select Category</option>
-                                        {{-- Example categories. You might load these dynamically from a database --}}
+                                        {{-- <option value="">Select Category</option> --}}
                                         @php
-                                            $categories = ['Shopping Advice', 'Product Reviews', 'Consumer Rights'];
+                                            $categories = ['Deals & Coupons','Shopping Advice', 'Product Reviews'];
                                         @endphp
                                         @foreach ($categories as $category)
                                             <option value="{{ $category }}"

@@ -105,7 +105,7 @@
                                 <div class="tt-item">
                                     <div class="tt-col-description">
                                         <h6 class="tt-title"><a
-                                                href="{{ route('view-deal-title', ['post' => $deal->slug]) }}">
+                                                href="{{ route('view-deal-title', ['post' => $post->slug]) }}">
                                                 {{ $post->title }}
                                             </a></h6>
                                         <div class="tt-col-message">
