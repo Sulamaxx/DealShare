@@ -324,7 +324,7 @@
                                 <form action="{{ route('subscription.destroy') }}" method="post">
                                     @csrf
                                     <input type="text" name="id" value="{{ $id }}" hidden />
-                                    <button class="btn btn-warning btn-sm" type="submit">Remove Subscribe</button>
+                                    <button class="btn btn-warning btn-sm" type="submit">Unsubscribe</button>
                                 </form>
                             @else
                                 <form action="{{ route('subscription') }}" method="post">
