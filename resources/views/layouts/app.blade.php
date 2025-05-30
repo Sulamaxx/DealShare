@@ -74,7 +74,7 @@
         const APP_STORAGE_URL = "{{ asset('storage') }}";
     </script>
 
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             $('.toggle-mobile-menu').click(function(e) {
                 e.preventDefault();
@@ -86,7 +86,7 @@
                 $('#mobile-menu').addClass('d-none');
             });
         });
-    </script>
+    </script> --}}
 
     <script>
         @if (session('success'))
@@ -124,7 +124,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/script.js') }}"></script>
+    {{-- <script src="{{ asset('js/script.js') }}"></script> --}}
     <script src="{{ asset('js/bundle.js') }}"></script>
     <svg width="0" height="0" class="hidden">
         <symbol aria-hidden="true" data-prefix="fab" data-icon="facebook-f" xmlns="http://www.w3.org/2000/svg"
