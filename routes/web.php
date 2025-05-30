@@ -113,7 +113,7 @@ Route::middleware([
     Route::post('/deals/{deal}/mark-helpful', [DealHelpfulController::class, 'mark'])->name('deals.markHelpful');
     Route::delete('/deals/{deal}/unmark-helpful', [DealHelpfulController::class, 'unmark'])->name('deals.unmarkHelpful');
     Route::post('/start-thread', [ThreadController::class, 'store']);
-    Route::get('/comments/{post}', [ThreadController::class, 'index']);
+    Route::post('/comments/{post}', [ThreadController::class, 'index']);
     Route::post('/comments', [ThreadController::class, 'storeChild']);
     Route::post('/comments/{comment}/report', [ThreadController::class, 'report']);
     Route::post('/subscription', [SubscriptionController::class, 'index'])->name('subscription');
