@@ -1,5 +1,5 @@
 <x-mail::message>
-    {!! $bodyContent !!}
+    {{ $bodyContent }}
 
     @if ($buttonUrl && $buttonText)
         <x-mail::button :url="$buttonUrl">

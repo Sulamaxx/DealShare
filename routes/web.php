@@ -1,11 +1,11 @@
 <?php
 
 use App\Http\Controllers\admin\AuthenticationController;
+use App\Http\Controllers\admin\BadgeController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\DealsController;
 use App\Http\Controllers\admin\SettingsController;
 use App\Http\Controllers\admin\UsersController;
-use App\Http\Controllers\admin\BadgeController;
 use App\Http\Controllers\AiapplicationController;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\ComponentspageController;
@@ -17,9 +17,9 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\ThreadController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserFrontController;
 use App\Http\Controllers\UserPostController;
-use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -39,7 +39,6 @@ Route::get('/runBottomBannerSettingSeeder', function () {
     return response()->json(['message' => 'SettingSeeder executed successfully']);
 });
 
-
 Route::get('/runTopBannerSettingSeeder', function () {
     Artisan::call('db:seed', [
         '--class' => 'TopBannerSettingSeeder',
@@ -48,7 +47,6 @@ Route::get('/runTopBannerSettingSeeder', function () {
 
     return response()->json(['message' => 'SettingSeeder executed successfully']);
 });
-
 
 Route::get('/run-setting-seeder', function () {
     Artisan::call('db:seed', [
@@ -130,12 +128,6 @@ Route::get('/approval-pending', function () {
     return view('auth.approval-pending');
 });
 
-
-
-
-
-
-
 // Admin Routes
 // Authentication
 Route::prefix('admin')->group(function () {
@@ -158,6 +150,23 @@ Route::controller(DealsController::class)
     ->middleware([AdminMiddleware::class])
     ->group(function () {
         Route::get('/admin', 'dealsList')->name('dealsList');
+        Route::get('/queue-restart', function () {
+            // Run the seeders
+            Artisan::call('queue:restart');
+            return 'Queue restart have been successfully run!';
+        });
+
+        Route::get('/view-clear', function () {
+            // Run the seeders
+            Artisan::call('view:clear');
+            return 'View clear have been successfully run!';
+        });
+
+        Route::get('/queue-work', function () {
+            // Run the seeders
+            Artisan::call('queue:work');
+            return 'Queue work have been successfully run!';
+        });
     });
 
 // Users
@@ -177,7 +186,7 @@ Route::prefix('admin/users')
             Route::post('/users/{id}/warning-email', 'sendWarningEmail')->name('user.warning.email');
             Route::post('/users/{id}/ban-temp', 'temporaryBan')->name('user.ban.temp');
             Route::post('/users/{id}/ban', 'banUser')->name('user.ban');
-            Route::patch('/user/{id}/activate',  'activate')->name('user.activate');
+            Route::patch('/user/{id}/activate', 'activate')->name('user.activate');
             Route::get('/update-profile/{id}', 'show')->name('updateProfile');
             Route::post('/update-profile/{id}', 'update')->name('admin.updateProfile');
         });
@@ -281,7 +290,6 @@ Route::prefix('aiapplication')->group(function () {
         Route::get('/voice-generator', 'voiceGenerator')->name('voiceGenerator');
     });
 });
-
 
 // chart
 Route::prefix('chart')->group(function () {

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
@@ -41,7 +40,6 @@ class DealsController extends Controller
         $deals = $query->orderBy('created_at', 'desc')->paginate(8);
         return view('backend.deals.dealsList', compact('deals'));
     }
-
 
     public function reportsList(Request $request)
     {
@@ -97,101 +95,100 @@ class DealsController extends Controller
     public function viewDeal()
     {
         $post = (object) [
-            'id' => 1,
-            'title' => 'Amazing Deal on Laptops!',
-            'description' => 'Check out this amazing deal on laptops with discounts up to 40%! Grab yours now!',
-            'link' => 'https://example.com/laptop-deal',
-            'upvotes' => 200,
-            'downvotes' => 5,
-            'posted_at' => Carbon::now(),
-            'comment_count' => 4,
-            'category' => 'Electronics',
+            'id'              => 1,
+            'title'           => 'Amazing Deal on Laptops!',
+            'description'     => 'Check out this amazing deal on laptops with discounts up to 40%! Grab yours now!',
+            'link'            => 'https://example.com/laptop-deal',
+            'upvotes'         => 200,
+            'downvotes'       => 5,
+            'posted_at'       => Carbon::now(),
+            'comment_count'   => 4,
+            'category'        => 'Electronics',
             'verified_member' => 1,
-            'image' => 'laptop-deal.jpg',
-            'discount_text' => '40% off',
-            'price_saving' => '$300',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-            'status' => 1,
-            'user' => (object) [
-                'name' => 'John Doe'
+            'image'           => 'laptop-deal.jpg',
+            'discount_text'   => '40% off',
+            'price_saving'    => '$300',
+            'created_at'      => Carbon::now(),
+            'updated_at'      => Carbon::now(),
+            'status'          => 1,
+            'user'            => (object) [
+                'name' => 'John Doe',
             ],
-            'comments' => [
+            'comments'        => [
                 (object) [
-                    'user' => (object) ['name' => 'Alice'],
-                    'body' => 'I just bought this laptop! The deal is amazing!',
+                    'user'       => (object) ['name' => 'Alice'],
+                    'body'       => 'I just bought this laptop! The deal is amazing!',
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
-                    'comments' => [
+                    'comments'   => [
                         (object) [
-                            'user' => (object) ['name' => 'Bob'],
-                            'body' => 'I agree, the specs are great for the price!',
+                            'user'       => (object) ['name' => 'Bob'],
+                            'body'       => 'I agree, the specs are great for the price!',
                             'created_at' => Carbon::now(),
                             'updated_at' => Carbon::now(),
-                            'comments' => [
+                            'comments'   => [
                                 (object) [
-                                    'user' => (object) ['name' => 'Charlie'],
-                                    'body' => 'I was skeptical, but after reading reviews, I’m going to get it!',
+                                    'user'       => (object) ['name' => 'Charlie'],
+                                    'body'       => 'I was skeptical, but after reading reviews, I’m going to get it!',
                                     'created_at' => Carbon::now(),
                                     'updated_at' => Carbon::now(),
-                                    'comments' => [
+                                    'comments'   => [
                                         (object) [
-                                            'user' => (object) ['name' => 'Dave'],
-                                            'body' => 'I have been using it for a month now. Totally worth it!',
+                                            'user'       => (object) ['name' => 'Dave'],
+                                            'body'       => 'I have been using it for a month now. Totally worth it!',
                                             'created_at' => Carbon::now(),
                                             'updated_at' => Carbon::now(),
-                                        ]
-                                    ]
-                                ]
-                            ]
+                                        ],
+                                    ],
+                                ],
+                            ],
                         ],
                         (object) [
-                            'user' => (object) ['name' => 'Emma'],
-                            'body' => 'Is the battery life really that long?',
+                            'user'       => (object) ['name' => 'Emma'],
+                            'body'       => 'Is the battery life really that long?',
                             'created_at' => Carbon::now(),
                             'updated_at' => Carbon::now(),
-                            'comments' => [
+                            'comments'   => [
                                 (object) [
-                                    'user' => (object) ['name' => 'Frank'],
-                                    'body' => 'Yes, it lasts for about 12 hours with regular use.',
+                                    'user'       => (object) ['name' => 'Frank'],
+                                    'body'       => 'Yes, it lasts for about 12 hours with regular use.',
                                     'created_at' => Carbon::now(),
                                     'updated_at' => Carbon::now(),
-                                ]
-                            ]
-                        ]
-                    ]
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
                 (object) [
-                    'user' => (object) ['name' => 'Daniel'],
-                    'body' => 'I’m thinking of buying this. Is the delivery fast?',
+                    'user'       => (object) ['name' => 'Daniel'],
+                    'body'       => 'I’m thinking of buying this. Is the delivery fast?',
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
-                    'comments' => []
+                    'comments'   => [],
                 ],
                 (object) [
-                    'user' => (object) ['name' => 'Sophia'],
-                    'body' => 'Anyone knows if there is an additional discount on students?',
+                    'user'       => (object) ['name' => 'Sophia'],
+                    'body'       => 'Anyone knows if there is an additional discount on students?',
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
-                    'comments' => [
+                    'comments'   => [
                         (object) [
-                            'user' => (object) ['name' => 'Grace'],
-                            'body' => 'You can get an additional 10% off with a student ID!',
+                            'user'       => (object) ['name' => 'Grace'],
+                            'body'       => 'You can get an additional 10% off with a student ID!',
                             'created_at' => Carbon::now(),
                             'updated_at' => Carbon::now(),
-                        ]
-                    ]
-                ]
-            ]
+                        ],
+                    ],
+                ],
+            ],
         ];
-
 
         return view('backend.deals.viewDeals', compact('post'));
     }
 
     public function updateStatus($id)
     {
-        $deal = Post::findOrFail($id);
+        $deal           = Post::findOrFail($id);
         $originalStatus = $deal->status;
         if ($deal->status === 0 || $deal->status === 2) {
             $deal->status = 1;
@@ -201,22 +198,22 @@ class DealsController extends Controller
 
         $deal->save();
 
-        $appName = config('app.name');
+        $appName   = config('app.name');
         $newStatus = $deal->status;
-        $subject = 'Deal Status Updated on ' . $appName;
+        $subject   = 'Deal Status Updated on ' . $appName;
 
         $dealUrl = '/deals/' . $deal->id . '?title=' . str_replace(' ', '-', $deal->title);
 
-        $body = "# Hello,\\n\\n";
-        $body .= "The status of a deal has been updated.\\n\\n";
-        $body .= "Deal ID: {$deal->id}\\n\\n"; // Include the deal ID in the email
+        $body = "# Hello,\n\n";
+        $body .= "The status of a deal has been updated.\n\n";
+        $body .= "Deal ID: {$deal->id}\n\n"; // Include the deal ID in the email
         if ($originalStatus != $newStatus) {
-            $body .= "The status changed from " . ($originalStatus == 0 ? 'Inactive' : ($originalStatus == 1 ? 'Active' : 'Pending')) . " to " . ($newStatus == 0 ? 'Inactive' : ($newStatus == 1 ? 'Active' : 'Pending')) . ".\\n\\n";
+            $body .= "The status changed from " . ($originalStatus == 0 ? 'Inactive' : ($originalStatus == 1 ? 'Active' : 'Pending')) . " to " . ($newStatus == 0 ? 'Inactive' : ($newStatus == 1 ? 'Active' : 'Pending')) . ".\n\n";
         } else {
-            $body .= "The status remains " . ($newStatus == 0 ? 'Inactive' : ($newStatus == 1 ? 'Active' : 'Pending')) . ".\\n\\n";
+            $body .= "The status remains " . ($newStatus == 0 ? 'Inactive' : ($newStatus == 1 ? 'Active' : 'Pending')) . ".\n\n";
         }
-        $body .= "You can view the deal here: " . url($dealUrl) . "\\n\\n";
-        $body .= "Thank you,\\nThe Team at {$appName}";
+        $body .= "You can view the deal here: " . url($dealUrl) . "\n\n";
+        $body .= "Thank you,\nThe Team at {$appName}";
 
         if ($deal->user && $deal->user->email) {
             send_generic_email($deal->user->email, $subject, $body, null, null);
@@ -227,7 +224,7 @@ class DealsController extends Controller
 
     public function updateRejectStatus($id)
     {
-        $deal = Post::findOrFail($id);
+        $deal         = Post::findOrFail($id);
         $deal->status = 2;
         $deal->save();
 
@@ -246,7 +243,7 @@ class DealsController extends Controller
         $body .= "Thank you for your understanding,\nThe Team at {$appName}";
 
         // No button typically needed for a rejected deal notification
-        $buttonUrl = null;
+        $buttonUrl  = null;
         $buttonText = null;
 
         if ($deal->user && $deal->user->email) {
@@ -262,10 +259,10 @@ class DealsController extends Controller
             'user', // The user who submitted the report (reporter)
             'reportable' => function ($morphTo) {
                 $morphTo->morphWith([
-                    Post::class => ['user'], // If reportable is a Post, eager load its 'user'
+                    Post::class    => ['user'],              // If reportable is a Post, eager load its 'user'
                     Comment::class => ['user', 'post.user'], // If reportable is a Comment, eager load its 'user' AND its 'post.user'
                 ]);
-            }
+            },
         ])->findOrFail($id);
 
         $report->status = 'reviewed';
@@ -273,16 +270,16 @@ class DealsController extends Controller
 
         $appName = config('app.name');
 
-        $reportedItemTitle = '';
-        $reportedItemUrl = '';
-        $itemType = '';
+        $reportedItemTitle   = '';
+        $reportedItemUrl     = '';
+        $itemType            = '';
         $reportedItemCreator = null; // Initialize reported item's creator
 
         // Determine the type of the reported item and get its details
         if ($report->reportable_type === Post::class) {
-            $itemType = 'post';
-            $reportedItemTitle = $report->reportable->title ?? 'Untitled Post';
-            $reportedItemUrl = url('/deals/' . $report->reportable->id . '?title=' . str_replace(' ', '-', $reportedItemTitle));
+            $itemType            = 'post';
+            $reportedItemTitle   = $report->reportable->title ?? 'Untitled Post';
+            $reportedItemUrl     = url('/deals/' . $report->reportable->id . '?title=' . str_replace(' ', '-', $reportedItemTitle));
             $reportedItemCreator = $report->reportable->user; // Post creator
         } elseif ($report->reportable_type === Comment::class) {
             $itemType = 'comment';
@@ -291,26 +288,26 @@ class DealsController extends Controller
 
             // For comments, link to the post the comment belongs to
             if ($report->reportable->post) {
-                $reportedItemUrl = url('/deals/' . $report->reportable->post->id . '?title=' . str_replace(' ', '-', $report->reportable->post->title ?? ''));
-                $reportedItemTitle = "comment on \"" . ($report->reportable->post->title ?? 'Untitled Post') . "\" (Text: \"{$commentTextSnippet}\")";
+                $reportedItemUrl     = url('/deals/' . $report->reportable->post->id . '?title=' . str_replace(' ', '-', $report->reportable->post->title ?? ''));
+                $reportedItemTitle   = "comment on \"" . ($report->reportable->post->title ?? 'Untitled Post') . "\" (Text: \"{$commentTextSnippet}\")";
                 $reportedItemCreator = $report->reportable->user; // Comment creator
             } else {
-                $reportedItemUrl = url('/'); // Fallback to homepage if parent post not found
-                $reportedItemTitle = "comment (Text: \"{$commentTextSnippet}\")";
+                $reportedItemUrl     = url('/'); // Fallback to homepage if parent post not found
+                $reportedItemTitle   = "comment (Text: \"{$commentTextSnippet}\")";
                 $reportedItemCreator = $report->reportable->user; // Still try to get comment creator
             }
         } else {
             // Fallback for unexpected reportable types
-            $itemType = 'item';
-            $reportedItemTitle = 'Unknown';
-            $reportedItemUrl = url('/'); // Link to homepage or a generic reports page
-            $reportedItemCreator = null; // No creator identifiable
+            $itemType            = 'item';
+            $reportedItemTitle   = 'Unknown';
+            $reportedItemUrl     = url('/'); // Link to homepage or a generic reports page
+            $reportedItemCreator = null;     // No creator identifiable
         }
 
         // --- Email to the User who submitted the Report (Reporter) ---
         if ($report->user && $report->user->email) {
             $subjectToReporter = 'Update on Your Report - ' . $appName;
-            $bodyToReporter = "# Hello **{$report->user->name}**,\n\n";
+            $bodyToReporter    = "# Hello **{$report->user->name}**,\n\n";
             $bodyToReporter .= "This is an update regarding a report you submitted on **{$appName}**.\n\n";
             $bodyToReporter .= "Your report concerning a **{$itemType}** has been **reviewed** (Report ID: {$report->id}).\n\n";
             if ($itemType !== 'item') {
@@ -324,7 +321,7 @@ class DealsController extends Controller
             $bodyToReporter .= "If you have any further questions, please contact our support team at [info@buyme.lk].\n\n";
             $bodyToReporter .= "The Team at {$appName}";
 
-            if (send_generic_email($report->user->email, $subjectToReporter, $bodyToReporter, $reportedItemUrl, 'View Item')) {
+            if (send_generic_email($report->user->email, $subjectToReporter, $bodyToReporter, null, null)) {
                 Log::info("Report status update email dispatched to reporter {$report->user->email} for report ID: {$report->id}");
             } else {
                 Log::error("Failed to send report status update email to reporter {$report->user->email} for report ID: {$report->id}");
@@ -336,7 +333,7 @@ class DealsController extends Controller
         // This avoids sending redundant emails if a user reports their own content and it gets reviewed.
         if ($reportedItemCreator && $reportedItemCreator->email && $reportedItemCreator->id !== $report->user->id) {
             $subjectToCreator = 'Regarding Your Content - ' . $appName;
-            $bodyToCreator = "# Hello **{$reportedItemCreator->name}**,\n\n";
+            $bodyToCreator    = "# Hello **{$reportedItemCreator->name}**,\n\n";
             $bodyToCreator .= "This email is to inform you about a recent review concerning your **{$itemType}** on **{$appName}**.\n\n";
             $bodyToCreator .= "Your **{$itemType}** (content: \"{$reportedItemTitle}\") has been reviewed due to a user report (Report ID: {$report->id}).\n\n";
             $bodyToCreator .= "The report stated the reason: `{$report->reason}`\n\n";
@@ -372,15 +369,15 @@ class DealsController extends Controller
     {
         $deal = Post::with('user')->findOrFail($id);
 
-        $dealTitle = $deal->title; // Get title before deletion for email content
-        $dealId = $deal->id;
+        $dealTitle   = $deal->title; // Get title before deletion for email content
+        $dealId      = $deal->id;
         $dealCreator = $deal->user; // Get the user who created the deal
 
         $deal->delete(); // Delete the deal
 
         Log::info("Deal {$dealId} ('{$dealTitle}') deleted.");
 
-        // --- Send Email to the Post Creator ---
+                                                   // --- Send Email to the Post Creator ---
         if ($dealCreator && $dealCreator->email) { // Ensure the post creator exists and has an email
             $appName = config('app.name');
             $subject = 'Your Deal Has Been Deleted on ' . $appName;
@@ -411,23 +408,23 @@ class DealsController extends Controller
     {
         $report = Report::with(['user', 'reportable', 'reportable.user', 'reportable.post.user'])->findOrFail($id);
 
-        $reporter = $report->user; // The user who submitted the report
-        $reportedItemCreator = null; // Initialize reported item's creator
-        $reportId = $report->id;
-        $reportReason = $report->reason;
+        $reporter            = $report->user; // The user who submitted the report
+        $reportedItemCreator = null;          // Initialize reported item's creator
+        $reportId            = $report->id;
+        $reportReason        = $report->reason;
 
         // Determine the type of the reported item and get its details for the email
         $reportedItemTitle = '';
-        $itemType = '';
+        $itemType          = '';
         if ($report->reportable_type === Post::class) {
-            $itemType = 'post';
-            $reportedItemTitle = $report->reportable->title ?? 'Untitled Post';
+            $itemType            = 'post';
+            $reportedItemTitle   = $report->reportable->title ?? 'Untitled Post';
             $reportedItemCreator = $report->reportable->user; // Post creator
         } elseif ($report->reportable_type === Comment::class) {
             $itemType = 'comment';
             // Get the comment text snippet
             $commentTextSnippet = substr($report->reportable->comment_text ?? 'N/A', 0, 50) . (strlen($report->reportable->comment_text ?? '') > 50 ? '...' : '');
-            $reportedItemTitle = "comment (Text: \"{$commentTextSnippet}\")";
+            $reportedItemTitle  = "comment (Text: \"{$commentTextSnippet}\")";
             // For comments, link to the post the comment belongs to
             if ($report->reportable->post) {
                 $reportedItemCreator = $report->reportable->user; // Comment creator
@@ -435,8 +432,8 @@ class DealsController extends Controller
                 $reportedItemCreator = $report->reportable->user; // Still try to get comment creator
             }
         } else {
-            $itemType = 'item';
-            $reportedItemTitle = 'Unknown Content';
+            $itemType            = 'item';
+            $reportedItemTitle   = 'Unknown Content';
             $reportedItemCreator = null; // No creator identifiable
         }
 
@@ -446,7 +443,7 @@ class DealsController extends Controller
 
         // --- Send Email to the User who submitted the Report (Reporter) ---
         if ($reporter && $reporter->email) {
-            $appName = config('app.name');
+            $appName           = config('app.name');
             $subjectToReporter = 'Report Deleted - ' . $appName;
 
             $bodyToReporter = "# Hello **{$reporter->name}**,\n\n";
@@ -473,7 +470,7 @@ class DealsController extends Controller
         // Only send if a creator is identified and they are not the same as the reporter
         if ($reportedItemCreator && $reportedItemCreator->email && $reportedItemCreator->id !== $reporter->id) {
             $subjectToCreator = 'Notification: Report Deleted - ' . $appName;
-            $bodyToCreator = "# Hello **{$reportedItemCreator->name}**,\n\n";
+            $bodyToCreator    = "# Hello **{$reportedItemCreator->name}**,\n\n";
             $bodyToCreator .= "This email is to inform you that a report concerning your **{$itemType}** has been deleted.\n\n";
             $bodyToCreator .= "Report Details:\n";
             $bodyToCreator .= "- **Report ID:** {$reportId}\n";
@@ -501,12 +498,12 @@ class DealsController extends Controller
 
         try {
 
-            $deal = Post::with('user')->findOrFail($deal);
+            $deal         = Post::with('user')->findOrFail($deal);
             $deal->status = 0; // Deactivate the deal
             $deal->save();
 
             // Find and update the report status
-            $report = Report::findOrFail($report);
+            $report         = Report::findOrFail($report);
             $report->status = 'resolved';
             $report->save();
 
@@ -515,7 +512,7 @@ class DealsController extends Controller
             // --- Send Email to Deal Creator Only ---
             if ($deal->user && $deal->user->email) {
                 $subjectToCreator = 'Your Deal Has Been Deactivated - ' . $appName;
-                $bodyToCreator = "# Hello **{$deal->user->name}**,\n\n";
+                $bodyToCreator    = "# Hello **{$deal->user->name}**,\n\n";
                 $bodyToCreator .= "We are writing to inform you that your deal titled **\"{$deal->title}\"** (ID: {$deal->id}) has been deactivated on **{$appName}**.\n\n";
                 $bodyToCreator .= "This action was taken following a user report (Report ID: {$report->id}).\n\n";
                 $bodyToCreator .= "The reported reason was: `{$report->reason}`\n\n";
@@ -544,12 +541,12 @@ class DealsController extends Controller
 
         try {
 
-            $comment = Comment::with('user')->findOrFail($comment);
+            $comment         = Comment::with('user')->findOrFail($comment);
             $comment->status = 0; // Deactivate the comment
             $comment->save();
 
             // Find and update the report status
-            $report = Report::findOrFail($report);
+            $report         = Report::findOrFail($report);
             $report->status = 'resolved';
             $report->save();
 
@@ -557,7 +554,7 @@ class DealsController extends Controller
 
             // --- Send Email to Comment Creator Only ---
             if ($comment->user && $comment->user->email) {
-                $subjectToCreator = 'Your Comment Has Been Deactivated - ' . $appName;
+                $subjectToCreator   = 'Your Comment Has Been Deactivated - ' . $appName;
                 $commentTextSnippet = substr($comment->comment_text ?? 'N/A', 0, 50) . (strlen($comment->comment_text ?? '') > 50 ? '...' : '');
 
                 $bodyToCreator = "# Hello **{$comment->user->name}**,\n\n";
@@ -643,26 +640,26 @@ class DealsController extends Controller
     {
         $post = Post::with('user')->findOrFail($id);
 
-        $originalTitle = $post->title;
-        $originalDescription = $post->description;
-        $originalLink = $post->link;
-        $originalDiscountText = $post->discount_text;
-        $originalPriceSaving = $post->price_saving;
-        $originalCategory = $post->category;
+        $originalTitle          = $post->title;
+        $originalDescription    = $post->description;
+        $originalLink           = $post->link;
+        $originalDiscountText   = $post->discount_text;
+        $originalPriceSaving    = $post->price_saving;
+        $originalCategory       = $post->category;
         $originalExpirationDate = $post->expiration_date;
-        $originalStore = $post->store;
-        $originalImage = $post->image;
+        $originalStore          = $post->store;
+        $originalImage          = $post->image;
 
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required',
-            'link' => 'nullable|url',
-            'discount_text' => 'nullable|string|max:255',
-            'price_saving' => 'nullable|string|max:255',
-            'category' => 'required|string|max:255',
+            'title'           => 'required|string|max:255',
+            'description'     => 'required',
+            'link'            => 'nullable|url',
+            'discount_text'   => 'nullable|string|max:255',
+            'price_saving'    => 'nullable|string|max:255',
+            'category'        => 'required|string|max:255',
             'expiration_date' => 'nullable|date|after_or_equal:today', // New validation for expiration_date
-            'store' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'store'           => 'nullable|string|max:255',
+            'image'           => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
         //$post = Post::find($id);
         $imagePath = null;
@@ -696,15 +693,15 @@ class DealsController extends Controller
             $post->expiration_date = null; // Set to null if not provided
         }
 
-        $post->store = $validated['store'];
-        $post->title = $validated['title'];
-        $post->description = $validated['description'];
-        $post->link = $validated['link'] ?? null;
+        $post->store         = $validated['store'];
+        $post->title         = $validated['title'];
+        $post->description   = $validated['description'];
+        $post->link          = $validated['link'] ?? null;
         $post->discount_text = $validated['discount_text'] ?? null;
-        $post->price_saving = $validated['price_saving'] ?? null;
-        $post->category = $validated['category'];
-        $post->image = $imagePath == null && $originalImage != null ? $originalImage : $imagePath;
-        $post->posted_at = now();
+        $post->price_saving  = $validated['price_saving'] ?? null;
+        $post->category      = $validated['category'];
+        $post->image         = $imagePath == null && $originalImage != null ? $originalImage : $imagePath;
+        $post->posted_at     = now();
         $post->save();
 
         $appName = config('app.name');
@@ -752,7 +749,7 @@ class DealsController extends Controller
             $changesMade = true;
         }
 
-        if (!$changesMade) {
+        if (! $changesMade) {
             $body .= "No specific content changes detected that would warrant listing.\n";
         }
 
@@ -762,12 +759,11 @@ class DealsController extends Controller
         // Using the full URL for the button
         $buttonFullUrl = url($dealUrl);
 
-
         $body .= "These changes have been made by the **Buyme Bargains Team**. If you have any questions, please contact our support team immediately at [info@buyme.lk].\n\n";
-
+        $body .= "Thank you,\nThe Team at {$appName}";
 
         if ($post->user && $post->user->email) {
-            send_generic_email($post->user->email, $subject, $body, $buttonFullUrl, "View Your Deal");
+            send_generic_email($post->user->email, $subject, $body, null, null);
         }
 
         return redirect()->route('dealsList')->with('success', 'Post updated successfully!');

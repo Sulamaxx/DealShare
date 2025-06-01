@@ -1,10 +1,10 @@
 <?php
 
 use App\Mail\GenericMail;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
-if (!function_exists('send_generic_email')) {
+if (! function_exists('send_generic_email')) {
     /**
      * Sends a generic email with a dynamic subject and body.
      *
@@ -17,8 +17,8 @@ if (!function_exists('send_generic_email')) {
     {
         try {
             // Dispatch the Mailable to the queue for sending
-            Mail::to($toEmail)->queue(new GenericMail($subject, $bodyContent, $buttonUrl, $buttonText));
-            Log::info("Generic email dispatched to {$toEmail} with subject: {$subject}");
+            Mail::to($toEmail)->send(new GenericMail($subject, $bodyContent, $buttonUrl, $buttonText));
+            Log::info("Generic email dispatched to {$toEmail} with subject: {$subject}.");
             return true;
         } catch (\Exception $e) {
             Log::error("Failed to send generic email to {$toEmail}. Subject: {$subject}. Error: " . $e->getMessage());
