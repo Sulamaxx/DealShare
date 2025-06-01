@@ -94,10 +94,10 @@ class UserController extends Controller
             }
 
             $body .= "\nIf you have any questions or did not make these changes, please contact our support team immediately at [info@buyme.lk].\n\n";
-            //$body .= "Thank you,\nThe Team at {$appName}";
+            $body .= "Thank you,\nThe Team at {$appName}";
 
             if ($user->email) {
-                send_generic_email($user->email, $subject, $body, url('/my-deals'), 'View Your Profile Settings');
+                send_generic_email($user->email, $subject, $body, null, null);
             }
 
             return redirect()->route('my-deals')->with('success', 'Profile settings updated successfully!');

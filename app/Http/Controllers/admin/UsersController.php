@@ -1,16 +1,13 @@
 <?php
-
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Mail\WarningEmail;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
@@ -42,16 +39,16 @@ class UsersController extends Controller
 
         // Validate the form data
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8|confirmed',
+            'name'      => 'required|string|max:255',
+            'email'     => 'required|email|unique:users,email',
+            'password'  => 'required|min:8|confirmed',
             'user_type' => 'required|in:user,moderator',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // File validation
+            'image'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // File validation
         ]);
 
         // Handle image upload if any
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('profile-photos', 'public');
+            $path      = $request->file('image')->store('profile-photos', 'public');
             $imagePath = $path;
         } else {
             $imagePath = null;
@@ -59,10 +56,10 @@ class UsersController extends Controller
 
         // Create new user
         $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'user_type' => $validated['user_type'],
+            'name'               => $validated['name'],
+            'email'              => $validated['email'],
+            'password'           => Hash::make($validated['password']),
+            'user_type'          => $validated['user_type'],
             'profile_photo_path' => $imagePath, // Store image URL if available
         ]);
 
@@ -78,15 +75,13 @@ class UsersController extends Controller
         $body .= "\n";
         $body .= "You can now log in to your account and start exploring.\n\n";
 
-        // Assuming you have a login route
+                                   // Assuming you have a login route
         $loginUrl = url('/login'); // Adjust this to your actual login route
-
 
         // Suggesting password reset for security
         $body .= "If this account was created for you, we recommend resetting your password immediately by clicking 'Forgot Your Password?' on the login page.\n\n";
 
         $body .= "We're excited to have you on board!\n\n";
-
 
         if ($user->email) {
             send_generic_email($user->email, $subject, $body, $loginUrl, "Log In to Your Account");
@@ -184,20 +179,20 @@ class UsersController extends Controller
             return redirect('/admin/login');
         }
 
-        $user = User::findOrFail($id);
-        $oldStatus = $user->status;
-        $newStatus = $oldStatus == 1 ? 0 : 1;
+        $user         = User::findOrFail($id);
+        $oldStatus    = $user->status;
+        $newStatus    = $oldStatus == 1 ? 0 : 1;
         $user->status = $newStatus;
         $user->save();
 
-        $subject = '';
-        $body = '';
-        $buttonUrl = null;
+        $subject    = '';
+        $body       = '';
+        $buttonUrl  = null;
         $buttonText = null;
 
         if ($newStatus == 1) { // User is now active (status 1)
             $subject = 'Your Account Has Been Activated on ' . config('app.name');
-            $body = "
+            $body    = "
 # Hello **{$user->name}**,
 
 Good news! Your account on **" . config('app.name') . "** has been **activated**.
@@ -212,7 +207,7 @@ The Team at " . config('app.name') . "
             $buttonText = 'Login to Your Account'; */
         } else { // User is now deactivated (status 0)
             $subject = 'Important: Your Account Status on ' . config('app.name');
-            $body = "
+            $body    = "
 # Hello **{$user->name}**,
 
 This is an important notification regarding your account on **" . config('app.name') . "**." . "
@@ -242,8 +237,8 @@ The Team at " . config('app.name') . "
         $user = User::findOrFail($id);
 
         $userEmail = $user->email;
-        $userName = $user->name;
-        $appName = config('app.name');
+        $userName  = $user->name;
+        $appName   = config('app.name');
 
         $user->delete();
 
@@ -298,11 +293,12 @@ Please review our [Community Guidelines](" . url('/pages?tab=guidelines') . ") t
 
 If you believe there has been a mistake or if you have any questions, please contact our support team at [info@buyme.lk].
 
-Thank you for your understanding and cooperation,<br>
+Thank you for your understanding and cooperation,
+
 The Team at " . config('app.name') . "
 ";
 
-        if (send_generic_email($user->email, $subject, $body, config('app.url'), "Visit Our Website")) {
+        if (send_generic_email($user->email, $subject, $body, null, null)) {
             return back()->with('success', 'Warning email sent to user.');
         } else {
             return back()->with('error', 'Failed to send warning email.');
@@ -315,7 +311,7 @@ The Team at " . config('app.name') . "
             return redirect('/admin/login');
         }
 
-        $user = User::findOrFail($id);
+        $user         = User::findOrFail($id);
         $user->status = 2;
         $user->save();
 
@@ -350,19 +346,27 @@ The Team at {$appName}
             return redirect('/admin/login');
         }
 
-        $user = User::findOrFail($id);
+        $user         = User::findOrFail($id);
         $user->status = 3;
         $user->save();
 
         $appName = config('app.name');
         $subject = 'Important: Permanent Account Ban on ' . $appName;
 
-        $body = "# Hello **{$user->name}**,\\n\\n";
-        $body .= "This is an important notification regarding your account on **{$appName}**. \\n\\n";
-        $body .= "Your account has been **permanently banned**. This means you will no longer be able to access any features or the platform.\\n\\n";
-        $body .= "This action was taken due to severe violations of our community guidelines or terms of service. We have determined that your activities on our platform are not compatible with our community standards.\\n\\n";
-        $body .= "If you believe this is a mistake or have questions, you may contact our support team at [info@buyme.lk]. However, please note that permanent bans are typically irreversible.\\n\\n";
-        $body .= "Thank you for your understanding.\\nThe Team at {$appName}";
+        $body = <<<MARKDOWN
+# Hello **{$user->name}**,
+
+This is an important notification regarding your account on **{$appName}**.
+
+Your account has been **permanently banned**. This means you will no longer be able to access any features or the platform.
+
+This action was taken due to severe violations of our community guidelines or terms of service. We have determined that your activities on our platform are not compatible with our community standards.
+
+If you believe this is a mistake or have questions, you may contact our support team at [info@buyme.lk](mailto:info@buyme.lk). However, please note that permanent bans are typically irreversible.
+
+Thank you for your understanding.
+The Team at {$appName}
+MARKDOWN;
 
         send_generic_email($user->email, $subject, $body, null, null);
 
@@ -375,7 +379,7 @@ The Team at {$appName}
             return redirect('/admin/login');
         }
 
-        $user = User::findOrFail($id);
+        $user         = User::findOrFail($id);
         $user->status = 1; // Set status to Active
         $user->save();
 
@@ -422,16 +426,16 @@ The Team at {$appName}
 
         $user = User::findOrFail($id);
 
-        $originalName = $user->name;
-        $originalEmail = $user->email;
-        $originalUserType = $user->user_type;
+        $originalName             = $user->name;
+        $originalEmail            = $user->email;
+        $originalUserType         = $user->user_type;
         $originalProfilePhotoPath = $user->profile_photo_path;
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'name'      => 'required|string|max:255',
+            'email'     => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'user_type' => 'required|in:user,moderator',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'image'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         try {
@@ -443,7 +447,7 @@ The Team at {$appName}
                 if ($user->profile_photo_path && Storage::disk('public')->exists($user->profile_photo_path)) {
                     Storage::disk('public')->delete($user->profile_photo_path);
                 }
-                $path = $request->file('image')->store('profile-photos', 'public');
+                $path                       = $request->file('image')->store('profile-photos', 'public');
                 $data['profile_photo_path'] = $path; // Add the new path to the data array
             }
 
