@@ -114,7 +114,7 @@
                                         {{-- Mobile --}}
                                         <div class="row align-items-center no-gutters hide-desktope">
                                             <div class="col-9">
-                                                <ul class="tt-list-badge">
+                                                {{-- <ul class="tt-list-badge">
                                                     <li class="show-mobile"><a href="#"><span
                                                                 class="tt-color05 tt-badge">music</span></a></li>
                                                 </ul>
@@ -122,10 +122,10 @@
                                                     <i class="tt-icon"><svg>
                                                             <use xlink:href="#icon-reply"></use>
                                                         </svg></i>
-                                                </a>
+                                                </a> --}}
                                             </div>
                                             <div class="col-3 ml-auto show-mobile">
-                                                <div class="tt-value">5 Jan,19</div>
+                                                <div class="tt-value">{{ $post->created_at->diffForHumans() }}</div>
                                             </div>
                                         </div>
 

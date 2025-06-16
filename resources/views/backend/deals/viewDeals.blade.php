@@ -35,14 +35,14 @@
                 @endif
 
                 {{-- Discount Text --}}
-                @if ($post->discount_text)
+                {{-- @if ($post->discount_text)
                     <p><strong>Discount:</strong> {{ $post->discount_text }}</p>
-                @endif
+                @endif --}}
 
                 {{-- Price Saving --}}
-                @if ($post->price_saving)
+                {{-- @if ($post->price_saving)
                     <p><strong>Price Saving:</strong> {{ $post->price_saving }}</p>
-                @endif
+                @endif --}}
             </div>
 
             <div class="card-footer text-muted ms-4 mb-4">

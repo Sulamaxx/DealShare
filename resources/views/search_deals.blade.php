@@ -183,21 +183,6 @@
                             style="border-radius: 20px; margin-top: auto; width:15vw;min-width:21vw;"
                             value="{{ request('search') }}">
 
-                        <select name="category" class="form-select w-auto" style="border-radius: 20px; margin-top: auto;">
-
-
-                            <option value="Deals & Coupons"
-                                {{ request('category') == 'Deals & Coupons' ? 'selected' : '' }}>Deals & Coupons
-                            </option>
-                            <option value="Shopping Advice"
-                                {{ request('category') == 'Shopping Advice' ? 'selected' : '' }}>
-                                Shopping Advice</option>
-                            <option value="Product Reviews"
-                                {{ request('category') == 'Product Reviews' ? 'selected' : '' }}>Product Reviews
-                            </option>
-
-                        </select>
-
                         <button type="submit" class="btn btn-dark"
                             style="border-radius: 20px; margin-top: auto;">Search</button>
                     </form>
@@ -209,6 +194,24 @@
 
     <main id="tt-pageContent" class="p-0" style="min-height:80vh">
         <div class="container">
+
+            <div class="row mb-3 mt-4 d-none d-md-block">
+                <div class="col-12 d-flex justify-content-end align-items-center">
+                    <form class="filters d-flex align-items-center gap-2" method="GET" action="{{ route('deals.index') }}">
+                        <label for="categoryFilter" class="form-label mb-0 me-2 text-nowrap">Filter by Category:</label>
+                        <select name="category" id="categoryFilter" class="form-select w-auto" style="border-radius: 20px;">
+                            <option value="">All Categories</option>
+                            <option value="Deals & Coupons" {{ request('category') == 'Deals & Coupons' ? 'selected' : '' }}>Deals & Coupons</option>
+                            <option value="Shopping Advice" {{ request('category') == 'Shopping Advice' ? 'selected' : '' }}>Shopping Advice</option>
+                            <option value="Product Reviews" {{ request('category') == 'Product Reviews' ? 'selected' : '' }}>Product Reviews</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary" style="border-radius: 20px;">Apply</button>
+                        @if(request('search'))
+                            <input type="hidden" name="search" value="{{ request('search') }}">
+                        @endif
+                    </form>
+                </div>
+            </div>
 
             <section class="popular-deals-section" style="margin-top: 20px;line-height: 17.5px;">
                 <div class="container" style="padding-inline: 0px">

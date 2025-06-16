@@ -11,6 +11,11 @@
                 width: 50vw !important;
             }
         }
+        .required-asterisk {
+            color: #dc3545; /* Red for visibility */
+            font-weight: bold;
+            margin-left: 0.25rem;
+        }
     </style>
 
     <main id="tt-pageContent" class="tt-offset-none" style="margin-top: 50px">
@@ -31,22 +36,22 @@
                     <form method="POST" class="form-default" action="{{ route('register') }}">
                         @csrf
                         <div class="form-group">
-                            <label for="loginUserName">Name</label>
+                            <label for="loginUserName">Name<span class="required-asterisk">*</span></label>
                             <input type="text" name="name" class="form-control" id="loginUserName"
                                 placeholder="Enter your name" value="{{ old('name') }}">
                         </div>
                         <div class="form-group">
-                            <label for="loginUserEmail">Email</label>
+                            <label for="loginUserEmail">Email<span class="required-asterisk">*</span></label>
                             <input type="text" name="email" class="form-control" id="loginUserEmail"
                                 placeholder="Enter your email" value="{{ old('email') }}">
                         </div>
                         <div class="form-group">
-                            <label for="loginUserPassword">Password</label>
+                            <label for="loginUserPassword">Password<span class="required-asterisk">*</span></label>
                             <input type="password" name="password" class="form-control" id="loginUserPassword"
                                 placeholder="************">
                         </div>
                         <div class="form-group">
-                            <label for="loginUserPassword">Confirm Password</label>
+                            <label for="loginUserPassword">Confirm Password<span class="required-asterisk">*</span></label>
                             <input type="password" name="password_confirmation" class="form-control" id="loginUserPassword"
                                 placeholder="************">
                         </div>

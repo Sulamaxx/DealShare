@@ -8,6 +8,35 @@
 
     @endphp
 
+    <style>
+        .custom-select {
+            appearance: none !important;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('/assets/icons/dropdown.svg') !important;
+            background-repeat: no-repeat !important;
+            background-position: right 0.75rem center !important;
+            background-size: 2rem !important;
+            padding-right: 2rem !important;
+            cursor: pointer !important;
+        }
+
+        .form-control.custom-select {
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+        }
+
+        .custom-select:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        .required-asterisk {
+            color: #dc3545; /* Red for visibility */
+            font-weight: bold;
+            margin-left: 0.25rem;
+        }
+    </style>
+
     <main id="tt-pageContent" class="p-5">
         <div class="container">
             <div class="tt-wrapper-inner mb-5">
@@ -22,7 +51,7 @@
 
                     <!-- Deal Title -->
                     <div class="form-group">
-                        <label for="inputTopicTitle">Deal Title</label>
+                        <label for="inputTopicTitle">Deal Title<span class="required-asterisk">*</span></label>
                         <input type="text" name="title" class="form-control" id="inputTopicTitle"
                             value="{{ $post->title }}" required>
                         <div class="tt-note">Describe your deal well, while keeping the subject short.</div>
@@ -36,18 +65,18 @@
                     </div>
 
                     <!-- Discount Text -->
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label for="inputDiscountText">Discount Text</label>
                         <input type="text" name="discount_text" class="form-control" id="inputDiscountText"
                             value="{{ $post->discount_text }}">
-                    </div>
+                    </div> --}}
 
                     <!-- Price Saving -->
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label for="inputPriceSaving">Price Saving</label>
                         <input type="text" name="price_saving" class="form-control" id="inputPriceSaving"
                             value="{{ $post->price_saving }}">
-                    </div>
+                    </div> --}}
 
                     {{-- --- New: Expiration Date Input --- --}}
                     <div class="form-group">
@@ -72,14 +101,14 @@
 
                     <!-- Deal Body -->
                     <div class="form-group">
-                        <label for="inputDescription">Deal Description</label>
+                        <label for="inputDescription">Deal Description<span class="required-asterisk">*</span></label>
                         <textarea name="description" class="form-control" id="inputDescription" rows="5" required>{{ $post->description }}</textarea>
                     </div>
 
                     <!-- Category -->
                     <div class="form-group">
-                        <label for="inputCategory">Category</label>
-                        <select name="category" class="form-control" id="inputCategory" required>
+                        <label for="inputCategory">Category<span class="required-asterisk">*</span></label>
+                        <select name="category" class="form-control custom-select" id="inputCategory" required>
                             {{-- <option value="">Select a Category</option> --}}
                             <option value="Deals & Coupons" {{ $post->category == 'Deals & Coupons' ? 'selected' : '' }}>
                                 Deals & Coupons</option>
@@ -93,8 +122,13 @@
                     <!-- Existing Image Preview -->
                     <div class="mb-3">
                         <label>Current Image:</label><br>
-                        <img id="previewImage" src="{{ asset($post->image) }}" alt="Current Deal Image"
-                            class="img-thumbnail" style="max-width: 200px;">
+                        @if ($post->image)
+                            <img id="previewImage" src="{{ asset($post->image) }}" alt="Current Deal Image"
+                                class="img-thumbnail" style="max-width: 200px;">
+                        @else
+                            <img id="previewImage" src="{{ asset('images/deal.jpg') }}" alt="Current Deal Image"
+                                class="img-thumbnail" style="max-width: 200px;">
+                        @endif
                     </div>
 
                     <!-- Image Upload Input -->

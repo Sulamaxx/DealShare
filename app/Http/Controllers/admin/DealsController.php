@@ -15,10 +15,6 @@ use Illuminate\Support\Facades\Storage;
 
 class DealsController extends Controller
 {
-    public function codeGenerator()
-    {
-        return view('backend.aiapplication/codeGenerator');
-    }
 
     public function addDeal()
     {
@@ -106,8 +102,6 @@ class DealsController extends Controller
             'category'        => 'Electronics',
             'verified_member' => 1,
             'image'           => 'laptop-deal.jpg',
-            'discount_text'   => '40% off',
-            'price_saving'    => '$300',
             'created_at'      => Carbon::now(),
             'updated_at'      => Carbon::now(),
             'status'          => 1,
@@ -224,30 +218,36 @@ class DealsController extends Controller
 
     public function updateRejectStatus($id)
     {
-        $deal         = Post::findOrFail($id);
-        $deal->status = 2;
+        $deal           = Post::findOrFail($id);
+        $originalStatus = $deal->status;
+        if ($deal->status === 2) {
+            $deal->status = 1;
+        } else {
+            $deal->status = 2;
+        }
         $deal->save();
+        if ($originalStatus != 2) {
+            $appName = config('app.name');
+            $subject = 'Important: Your Deal Submission was Rejected on ' . $appName;
 
-        $appName = config('app.name');
-        $subject = 'Important: Your Deal Submission was Rejected on ' . $appName;
+            $body = "# Hello **{$deal->user->name}**,\n\n"; // Personalize with author's name
+            $body .= "We regret to inform you that your deal submission titled **\"{$deal->title}\"** (ID: {$deal->id}) has been **rejected** on **{$appName}**.\n\n";
+            $body .= "This means your deal will not be published on our platform. This could be due to various reasons, including (but not limited to):\n\n";
+            $body .= "* Violation of our community guidelines.\n";
+            $body .= "* Incomplete or inaccurate information.\n";
+            $body .= "* Not meeting our quality standards.\n";
+            $body .= "* Duplication of an existing deal.\n\n";
+            $body .= "Please review our [Community Guidelines](" . url('/pages?tab=guidelines') . ") for more information. You may consider revising your deal if applicable and submitting it again, or submitting new deals that adhere to our guidelines.\n\n";
+            $body .= "If you have any questions or believe this was a mistake, please contact our support team at [info@buyme.lk].\n\n";
+            $body .= "Thank you for your understanding,\nThe Team at {$appName}";
 
-        $body = "# Hello **{$deal->user->name}**,\n\n"; // Personalize with author's name
-        $body .= "We regret to inform you that your deal submission titled **\"{$deal->title}\"** (ID: {$deal->id}) has been **rejected** on **{$appName}**.\n\n";
-        $body .= "This means your deal will not be published on our platform. This could be due to various reasons, including (but not limited to):\n\n";
-        $body .= "* Violation of our community guidelines.\n";
-        $body .= "* Incomplete or inaccurate information.\n";
-        $body .= "* Not meeting our quality standards.\n";
-        $body .= "* Duplication of an existing deal.\n\n";
-        $body .= "Please review our [Community Guidelines](" . url('/pages?tab=guidelines') . ") for more information. You may consider revising your deal if applicable and submitting it again, or submitting new deals that adhere to our guidelines.\n\n";
-        $body .= "If you have any questions or believe this was a mistake, please contact our support team at [info@buyme.lk].\n\n";
-        $body .= "Thank you for your understanding,\nThe Team at {$appName}";
+            // No button typically needed for a rejected deal notification
+            $buttonUrl  = null;
+            $buttonText = null;
 
-        // No button typically needed for a rejected deal notification
-        $buttonUrl  = null;
-        $buttonText = null;
-
-        if ($deal->user && $deal->user->email) {
-            send_generic_email($deal->user->email, $subject, $body, $buttonUrl, $buttonText);
+            if ($deal->user && $deal->user->email) {
+                send_generic_email($deal->user->email, $subject, $body, $buttonUrl, $buttonText);
+            }
         }
 
         return back()->with('success', 'Deal rejected successfully.');
@@ -544,6 +544,7 @@ class DealsController extends Controller
             $comment         = Comment::with('user')->findOrFail($comment);
             $comment->status = 0; // Deactivate the comment
             $comment->save();
+            Post::where('id', $comment->post_id)->decrement('comment_count');
 
             // Find and update the report status
             $report         = Report::findOrFail($report);
@@ -643,8 +644,6 @@ class DealsController extends Controller
         $originalTitle          = $post->title;
         $originalDescription    = $post->description;
         $originalLink           = $post->link;
-        $originalDiscountText   = $post->discount_text;
-        $originalPriceSaving    = $post->price_saving;
         $originalCategory       = $post->category;
         $originalExpirationDate = $post->expiration_date;
         $originalStore          = $post->store;
@@ -654,10 +653,8 @@ class DealsController extends Controller
             'title'           => 'required|string|max:255',
             'description'     => 'required',
             'link'            => 'nullable|url',
-            'discount_text'   => 'nullable|string|max:255',
-            'price_saving'    => 'nullable|string|max:255',
             'category'        => 'required|string|max:255',
-            'expiration_date' => 'nullable|date|after_or_equal:today', // New validation for expiration_date
+            'expiration_date' => 'nullable|date|after_or_equal:today',
             'store'           => 'nullable|string|max:255',
             'image'           => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
@@ -693,15 +690,13 @@ class DealsController extends Controller
             $post->expiration_date = null; // Set to null if not provided
         }
 
-        $post->store         = $validated['store'];
-        $post->title         = $validated['title'];
-        $post->description   = $validated['description'];
-        $post->link          = $validated['link'] ?? null;
-        $post->discount_text = $validated['discount_text'] ?? null;
-        $post->price_saving  = $validated['price_saving'] ?? null;
-        $post->category      = $validated['category'];
-        $post->image         = $imagePath == null && $originalImage != null ? $originalImage : $imagePath;
-        $post->posted_at     = now();
+        $post->store       = $validated['store'];
+        $post->title       = $validated['title'];
+        $post->description = $validated['description'];
+        $post->link        = $validated['link'] ?? null;
+        $post->category    = $validated['category'];
+        $post->image       = $imagePath == null && $originalImage != null ? $originalImage : $imagePath;
+        $post->posted_at   = now();
         $post->save();
 
         $appName = config('app.name');
@@ -722,14 +717,6 @@ class DealsController extends Controller
         }
         if ($post->link !== $originalLink) {
             $body .= "* **Link:** Updated\n";
-            $changesMade = true;
-        }
-        if ($post->discount_text !== $originalDiscountText) {
-            $body .= "* **Discount Text:** From `" . ($originalDiscountText ?? 'N/A') . "` to `" . ($post->discount_text ?? 'N/A') . "`\n";
-            $changesMade = true;
-        }
-        if ($post->price_saving !== $originalPriceSaving) {
-            $body .= "* **Price Saving:** From `" . ($originalPriceSaving ?? 'N/A') . "` to `" . ($post->price_saving ?? 'N/A') . "`\n";
             $changesMade = true;
         }
         if ($post->category !== $originalCategory) {
