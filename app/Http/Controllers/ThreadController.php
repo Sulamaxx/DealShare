@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
@@ -20,14 +19,16 @@ class ThreadController extends Controller
         ]);
         $post = Post::with('user')->find($request->post_id);
         if ($post) {
-            $thread = new Comment();
-            $thread->post_id = $request->post_id;
-            $thread->user_id = Auth::user()->id;
+            $thread               = new Comment();
+            $thread->post_id      = $request->post_id;
+            $thread->user_id      = Auth::user()->id;
             $thread->comment_text = $request->comment;
             $thread->save();
 
+            $post->increment('comment_count');
+
             $commenterName = Auth::user()->name; // Get the name of the user who commented
-            $postAuthor = $post->user;
+            $postAuthor    = $post->user;
 
             if ($postAuthor && $postAuthor->email && $postAuthor->id !== Auth::user()->id) { // Don't send to self
                 $appName = config('app.name');
@@ -70,17 +71,19 @@ class ThreadController extends Controller
     public function storeChild(Request $request)
     {
         $request->validate([
-            'post_id' => 'required|exists:posts,id',
+            'post_id'      => 'required|exists:posts,id',
             'comment_text' => 'required|string',
-            'parent_id' => 'nullable|exists:comments,id',
+            'parent_id'    => 'nullable|exists:comments,id',
         ]);
 
         $comment = Comment::create([
-            'post_id' => $request->post_id,
-            'user_id' => auth()->id(),
+            'post_id'      => $request->post_id,
+            'user_id'      => auth()->id(),
             'comment_text' => $request->comment_text,
-            'parent_id' => $request->parent_id
+            'parent_id'    => $request->parent_id,
         ]);
+
+        Post::where('id', $comment->post_id)->increment('comment_count');
 
         $parentComment = null;
         if ($request->parent_id) {
@@ -130,7 +133,7 @@ class ThreadController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Validation failed.',
-                'errors' => $validator->errors(),
+                'errors'  => $validator->errors(),
             ], 422); // Unprocessable Entity
         }
 
@@ -148,11 +151,11 @@ class ThreadController extends Controller
         }
 
         try {
-            $report = new Report();
+            $report          = new Report();
             $report->user_id = $user->id;
-            $report->reason = $request->input('reason'); // Get reason from request
+            $report->reason  = $request->input('reason'); // Get reason from request
 
-            // Associate the report with the post using the polymorphic relationship
+                                                        // Associate the report with the post using the polymorphic relationship
             $report->reportable()->associate($comment); // Sets reportable_type and reportable_id
 
             if ($report->reportable_type == "App\Models\Comment") {

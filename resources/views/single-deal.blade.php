@@ -231,10 +231,16 @@
                                             </button>
                                         @endif
                                         @auth
-                                            <button class="badge bg-danger d-flex align-items-center"
-                                                data-post-id="{{ $post->slug }}" onclick="reportPost(this)">
-                                                Report Deal
-                                            </button>
+                                            @if (!$reported)
+                                                <button class="badge bg-danger d-flex align-items-center"
+                                                    data-post-id="{{ $post->slug }}" onclick="reportPost(this)">
+                                                    Report Deal
+                                                </button>
+                                            @else
+                                                <button class="badge bg-danger d-flex align-items-center" disabled>
+                                                    Reported
+                                                </button>
+                                            @endif
                                         @endauth
                                     </div>
                                 </div>
@@ -249,8 +255,15 @@
                             <span class="badge bg-warning">New</span>
                             {{-- <img class="mt-3" style="width: 100%; height: 60vh; object-fit: cover;" src="{{ asset($post->image) }}" alt=""> --}}
                             <div id="image-viewer-{{ $post->id }}">
-                                <img class="mt-3" style="width: 100%; height: 60vh; object-fit: cover; cursor: zoom-in;"
-                                    src="{{ asset($post->image) }}" alt="{{ $post->title }}">
+                                @if ($post->image)
+                                    <img class="mt-3"
+                                        style="width: 100%; height: 60vh; object-fit: cover; cursor: zoom-in;"
+                                        src="{{ asset($post->image) }}" alt="{{ $post->title }}">
+                                @else
+                                    <img class="mt-3"
+                                        style="width: 100%; height: 60vh; object-fit: cover; cursor: zoom-in;"
+                                        src="{{ asset('images/deal.jpg') }}" alt="{{ $post->title }}">
+                                @endif
                             </div>
 
 
@@ -261,7 +274,7 @@
                             </p>
 
                             <p>
-                                Link : <a href="{{ $post->link }}">{{ $post->link }}</a>
+                                Link : <a href="{{ $post->link }}" target="_blank">{{ $post->link }}</a>
                             </p>
                         </div>
                         <div class="tt-item-info info-bottom">
@@ -282,7 +295,8 @@
                                 </a>
                             @else
                                 <a class="tt-icon-btn like-button cursor-pointer {{ $vote_type === 'up' ? 'upvoted' : '' }}"
-                                    data-post-id="{{ $post->id }}" data-vote-type="up" onclick="loginMessage(this)">
+                                    data-post-id="{{ $post->id }}" data-vote-type="up" onclick="loginMessage(this)"
+                                    style="justify-content: center">
                                     <i class="tt-icon"><svg>
                                             <use xlink:href="#icon-like"></use>
                                         </svg></i>
@@ -290,7 +304,7 @@
                                 </a>
                                 <a class="tt-icon-btn dislike-button cursor-pointer {{ $vote_type === 'down' ? 'downvoted' : '' }}"
                                     data-post-id="{{ $post->id }}" data-vote-type="down"
-                                    onclick="loginMessage(this)">
+                                    onclick="loginMessage(this)" style="justify-content: center">
                                     <i class="tt-icon"><svg>
                                             <use xlink:href="#icon-dislike"></use>
                                         </svg></i>
@@ -298,9 +312,10 @@
                                 </a>
                             @endif
 
-                            <a href="javascript:void(0)" class="tt-icon-btn">
+                            <a href="javascript:void(0)" class="tt-icon-btn cursor-default"
+                                style="justify-content: center">
                                 <i class="tt-icon"><svg>
-                                        <use xlink:href="#icon-reply"></use>
+                                        <use xlink:href="#icon-comment"></use>
                                     </svg></i>
                                 <span class="tt-text">{{ $post->comment_count }}</span>
                             </a>
@@ -346,7 +361,7 @@
                 <div class="pt-editor form-default">
                     <h6 class="pt-title">Comment</h6>
                     <div class="form-group">
-                        <textarea name="message" id="new_thread" class="form-control" rows="5"></textarea>
+                        <textarea name="message" id="new_thread" class="form-control" rows="5" style="background-color: #ffffff"></textarea>
                     </div>
                     <div class="pt-row">
                         <div class="col-auto">

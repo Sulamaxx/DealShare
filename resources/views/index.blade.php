@@ -175,7 +175,7 @@
         style="background-image: url({{ $banner['top_banner'] === 'images/banner.png' ? asset($banner['top_banner']) : asset('storage/' . $banner['top_banner']) }})">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-md-6">
+                <div class="col-md-11">
 
                     <h3 class="fw-bold" style="color: white; font-size: 1.5em; margin-bottom: 5px;">Welcome to</h3>
                     <h1 class="fw-bold display-5" style="color: white; font-size: 2.5em; margin-bottom: 10px;">Buyme Bargians
@@ -189,11 +189,10 @@
                             style="border-radius: 20px; margin-top: auto; width:15vw;min-width:21vw;">
 
                         <select name="category" class="form-select w-auto" style="border-radius: 20px; margin-top: auto;">
-
+                            <option value="">All Categories</option>
                             <option value="Deals & Coupons">Deals & Coupons</option>
                             <option value="Shopping Advice">Shopping Advice</option>
                             <option value="Product Reviews">Product Reviews</option>
-
                         </select>
 
                         <button type="submit" class="btn btn-dark"

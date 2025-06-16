@@ -10,13 +10,13 @@
                 alt="{{ $deal->title }}" target="_blank">
             </a>
         @else
-            <a class="deal-image-area position-relative"
+            <a class="deal-image-area position-relative mobile-image"
                 style="flex-basis: 30%; background-image: url('{{ asset('images/deal.jpg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;min-width:30%"
                 alt="Placeholder Image">
             </a>
         @endif
 
-        <div class="deal-details-area p-1 card-mobile"
+        <div class="deal-details-area p-2 card-mobile"
             style="flex-basis: 70%; display: flex; flex-direction: column;max-width:70%;">
 
 
@@ -27,15 +27,15 @@
                 </a>
             </h5>
 
-            <p class="deal-description-clamp" style="font-size: 0.875em; color: #555; margin-bottom: 3px; ">
+            <p class="deal-description-clamp" style="font-size: 0.875em; color: #222; margin-bottom: 3px; ">
                 {{ $deal->description }}
             </p>
 
 
             <small class="text-muted mb-2 deal-info-line mt-auto">
-                <i class="fas fa-info-circle me-1"></i>
+                <i class="fas fa-link me-1"></i>
                 <a href="{{ $deal->link }}" target="_blank" class="deal-link-clamp"
-                    style="text-decoration: none; color: #555;">{{ $deal->link }}</a>
+                    style="text-decoration: none; color: #222;">{{ $deal->link }}</a>
             </small>
 
 
@@ -45,11 +45,11 @@
                     <div class="d-flex align-items-center"
                         style="background-color: #ddd;padding-inline: 5px;border-radius:3.75px">
 
-                        <span class=" fw-bold" style="margin-right: 5px;font-weight: bold;font-color:#ddd">
+                        <span class=" fw-bold" style="margin-right: 5px;font-weight: bold;font-color:green !important;">
                             +{{ $deal->upvotes }}
                         </span>
                         <span style="margin-right: 5px;font-color:#ddd">|</span>
-                        <span class="fw-bold" style="margin-right: 5px;font-weight: bold;font-color:#ddd">
+                        <span class="fw-bold" style="margin-right: 5px;font-weight: bold;font-color:red !important;">
                             -{{ $deal->downvotes }}
                         </span>
                     </div>

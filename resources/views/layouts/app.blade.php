@@ -126,6 +126,54 @@
     <!-- Scripts -->
     {{-- <script src="{{ asset('js/script.js') }}"></script> --}}
     <script src="{{ asset('js/bundle.js') }}"></script>
+
+    @if (!Cookie::get('cookie_consent'))
+        <div id="cookie-consent"
+            style="position: fixed; bottom: 0; left: 0; right: 0; background: #333; color: #fff; padding: 15px; z-index: 1000; font-size: 0.9rem;">
+            <div class="container d-flex justify-content-between align-items-center flex-wrap">
+                <p class="mb-0">
+                    We use cookies to enhance your experience. By continuing, you agree to our <a
+                        href="{{ route('pages') }}?tab=cookie_policy" style="color: #28a745;">Cookie Policy</a>.
+                </p>
+                <div>
+                    <button id="accept-cookies" class="btn btn-sm btn-success"
+                        style="margin-left: 10px;">Accept</button>
+                    {{-- <a href="{{ route('pages') }}?tab=cookie_policy" class="btn btn-sm btn-outline-light"
+                        style="margin-left: 10px;">Manage Preferences</a> --}}
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const acceptButton = document.getElementById('accept-cookies');
+                if (acceptButton) {
+                    acceptButton.addEventListener('click', function() {
+                        try {
+                            // Set the cookie with explicit attributes
+                            document.cookie = 'cookie_consent=accepted; path=/; max-age=' + (365 * 24 * 60 *
+                                60) + '; SameSite=Lax; Secure';
+                            console.log('Cookie set: cookie_consent=accepted');
+                            // Hide the banner
+                            const banner = document.getElementById('cookie-consent');
+                            if (banner) {
+                                banner.style.display = 'none';
+                            }
+                        } catch (error) {
+                            console.error('Failed to set cookie_consent:', error);
+                        }
+                    });
+                } else {
+                    console.warn('Accept button not found');
+                }
+
+                // Debug: Log current cookies
+                console.log('Current cookies:', document.cookie);
+            });
+        </script>
+    @endif
+
+
     <svg width="0" height="0" class="hidden">
         <symbol aria-hidden="true" data-prefix="fab" data-icon="facebook-f" xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 264 512" id="facebook-f-brands">
@@ -670,6 +718,16 @@
         <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 117 101.57" id="icon-reply">
             <path
                 d="M112.5 101.57c-1.91 0-3.65-1.22-4.27-3.08-5.81-17.44-16.92-27.46-33.01-29.75-8.34-1.19-15.9.02-19.94.93v27.4c0 1.82-1.1 3.46-2.78 4.16-1.68.7-3.62.31-4.9-.98L1.32 53.97C.47 53.13 0 51.98 0 50.79s.47-2.34 1.32-3.18L47.6 1.32a4.503 4.503 0 0 1 4.9-.98c1.68.7 2.78 2.34 2.78 4.16v26.61c6 .55 17.14 2.32 28.37 7.94C98.87 46.65 117 62.89 117 97.07c0 2.21-1.6 4.09-3.78 4.44-.24.04-.48.06-.72.06z">
+            </path>
+        </symbol>
+        <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 117 101.57" id="icon-comment">
+            <path
+                d="M108.5 0H8.5C3.81 0 0 3.81 0 8.5v67.57c0 4.69 3.81 8.5 8.5 8.5h25v17.5c0 2.21 1.79 4 4 4 1.1 0 2.18-.45 2.95-1.24l21.05-21.26h38.5c4.69 0 8.5-3.81 8.5-8.5V8.5c0-4.69-3.81-8.5-8.5-8.5z">
+            </path>
+        </symbol>
+        <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="icon-dropdown">
+            <path
+                d="M12 15.5c-.5 0-1-.2-1.4-.6l-5.5-5.5c-.8-.8-.8-2 0-2.8.8-.8 2-.8 2.8 0L12 10.7l4.1-4.1c.8-.8 2-.8 2.8 0 .8.8.8 2 0 2.8l-5.5 5.5c-.4.4-.9.6-1.4.6z">
             </path>
         </symbol>
         <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 117 117" id="icon-search">

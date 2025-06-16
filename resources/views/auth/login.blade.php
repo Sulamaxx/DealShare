@@ -40,7 +40,7 @@
                         @endsession
 
                         <div class="form-group">
-                            <label for="loginUserName">Username</label>
+                            <label for="loginUserName">Email</label>
                             <input type="email" name="email" class="form-control" id="loginUserName"
                                 placeholder="Enter your email" value="{{ old(key: 'email') }}">
                         </div>

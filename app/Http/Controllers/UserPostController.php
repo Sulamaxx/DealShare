@@ -1,15 +1,15 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Events\PostCreated;
 use App\Events\PostVoted;
+use App\Models\Badge;
 use App\Models\Post;
 use App\Models\Report;
 use App\Models\Setting;
 use App\Models\Vote;
-use App\Models\Badge;
 use Carbon\Carbon;
+use function Laravel\Prompts\error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,23 +17,21 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
-use function Laravel\Prompts\error;
-
 class UserPostController extends Controller
 {
     public function myDeals()
     {
         $user = Auth::user();
 
-        $totalUpvotes = $user->posts()->sum('upvotes');
+        $totalUpvotes   = $user->posts()->sum('upvotes');
         $totalDownvotes = $user->posts()->sum('downvotes');
-        $netVoteCount = $totalUpvotes - $totalDownvotes;
+        $netVoteCount   = $totalUpvotes - $totalDownvotes;
 
         $badge = Badge::where('vote-count', '<=', $netVoteCount)
             ->orderBy('vote-count', 'desc') // Order by vote_count descending
             ->first();
 
-        if ($badge && (!$user->badge_id || $user->badge_id !== $badge->id)) {
+        if ($badge && (! $user->badge_id || $user->badge_id !== $badge->id)) {
             $oldBadgeName = $user->badge ? $user->badge->name : 'No Badge';
             $newBadgeName = $badge->name;
 
@@ -68,9 +66,9 @@ class UserPostController extends Controller
     {
         $user = Auth::user();
 
-        $totalUpvotes = $user->posts()->sum('upvotes');
+        $totalUpvotes   = $user->posts()->sum('upvotes');
         $totalDownvotes = $user->posts()->sum('downvotes');
-        $netVoteCount = $totalUpvotes - $totalDownvotes;
+        $netVoteCount   = $totalUpvotes - $totalDownvotes;
 
         $badge = Badge::where('vote-count', '<=', $netVoteCount)
             ->orderBy('vote-count', 'desc') // Order by vote_count descending
@@ -79,8 +77,8 @@ class UserPostController extends Controller
         //$posts = Post::where('post_by', Auth::user()->id)->paginate(10);
 
         $commentedPostIds = $user->comments() // Access the user's comments relationship
-            ->distinct('post_id') // Get only unique post IDs
-            ->pluck('post_id'); // Get a collection of just the 'post_id' values
+            ->distinct('post_id')                 // Get only unique post IDs
+            ->pluck('post_id');                   // Get a collection of just the 'post_id' values
 
         $subscribedPostIds = $user->subscriptions()
             ->distinct('post_id')
@@ -102,7 +100,7 @@ class UserPostController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        if ($badge && (!$user->badge_id || $user->badge_id !== $badge->id)) {
+        if ($badge && (! $user->badge_id || $user->badge_id !== $badge->id)) {
             $oldBadgeName = $user->badge ? $user->badge->name : 'No Badge';
             $newBadgeName = $badge->name;
 
@@ -147,9 +145,9 @@ class UserPostController extends Controller
 
                 if ($author) {
                     // Calculate total upvotes/downvotes for THIS author across ALL their posts
-                    $authorTotalUpvotes = $author->posts()->sum('upvotes');
+                    $authorTotalUpvotes   = $author->posts()->sum('upvotes');
                     $authorTotalDownvotes = $author->posts()->sum('downvotes');
-                    $authorNetVoteCount = $authorTotalUpvotes - $authorTotalDownvotes;
+                    $authorNetVoteCount   = $authorTotalUpvotes - $authorTotalDownvotes;
 
                     // Find the highest qualifying badge for this author
                     $authorBadge = Badge::where('vote-count', '<=', $authorNetVoteCount)
@@ -159,7 +157,7 @@ class UserPostController extends Controller
                     // Attach the badge object to the deal for easy access in the view
                     $deal->author_badge = $authorBadge;
 
-                    if ($authorBadge && (!$author->badge_id || $author->badge_id !== $authorBadge->id)) {
+                    if ($authorBadge && (! $author->badge_id || $author->badge_id !== $authorBadge->id)) {
                         $oldBadgeName = $author->badge ? $author->badge->name : 'No Badge';
                         $newBadgeName = $authorBadge->name;
 
@@ -209,17 +207,16 @@ class UserPostController extends Controller
             ->pluck('value', 'key')
             ->toArray();
 
-        $upvoteWeight = (float) ($settings['popular_deal_upvote_weight'] ?? 1.0);
+        $upvoteWeight   = (float) ($settings['popular_deal_upvote_weight'] ?? 1.0);
         $downvoteWeight = (float) ($settings['popular_deal_downvote_weight'] ?? -0.5);
-        $commentWeight = (float) ($settings['popular_deal_comment_weight'] ?? 0.8);
-
+        $commentWeight  = (float) ($settings['popular_deal_comment_weight'] ?? 0.8);
 
         $popularityFormula = DB::raw(
             // Calculate score: (upvotes * upvote weight) + (downvotes * downvote weight) + (comment count * comment weight)
             "(COALESCE(upvotes, 0) * {$upvoteWeight}) + " .
-                "(COALESCE(downvotes, 0) * {$downvoteWeight}) + " .
-                "(COALESCE(comment_count, 0) * {$commentWeight}) " .
-                "AS popularity_score"
+            "(COALESCE(downvotes, 0) * {$downvoteWeight}) + " .
+            "(COALESCE(comment_count, 0) * {$commentWeight}) " .
+            "AS popularity_score"
         );
 
         /* $popular_deals = Post::where('status', 1)->select('posts.*', $popularityFormula)->orderByDesc('popularity_score')->paginate(10);
@@ -239,9 +236,9 @@ class UserPostController extends Controller
 
                 if ($author) {
                     // Calculate total upvotes/downvotes for THIS author across ALL their posts
-                    $authorTotalUpvotes = $author->posts()->sum('upvotes');
+                    $authorTotalUpvotes   = $author->posts()->sum('upvotes');
                     $authorTotalDownvotes = $author->posts()->sum('downvotes');
-                    $authorNetVoteCount = $authorTotalUpvotes - $authorTotalDownvotes;
+                    $authorNetVoteCount   = $authorTotalUpvotes - $authorTotalDownvotes;
 
                     // Find the highest qualifying badge for this author
                     $authorBadge = Badge::where('vote-count', '<=', $authorNetVoteCount)
@@ -251,7 +248,7 @@ class UserPostController extends Controller
                     // Attach the badge object to the deal for easy access in the view
                     $deal->author_badge = $authorBadge;
 
-                    if ($authorBadge && (!$author->badge_id || $author->badge_id !== $authorBadge->id)) {
+                    if ($authorBadge && (! $author->badge_id || $author->badge_id !== $authorBadge->id)) {
                         $oldBadgeName = $author->badge ? $author->badge->name : 'No Badge';
                         $newBadgeName = $authorBadge->name;
 
@@ -315,9 +312,9 @@ class UserPostController extends Controller
 
                 if ($author) {
                     // Calculate total upvotes/downvotes for THIS author across ALL their posts
-                    $authorTotalUpvotes = $author->posts()->sum('upvotes');
+                    $authorTotalUpvotes   = $author->posts()->sum('upvotes');
                     $authorTotalDownvotes = $author->posts()->sum('downvotes');
-                    $authorNetVoteCount = $authorTotalUpvotes - $authorTotalDownvotes;
+                    $authorNetVoteCount   = $authorTotalUpvotes - $authorTotalDownvotes;
 
                     // Find the highest qualifying badge for this author
                     $authorBadge = Badge::where('vote-count', '<=', $authorNetVoteCount)
@@ -327,7 +324,7 @@ class UserPostController extends Controller
                     // Attach the badge object to the deal for easy access in the view
                     $deal->author_badge = $authorBadge;
 
-                    if ($authorBadge && (!$author->badge_id || $author->badge_id !== $authorBadge->id)) {
+                    if ($authorBadge && (! $author->badge_id || $author->badge_id !== $authorBadge->id)) {
                         $oldBadgeName = $author->badge ? $author->badge->name : 'No Badge';
                         $newBadgeName = $authorBadge->name;
 
@@ -382,6 +379,7 @@ class UserPostController extends Controller
         $user = Auth::user();
         // Log::info($post);
         $vote_type = "";
+        $reported  = false;
         if ($user != null) {
             $vote = Vote::where("post_id", $id)
                 ->where("user_id", $user->id)
@@ -390,17 +388,28 @@ class UserPostController extends Controller
             if ($vote) {
                 $vote_type = $vote->vote_type;
             }
+
+            $existingReport = Report::where('user_id', $user->id)
+                ->where('reportable_type', Post::class)
+                ->where('reportable_id', $post->id)
+                ->where('status', 'pending')
+                ->first();
+
+            if ($existingReport) {
+                $reported = true;
+            }
         }
 
-        return view('single-deal', compact('post', "vote_type"));
+        return view('single-deal', compact('post', "vote_type", 'reported'));
     }
 
     public function view_deal_title(Post $post) // Laravel automatically injects the Post model
     {
         // $post is already loaded by its slug, no need for findOrFail()
-
-        $user = Auth::user();
+        $post->load('subscriptions');
+        $user      = Auth::user();
         $vote_type = "";
+        $reported  = false;
 
         if ($user) {
             $vote = Vote::where("post_id", $post->id) // Use $post->id for vote lookup
@@ -410,23 +419,32 @@ class UserPostController extends Controller
             if ($vote) {
                 $vote_type = $vote->vote_type;
             }
+
+            $existingReport = Report::where('user_id', $user->id)
+                ->where('reportable_type', Post::class)
+                ->where('reportable_id', $post->id)
+                ->where('status', 'pending')
+                ->first();
+
+            if ($existingReport) {
+                $reported = true;
+            }
+
         }
 
-        return view('single-deal', compact('post', "vote_type"));
+        return view('single-deal', compact('post', "vote_type", 'reported'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required',
-            'link' => 'nullable|url',
-            'discount_text' => 'nullable|string|max:255',
-            'price_saving' => 'nullable|string|max:255',
-            'category' => 'required|string|max:255',
-            'expiration_date' => 'nullable|date|after_or_equal:today', // New validation for expiration_date
-            'store' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'title'           => 'required|string|max:255',
+            'description'     => 'required',
+            'link'            => 'nullable|url',
+            'category'        => 'required|string|max:255',
+            'expiration_date' => 'nullable|date|after_or_equal:today',
+            'store'           => 'nullable|string|max:255',
+            'image'           => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $imagePath = null;
@@ -455,17 +473,15 @@ class UserPostController extends Controller
         }
 
         $post = Post::create([
-            'title' => $validated['title'],
-            'description' => $validated['description'],
-            'link' => $validated['link'] ?? null,
-            'discount_text' => $validated['discount_text'] ?? null,
-            'price_saving' => $validated['price_saving'] ?? null,
-            'category' => $validated['category'],
-            'image' => $imagePath,
-            'posted_at' => now(),
+            'title'           => $validated['title'],
+            'description'     => $validated['description'],
+            'link'            => $validated['link'] ?? null,
+            'category'        => $validated['category'],
+            'image'           => $imagePath,
+            'posted_at'       => now(),
             'expiration_date' => $expiration_date,
-            'store' => $validated['store'],
-            'post_by' => auth()->id(), // link to current logged-in user
+            'store'           => $validated['store'],
+            'post_by'         => auth()->id(), // link to current logged-in user
         ]);
 
         event(new PostCreated($post));
@@ -473,8 +489,8 @@ class UserPostController extends Controller
         $appName = config('app.name');
         $subject = 'Your New Deal Has Been Created on ' . $appName;
 
-        // Access the user's name via the relationship
-        $user = auth()->user(); // Get the currently logged-in user
+                                                  // Access the user's name via the relationship
+        $user     = auth()->user();               // Get the currently logged-in user
         $userName = $user ? $user->name : 'User'; // Default to "User" if no user is logged in.
 
         $body = "# Hello **{$userName}**,\n\n"; // Personalize with author's name
@@ -483,7 +499,7 @@ class UserPostController extends Controller
         $body .= "Thank you for contributing to our community!\n\n";
         $body .= "The Team at {$appName}";
 
-        $dealUrl = '/deals/' . $post->id . '?title=' . str_replace(' ', '-', $post->title);
+        $dealUrl       = '/deals/' . $post->id . '?title=' . str_replace(' ', '-', $post->title);
         $buttonFullUrl = url($dealUrl);
         if (auth()->user() && auth()->user()->email) {
             send_generic_email(auth()->user()->email, $subject, $body, null, null);
@@ -495,26 +511,22 @@ class UserPostController extends Controller
     {
         $post = Post::with('user')->findOrFail($request->id);
 
-        $originalTitle = $post->title;
-        $originalDescription = $post->description;
-        $originalLink = $post->link;
-        $originalDiscountText = $post->discount_text;
-        $originalPriceSaving = $post->price_saving;
-        $originalCategory = $post->category;
+        $originalTitle          = $post->title;
+        $originalDescription    = $post->description;
+        $originalLink           = $post->link;
+        $originalCategory       = $post->category;
         $originalExpirationDate = $post->expiration_date;
-        $originalStore = $post->store;
-        $originalImage = $post->image;
+        $originalStore          = $post->store;
+        $originalImage          = $post->image;
 
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required',
-            'link' => 'nullable|url',
-            'discount_text' => 'nullable|string|max:255',
-            'price_saving' => 'nullable|string|max:255',
-            'category' => 'required|string|max:255',
-            'expiration_date' => 'nullable|date|after_or_equal:today', // New validation for expiration_date
-            'store' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'title'           => 'required|string|max:255',
+            'description'     => 'required',
+            'link'            => 'nullable|url',
+            'category'        => 'required|string|max:255',
+            'expiration_date' => 'nullable|date|after_or_equal:today',
+            'store'           => 'nullable|string|max:255',
+            'image'           => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
         //$post = Post::find($request->id);
         $imagePath = null;
@@ -548,15 +560,13 @@ class UserPostController extends Controller
             $post->expiration_date = null; // Set to null if not provided
         }
 
-        $post->store = $validated['store'];
-        $post->title = $validated['title'];
+        $post->store       = $validated['store'];
+        $post->title       = $validated['title'];
         $post->description = $validated['description'];
-        $post->link = $validated['link'] ?? null;
-        $post->discount_text = $validated['discount_text'] ?? null;
-        $post->price_saving = $validated['price_saving'] ?? null;
-        $post->category = $validated['category'];
-        $post->image = $imagePath == null && $originalImage != null ? $originalImage : $imagePath;
-        $post->posted_at = now();
+        $post->link        = $validated['link'] ?? null;
+        $post->category    = $validated['category'];
+        $post->image       = $imagePath == null && $originalImage != null ? $originalImage : $imagePath;
+        $post->posted_at   = now();
         $post->save();
 
         $appName = config('app.name');
@@ -579,14 +589,6 @@ class UserPostController extends Controller
             $body .= "* **Link:** Updated\n";
             $changesMade = true;
         }
-        if ($post->discount_text !== $originalDiscountText) {
-            $body .= "* **Discount Text:** From `" . ($originalDiscountText ?? 'N/A') . "` to `" . ($post->discount_text ?? 'N/A') . "`\n";
-            $changesMade = true;
-        }
-        if ($post->price_saving !== $originalPriceSaving) {
-            $body .= "* **Price Saving:** From `" . ($originalPriceSaving ?? 'N/A') . "` to `" . ($post->price_saving ?? 'N/A') . "`\n";
-            $changesMade = true;
-        }
         if ($post->category !== $originalCategory) {
             $body .= "* **Category:** From `{$originalCategory}` to `{$post->category}`\n";
             $changesMade = true;
@@ -604,7 +606,7 @@ class UserPostController extends Controller
             $changesMade = true;
         }
 
-        if (!$changesMade) {
+        if (! $changesMade) {
             $body .= "No specific content changes detected that would warrant listing.\n";
         }
 
@@ -624,9 +626,9 @@ class UserPostController extends Controller
     }
     public function vote(Request $request)
     {
-        $user = Auth::user();
+        $user     = Auth::user();
         $voteType = $request->input('vote_type');
-        $postId = $request->input('post_id');
+        $postId   = $request->input('post_id');
 
         if ($voteType && $postId) {
             $post = Post::with('user')->find($postId);
@@ -636,7 +638,7 @@ class UserPostController extends Controller
                     ->where('post_id', $postId)
                     ->first();
 
-                if (!$existingVote) {
+                if (! $existingVote) {
                     if ($voteType === 'up') {
                         $post->increment('upvotes');
                     } elseif ($voteType === 'down') {
@@ -644,17 +646,17 @@ class UserPostController extends Controller
                     }
 
                     Vote::create([
-                        'user_id' => $user->id,
-                        'post_id' => $postId,
+                        'user_id'   => $user->id,
+                        'post_id'   => $postId,
                         'vote_type' => $voteType,
                     ]);
 
                     event(new PostVoted($post));
 
                     $response = [
-                        "error" => false,
-                        "message" => "Vote recorded successfully.",
-                        "upvotes" => $post->upvotes,
+                        "error"     => false,
+                        "message"   => "Vote recorded successfully.",
+                        "upvotes"   => $post->upvotes,
                         "downvotes" => $post->downvotes,
                     ];
 
@@ -670,37 +672,36 @@ class UserPostController extends Controller
                             $post->increment('upvotes');
                         }
 
-
                         $existingVote->vote_type = $voteType;
                         $existingVote->save();
 
                         $response = [
-                            "error" => false,
-                            "message" => "Vote changed successfully!",
-                            "upvotes" => $post->upvotes,
+                            "error"     => false,
+                            "message"   => "Vote changed successfully!",
+                            "upvotes"   => $post->upvotes,
                             "downvotes" => $post->downvotes,
                         ];
 
                         $this->sendVoteNotificationEmail($post, $user, $voteType, 'changed');
                     } else {
                         $response = [
-                            "error" => false,
-                            "message" => "You have already voted.",
-                            "upvotes" => $post->upvotes,
+                            "error"     => false,
+                            "message"   => "You have already voted.",
+                            "upvotes"   => $post->upvotes,
                             "downvotes" => $post->downvotes,
                         ];
                     }
                 }
             } else {
                 $response = [
-                    "error" => true,
+                    "error"   => true,
                     "message" => "Post not found.",
                 ];
             }
             return response()->json($response);
         } else {
             $response = [
-                "error" => true,
+                "error"   => true,
                 "message" => "Missing vote type or post ID.",
             ];
             return response()->json($response);
@@ -713,7 +714,7 @@ class UserPostController extends Controller
 
         // Don't send email if the voter is the post creator themselves,
         // or if the creator doesn't have an email.
-        if (!$postCreator || !$postCreator->email || $postCreator->id === $voter->id) {
+        if (! $postCreator || ! $postCreator->email || $postCreator->id === $voter->id) {
             Log::info("Skipping vote notification email for post ID: {$post->id}. Creator not found, no email, or creator is voter.");
             return;
         }
@@ -721,7 +722,7 @@ class UserPostController extends Controller
         $appName = config('app.name');
         $itemUrl = url('deals/' . $post->id . '?title=' . str_replace(' ', '-', $post->title ?? ''));
 
-        $subject = 'Your Deal Received a ' . ucfirst($voteType) . 'vote on ' . $appName;
+        $subject   = 'Your Deal Received a ' . ucfirst($voteType) . 'vote on ' . $appName;
         $voterName = $voter->name; // Name of the user who voted
 
         $body = "# Hello **{$postCreator->name}**,\n\n";
@@ -756,7 +757,7 @@ class UserPostController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Validation failed.',
-                'errors' => $validator->errors(),
+                'errors'  => $validator->errors(),
             ], 422); // Unprocessable Entity
         }
 
@@ -776,11 +777,11 @@ class UserPostController extends Controller
         }
 
         try {
-            $report = new Report();
+            $report          = new Report();
             $report->user_id = $user->id;
-            $report->reason = $request->input('reason'); // Get reason from request
+            $report->reason  = $request->input('reason'); // Get reason from request
 
-            // Associate the report with the post using the polymorphic relationship
+                                                     // Associate the report with the post using the polymorphic relationship
             $report->reportable()->associate($post); // Sets reportable_type and reportable_id
 
             $report->save();
@@ -794,14 +795,13 @@ class UserPostController extends Controller
             // Optional: Log the report
             Log::info("Post {$post->id} reported by user {$user->id}. Reason: {$report->reason}");
 
-            $appName = config('app.name');
+            $appName     = config('app.name');
             $viewDealUrl = url('deals/' . $post->id . '?title=' . str_replace(' ', '-', $post->title));
-            $reasonText = $report->reason ?? 'No reason provided';
-
+            $reasonText  = $report->reason ?? 'No reason provided';
 
             // --- Send Email to the User Who Created the Post ---
             $subjectPostCreator = 'Your Deal Has Been Reported on ' . $appName;
-            $bodyPostCreator = "# Hello **" . ($post->user->name ?? 'User') . "**,\n\n";
+            $bodyPostCreator    = "# Hello **" . ($post->user->name ?? 'User') . "**,\n\n";
             $bodyPostCreator .= "We are writing to inform you that your deal titled **\"{$post->title}\"** (ID: {$post->id}) has been reported by a user on **{$appName}**.\n\n";
             $bodyPostCreator .= "The reason provided for the report is: `{$reasonText}`\n\n";
             $bodyPostCreator .= "Please be aware that our moderation team will review this report and take appropriate action if necessary.\n\n";
@@ -837,7 +837,7 @@ class UserPostController extends Controller
     public function search(Request $request)
     {
         // --- Get filters from the request ---
-        $search = $request->input('search');
+        $search   = $request->input('search');
         $category = $request->input('category');
         // --- Build the query for the main deals list
         $query = Post::where('status', 1);
@@ -847,8 +847,7 @@ class UserPostController extends Controller
             $query->where(function ($query) use ($search) {
                 $query->where('title', 'like', '%' . $search . '%')
                     ->orWhere('description', 'like', '%' . $search . '%')
-                    ->orWhere('link', 'like', '%' . $search . '%')
-                    ->orWhere('discount_text', 'like', '%' . $search . '%');
+                    ->orWhere('link', 'like', '%' . $search . '%');
             });
         }
 
@@ -860,59 +859,56 @@ class UserPostController extends Controller
 
         $search_deals = $query->paginate(10)->withQueryString();
 
-        $attachBadges = function ($deals) {
-            foreach ($deals as $deal) {
+        foreach ($search_deals as $deal) {
 
-                $author = $deal->user; // Access the user object from the joined data
+            $author = $deal->user; // Access the user object from the joined data
 
-                if ($author) {
-                    // Calculate total upvotes/downvotes for THIS author across ALL their posts
-                    $authorTotalUpvotes = $author->posts()->sum('upvotes');
-                    $authorTotalDownvotes = $author->posts()->sum('downvotes');
-                    $authorNetVoteCount = $authorTotalUpvotes - $authorTotalDownvotes;
+            if ($author) {
+                // Calculate total upvotes/downvotes for THIS author across ALL their posts
+                $authorTotalUpvotes   = $author->posts()->sum('upvotes');
+                $authorTotalDownvotes = $author->posts()->sum('downvotes');
+                $authorNetVoteCount   = $authorTotalUpvotes - $authorTotalDownvotes;
 
-                    // Find the highest qualifying badge for this author
-                    $authorBadge = Badge::where('vote-count', '<=', $authorNetVoteCount)
-                        ->orderBy('vote-count', 'desc')
-                        ->first();
+                // Find the highest qualifying badge for this author
+                $authorBadge = Badge::where('vote-count', '<=', $authorNetVoteCount)
+                    ->orderBy('vote-count', 'desc')
+                    ->first();
 
-                    // Attach the badge object to the deal for easy access in the view
-                    $deal->author_badge = $authorBadge;
+                // Attach the badge object to the deal for easy access in the view
+                $deal->author_badge = $authorBadge;
 
-                    if ($authorBadge && (!$author->badge_id || $author->badge_id !== $authorBadge->id)) {
-                        $oldBadgeName = $author->badge ? $author->badge->name : 'No Badge';
-                        $newBadgeName = $authorBadge->name;
+                if ($authorBadge && (! $author->badge_id || $author->badge_id !== $authorBadge->id)) {
+                    $oldBadgeName = $author->badge ? $author->badge->name : 'No Badge';
+                    $newBadgeName = $authorBadge->name;
 
-                        // Update the user's badge
-                        $author->badge_id = $authorBadge->id;
-                        $author->save();
+                    // Update the user's badge
+                    $author->badge_id = $authorBadge->id;
+                    $author->save();
 
-                        // --- Send Email to the User About Badge Change ---
-                        $appName = config('app.name');
-                        $subject = 'Your Badge Has Changed on ' . $appName;
+                    // --- Send Email to the User About Badge Change ---
+                    $appName = config('app.name');
+                    $subject = 'Your Badge Has Changed on ' . $appName;
 
-                        $body = "# Hello **{$author->name}**,\n\n";
-                        $body .= "Congratulations! Your badge has been updated on **{$appName}**.\n\n";
-                        $body .= "Your previous badge was: **{$oldBadgeName}**\n\n";
-                        $body .= "Your new badge is: **{$newBadgeName}**\n\n";
-                        $body .= "This change reflects your increased activity and positive contributions to our community.\n\n";
-                        $body .= "Keep up the great work!\n\n";
-                        $body .= "Thank you,\nThe Team at {$appName}";
+                    $body = "# Hello **{$author->name}**,\n\n";
+                    $body .= "Congratulations! Your badge has been updated on **{$appName}**.\n\n";
+                    $body .= "Your previous badge was: **{$oldBadgeName}**\n\n";
+                    $body .= "Your new badge is: **{$newBadgeName}**\n\n";
+                    $body .= "This change reflects your increased activity and positive contributions to our community.\n\n";
+                    $body .= "Keep up the great work!\n\n";
+                    $body .= "Thank you,\nThe Team at {$appName}";
 
-                        if (send_generic_email($author->email, $subject, $body, null, null)) { // No specific URL needed here
-                            Log::info("Badge change notification email dispatched to user {$author->email}");
-                        } else {
-                            Log::error("Failed to send badge change notification email to user {$author->email}");
-                        }
+                    if (send_generic_email($author->email, $subject, $body, null, null)) { // No specific URL needed here
+                        Log::info("Badge change notification email dispatched to user {$author->email}");
+                    } else {
+                        Log::error("Failed to send badge change notification email to user {$author->email}");
                     }
-                } else {
-                    $deal->author_badge = null; // No badge if author not found
                 }
+            } else {
+                $deal->author_badge = null; // No badge if author not found
             }
-            return $deals;
-        };
+        }
 
-        $search_deals = $attachBadges($search_deals);
+        //$search_deals = $attachBadges($search_deals);
 
         $banner = Setting::whereIn('key', [
             'top_banner',
