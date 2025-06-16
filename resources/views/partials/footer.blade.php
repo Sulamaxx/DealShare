@@ -60,12 +60,12 @@
         @enderror
 
         @if (isset($badge) && $badge)
-            <div class="form-group">
-                <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
+            <div class="form-group d-flex align-items-center justify-content-between gap-2">
+                <label class="font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-0">
                     Badge
                 </label>
                 @if ($badge) {{-- Check if a badge was found --}}
-                    <a href="#" title="{{ $badge->description }}" class="form-control-static">
+                    <a href="#" title="{{ $badge->description }}" class="form-control-static mb-0">
                         <span class="tt-color-default tt-badge" style="padding-left: 0px; display: block;">
                             @if ($badge->icon)
                                 {{-- Assuming badge->icon is the image path --}}
@@ -80,48 +80,48 @@
                     </a>
                 @else
                     {{-- Show this if no qualifying badge was found --}}
-                    <span class="tt-color-none tt-badge" style="color:black">No Badges Earned Yet</span>
+                    <span class="tt-color-none tt-badge mb-0" style="color:black">No Badges Earned Yet</span>
 
                 @endif
             </div>
         @endif
-        <div class="form-group">
-            <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
+        <div class="form-group d-flex align-items-center justify-content-between gap-2">
+            <label class="font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-0">
                 Joined Date
             </label>
-            <p class="form-control-static">{{ $user && $joinedDate ? $joinedDate : '' }}</p> {{-- Display joined date --}}
+            <p class="form-control-static mb-0">{{ $user && $joinedDate ? $joinedDate : '' }}</p>
         </div>
 
-        <div class="form-group">
-            <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
+        <div class="form-group d-flex align-items-center justify-content-between gap-2">
+            <label class="font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-0">
                 Total Deals Submitted
             </label>
-            <p class="form-control-static">{{ $user && $totalDealsSubmitted ? $totalDealsSubmitted : '' }}</p>
+            <p class="form-control-static mb-0">{{ $user && $totalDealsSubmitted ? $totalDealsSubmitted : '0' }}</p>
             {{-- Display total deals --}}
         </div>
 
-        <div class="form-group">
-            <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
+        <div class="form-group d-flex align-items-center justify-content-between gap-2">
+            <label class="font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-0">
                 Total Upvotes Received
             </label>
-            <p class="form-control-static">{{ $user && $totalUpvotesReceived ? $totalUpvotesReceived : '' }}</p>
+            <p class="form-control-static mb-0">{{ $user && $totalUpvotesReceived ? $totalUpvotesReceived : '0' }}</p>
             {{-- Display total upvotes --}}
         </div>
 
-        <div class="form-group">
-            <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
+        <div class="form-group d-flex align-items-center justify-content-between gap-2">
+            <label class="font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-0">
                 Total Downvotes Received
             </label>
-            <p class="form-control-static">{{ $user && $totalDownvotesReceived ? $totalDownvotesReceived : '' }}
+            <p class="form-control-static mb-0">{{ $user && $totalDownvotesReceived ? $totalDownvotesReceived : '0' }}
             </p>
             {{-- Display total downvotes --}}
         </div>
 
-        <div class="form-group">
-            <label class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
+        <div class="form-group d-flex align-items-center justify-content-between gap-2">
+            <label class="font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-0">
                 Total Comments Made
             </label>
-            <p class="form-control-static">{{ $user && $totalCommentsMade ? $totalCommentsMade : '' }}</p>
+            <p class="form-control-static mb-0">{{ $user && $totalCommentsMade ? $totalCommentsMade : '0' }}</p>
             {{-- Display total comments --}}
         </div>
         <div class="form-group">
@@ -293,7 +293,7 @@
             <a href="/" class="navbar-brand">
                 <img src="{{ asset('images/logo.png') }}" alt="Logo" height="42" width="84">
             </a>
-            <p class="footer-copy">© 2025 Buyme.lk. All Rights Reserved.</p>
+            <p class="footer-copy">© 2025 Buyme.lk. All Rights Reserved. | Version 1.0.0</p>
         </div>
         <div class="footer-right">
             <div class="footer-links">
@@ -302,6 +302,7 @@
                 <a href="{{ route('pages') }}?tab=guidelines">Guidelines</a> |
                 <a href="{{ route('pages') }}?tab=term_and_services">Terms</a> |
                 <a href="{{ route('pages') }}?tab=privacy">Privacy</a> |
+                <a href="{{ route('pages') }}?tab=cookie_policy">Cookie Policy</a> |
                 {{-- <a href="{{ route('pages') }}">Blog</a> | --}}
                 <a href="{{ route('pages') }}?tab=contact">Contact Us</a>
             </div>

@@ -90,7 +90,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="mb-5">
+                                {{-- <div class="mb-5">
                                     <label for="discount_text"
                                         class="inline-block font-semibold text-neutral-600 dark:text-neutral-200 text-sm mb-2">
                                         Discount Text</label>
@@ -112,7 +112,7 @@
                                     @error('price_saving')
                                         <div class="text-danger-600 text-sm mt-1">{{ $message }}</div>
                                     @enderror
-                                </div>
+                                </div> --}}
 
                                 {{-- --- New: Expiration Date Input --- --}}
                                 <div class="mb-5">
